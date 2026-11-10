@@ -368,7 +368,7 @@ function newState(){return{v:1,gold:120,day:1,time:0.08,rating:1,xp:0,rod:1,tank
 let s=load()||newState();
 let tab='tank',T=0,APPEAL=0;
 const anim={};let bubbles=[],ripples=[],present=[],sparks=[];
-let thunder=0,boatHit=null,cleanMode=false,pdown=false,sponge=null,recalcT=0,islandSub='fac',warned={},pend={g:0,n:0,cafe:0,t:0},visAcc=0,saveT=0,topT=0,gatherCd=0,selFish=null;
+let thunder=0,shopTank=0,boatHit=null,cleanMode=false,pdown=false,sponge=null,recalcT=0,islandSub='fac',warned={},pend={g:0,n:0,cafe:0,t:0},visAcc=0,saveT=0,topT=0,gatherCd=0,selFish=null;
 const fs={st:'idle',t:0,wait:0,sp:null,size:0,bx:0,by:0,sx:0,sy:0,hits:0,need:1,z0:0,z1:0,mk:0,md:1,speed:1,win:1,nib:0,nibT:1,res:null,flash:null};
 
 // ===================== ユーティリティ =====================
@@ -899,6 +899,7 @@ function drawTank(){
  g=ctx.createLinearGradient(0,sand,0,H);g.addColorStop(0,'#ead8a8');g.addColorStop(1,'#bfa46e');ctx.fillStyle=g;
  ctx.beginPath();ctx.moveTo(0,H);for(let x=0;x<=W;x+=10)ctx.lineTo(x,sand+Math.sin(x*.03)*3);ctx.lineTo(W,H);ctx.fill();
  ctx.fillStyle='rgba(120,90,50,.35)';for(let i=0;i<25;i++){ctx.beginPath();ctx.arc((i*97)%W,sand+8+(i*13)%(H-sand-10),1.5+(i%3),0,7);ctx.fill();}
+ (s.tanks[s.cur].deco||[]).forEach((id,i)=>drawTankDeco(ctx,id,W*TDECO_X[i],sand+3,clamp(H/300,.8,1.5),night(hourNow()),i*.3));
  // エアポンプ
  ctx.fillStyle='#555';ctx.fillRect(W*.93-5,sand-8,10,10);
  // 泡
@@ -1280,6 +1281,76 @@ function gather(){
  log(`🏖️ 浜辺で${sp.n}（${fmtSize(size)}）を見つけた！${r.isNew?' ✨NEW':''}`,RCOL[sp.r]);save();renderPanel();
 }
 
+// ===================== 水槽の装飾 =====================
+const TDECOS=[
+ {id:'plants',n:'水草の森',c:1200,b:4,d:'ゆらゆら揺れる水草で、魚たちのかくれ家に'},
+ {id:'airstone',n:'エアストーン',c:2000,b:4,d:'泡のカーテンがきらきら立ちのぼる'},
+ {id:'shell',n:'大きな巻き貝',c:2500,b:5,d:'真珠をのぞかせる大きな貝殻'},
+ {id:'rock',n:'岩のアーチ',c:3500,b:5,d:'苔むした岩のトンネル。魚がくぐり抜ける'},
+ {id:'coral',n:'サンゴの群生',c:5000,b:7,d:'色とりどりのサンゴで水槽が一気に華やかに'},
+ {id:'amphora',n:'古代のツボ',c:8000,b:8,d:'海の底で眠っていた、模様入りのツボ'},
+ {id:'light',n:'水中ライト',c:12000,b:9,d:'水槽をやさしく照らす。夜はとくに幻想的'},
+ {id:'helmet',n:'潜水ヘルメット',c:18000,b:10,d:'真ちゅう製のアンティーク。窓から泡がこぼれる'},
+ {id:'chest',n:'海賊の宝箱',c:30000,b:12,d:'ときどきフタが開いて泡と金貨がきらめく'},
+ {id:'pillar',n:'沈んだ神殿の柱',c:50000,b:14,d:'折れた古代の柱。ロマンあふれる遺跡の雰囲気'},
+ {id:'ship',n:'沈没船',c:90000,b:18,d:'マストの折れた木造船。水槽の主役級オブジェ'},
+ {id:'castle',n:'海底のお城',c:150000,b:22,d:'小さな塔が並ぶ、夢のような水中のお城'},
+];
+const TDM={};TDECOS.forEach(d=>TDM[d.id]=d);
+const TDECO_MAX=5,TDECO_X=[.12,.31,.5,.69,.88];
+function tankDecoBonus(t){return(t.deco||[]).reduce((a,id)=>a+(TDM[id]?TDM[id].b:0),0)/100;}
+function drawTankDeco(c,id,x,y,k,nt,ph){
+ c.save();c.translate(x,y);
+ const E=(x0,y0,rx,ry,col,rot=0)=>{c.fillStyle=col;c.beginPath();c.ellipse(x0*k,y0*k,rx*k,ry*k,rot,0,7);c.fill();};
+ const P=(pts,col)=>{c.fillStyle=col;c.beginPath();pts.forEach(([px,py],j)=>j?c.lineTo(px*k,py*k):c.moveTo(px*k,py*k));c.closePath();c.fill();};
+ const bub=(bx,by,n,sp=1)=>{for(let i=0;i<n;i++){const p2=(T*.35*sp+i/n+ph)%1;c.strokeStyle=`rgba(255,255,255,${(1-p2)*.8})`;c.lineWidth=1;c.beginPath();c.arc((bx+Math.sin(T*3+i)*2)*k,(by-p2*60)*k,(1.2+i%3*.7)*k,0,7);c.stroke();}};
+ c.fillStyle='rgba(0,0,0,.18)';c.beginPath();c.ellipse(0,1*k,26*k,4*k,0,0,7);c.fill();
+ switch(id){
+  case'plants':for(let i=0;i<9;i++){const bx=(i-4)*5,hh=30+((i*7)%4)*9,sw=Math.sin(T*1.3+i+ph)*5;c.strokeStyle=['#2e8b57','#3cb371','#5ac87a','#2a7a4a'][i%4];c.lineWidth=3*k;c.lineCap='round';c.beginPath();c.moveTo(bx*k,0);c.quadraticCurveTo((bx+sw*.5)*k,-hh*.5*k,(bx+sw)*k,-hh*k);c.stroke();}
+   for(let i=0;i<5;i++){const bx=-14+i*7,by=-4-(i%2)*5;E(bx,by,4,2.6,'#6ad48a',-.4+i*.2);}break;
+  case'airstone':E(0,-2,9,4,'#6a6a7a');E(-2,-3,4,1.5,'#9a9aaa');bub(0,-4,12,1.6);bub(-3,-4,8,1.2);bub(3,-4,8,1.9);break;
+  case'shell':{const g=c.createLinearGradient(0,-24*k,0,0);g.addColorStop(0,'#fff0e0');g.addColorStop(1,'#e0a080');c.fillStyle=g;c.beginPath();c.moveTo(-18*k,0);c.quadraticCurveTo(-20*k,-20*k,0,-26*k);c.quadraticCurveTo(22*k,-18*k,18*k,0);c.closePath();c.fill();
+   c.strokeStyle='rgba(170,100,70,.5)';c.lineWidth=1;for(let i=-3;i<=3;i++){c.beginPath();c.moveTo(i*2*k,0);c.lineTo(i*6*k,-22*k);c.stroke();}E(0,-3,4,3.5,'#fffaf2');E(-1,-4,1.2,1,'#fff');break;}
+  case'rock':{c.fillStyle='#6a6a62';c.beginPath();c.moveTo(-26*k,0);c.quadraticCurveTo(-28*k,-30*k,-8*k,-38*k);c.quadraticCurveTo(14*k,-42*k,24*k,-22*k);c.quadraticCurveTo(28*k,-8*k,26*k,0);c.lineTo(12*k,0);c.quadraticCurveTo(10*k,-20*k,0,-20*k);c.quadraticCurveTo(-12*k,-20*k,-12*k,0);c.closePath();c.fill();
+   c.fillStyle='rgba(255,255,255,.12)';c.beginPath();c.ellipse(-12*k,-30*k,10*k,4*k,-.3,0,7);c.fill();for(let i=0;i<8;i++)E(-20+i*6,-28-((i*7)%3)*4,3,1.6,'#5aa060');break;}
+  case'coral':{const cols=['#ff7aa0','#ff9a5a','#c38bff','#ffd25a'];for(let i=0;i<4;i++){c.strokeStyle=cols[i];c.lineWidth=3.2*k;c.lineCap='round';const bx=(i-1.5)*10,hh=18+(i%2)*10;c.beginPath();c.moveTo(bx*k,0);c.lineTo(bx*k,-hh*k);c.moveTo(bx*k,-hh*.5*k);c.lineTo((bx-6)*k,-hh*.85*k);c.moveTo(bx*k,-hh*.6*k);c.lineTo((bx+6)*k,-hh*1.05*k);c.stroke();}
+   E(-14,-5,8,6,'#e8a87a');c.strokeStyle='rgba(150,80,50,.5)';c.lineWidth=1;for(let i=0;i<3;i++){c.beginPath();c.ellipse(-14*k,-5*k,(7-i*2)*k,(5-i*1.5)*k,0,Math.PI,0);c.stroke();}break;}
+  case'amphora':{c.rotate(-.35);const g=c.createLinearGradient(-12*k,0,12*k,0);g.addColorStop(0,'#8a4a2a');g.addColorStop(.5,'#c8784a');g.addColorStop(1,'#7a3a20');c.fillStyle=g;c.beginPath();c.moveTo(-5*k,-34*k);c.quadraticCurveTo(-15*k,-24*k,-12*k,-10*k);c.quadraticCurveTo(-8*k,0,0,1*k);c.quadraticCurveTo(8*k,0,12*k,-10*k);c.quadraticCurveTo(15*k,-24*k,5*k,-34*k);c.closePath();c.fill();
+   E(0,-35,6,2.2,'#6a3a1a');c.strokeStyle='#3a1a0a';c.lineWidth=1.5*k;c.beginPath();c.moveTo(-11*k,-20*k);c.lineTo(11*k,-20*k);c.stroke();for(let i=-2;i<=2;i++){c.beginPath();c.moveTo(i*4*k,-17*k);c.lineTo(i*4*k+2*k,-14*k);c.stroke();}
+   c.strokeStyle='#8a4a2a';c.lineWidth=2*k;c.beginPath();c.arc(-8*k,-30*k,4*k,Math.PI*.5,Math.PI*1.5);c.stroke();c.beginPath();c.arc(8*k,-30*k,4*k,-Math.PI*.5,Math.PI*.5);c.stroke();break;}
+  case'light':{c.fillStyle='#3a4048';c.fillRect(-2*k,-26*k,4*k,26*k);E(0,-1,7,2.5,'#2a3038');c.fillStyle='#ffe8a8';c.beginPath();c.arc(0,-28*k,4*k,0,7);c.fill();
+   c.save();c.globalCompositeOperation='lighter';const a=.18+nt*.25+.04*Math.sin(T*2+ph);const g=c.createLinearGradient(0,-28*k,0,-120*k);g.addColorStop(0,`rgba(255,240,190,${a})`);g.addColorStop(1,'rgba(255,240,190,0)');c.fillStyle=g;c.beginPath();c.moveTo(-3*k,-28*k);c.lineTo(3*k,-28*k);c.lineTo(26*k,-120*k);c.lineTo(-26*k,-120*k);c.closePath();c.fill();
+   const r=c.createRadialGradient(0,-28*k,0,0,-28*k,20*k);r.addColorStop(0,`rgba(255,240,190,${.5+nt*.3})`);r.addColorStop(1,'rgba(255,240,190,0)');c.fillStyle=r;c.beginPath();c.arc(0,-28*k,20*k,0,7);c.fill();c.restore();break;}
+  case'helmet':{const g=c.createRadialGradient(-6*k,-24*k,2*k,0,-16*k,18*k);g.addColorStop(0,'#ffe08a');g.addColorStop(.6,'#c8902a');g.addColorStop(1,'#7a5010');c.fillStyle=g;c.beginPath();c.arc(0,-16*k,16*k,0,7);c.fill();
+   c.fillStyle='#8a6a2a';c.fillRect(-18*k,-4*k,36*k,5*k);for(const [wx,wy,wr] of[[0,-16,7],[-12,-17,4],[12,-17,4]]){E(wx,wy,wr+1.5,wr+1.5,'#6a4a10');E(wx,wy,wr,wr,'rgba(120,200,230,.65)');E(wx-wr*.3,wy-wr*.3,wr*.3,wr*.2,'rgba(255,255,255,.7)');}
+   bub(0,-30,6,1.3);break;}
+  case'chest':{const op=Math.max(0,Math.sin(T*.6+ph))*.6;E(0,-12,13,4,'rgba(255,210,80,.25)');c.fillStyle='#7a4a1a';c.fillRect(-16*k,-14*k,32*k,14*k);c.fillStyle='#ffd166';c.fillRect(-16*k,-14*k,32*k,2*k);c.fillRect(-2*k,-14*k,4*k,14*k);
+   c.save();c.translate(-16*k,-14*k);c.rotate(-op);c.fillStyle='#8a5a2a';c.beginPath();c.moveTo(0,0);c.lineTo(32*k,0);c.quadraticCurveTo(16*k,-12*k,0,0);c.fill();c.fillStyle='#ffd166';c.fillRect(0,-1.5*k,32*k,1.5*k);c.restore();
+   if(op>.15){for(let i=0;i<5;i++){c.fillStyle=['#ffd23a','#ff5a8a','#5ad8ff'][i%3];c.beginPath();c.arc((-10+i*5)*k,(-15-Math.sin(T*3+i))*k,2*k,0,7);c.fill();}bub(0,-16,6,1.5);}break;}
+  case'pillar':{const col=(px,hh,rot)=>{c.save();c.translate(px*k,0);c.rotate(rot);const g=c.createLinearGradient(-6*k,0,6*k,0);g.addColorStop(0,'#c8c0b0');g.addColorStop(.5,'#f0ece0');g.addColorStop(1,'#a8a090');c.fillStyle=g;c.fillRect(-6*k,-hh*k,12*k,hh*k);
+    c.strokeStyle='rgba(120,110,90,.45)';c.lineWidth=1;for(let i=-1;i<=1;i++){c.beginPath();c.moveTo(i*3.5*k,0);c.lineTo(i*3.5*k,-hh*k);c.stroke();}c.fillStyle='#d8d0c0';c.fillRect(-8*k,-hh*k-3*k,16*k,3*k);c.fillRect(-8*k,-3*k,16*k,3*k);
+    c.fillStyle='#4a8a4a';for(let i=0;i<3;i++){c.beginPath();c.arc((i*3-3)*k,-hh*k*(.3+i*.2),2*k,0,7);c.fill();}c.restore();};col(-12,40,0);col(10,24,0);
+   c.save();c.translate(16*k,-4*k);c.rotate(-1.45);c.fillStyle='#d8d0c0';c.fillRect(-4*k,-2*k,8*k,26*k);c.restore();break;}
+  case'ship':{c.rotate(-.12);const g=c.createLinearGradient(0,-24*k,0,0);g.addColorStop(0,'#7a5530');g.addColorStop(1,'#3a2410');c.fillStyle=g;c.beginPath();c.moveTo(-34*k,-22*k);c.lineTo(30*k,-18*k);c.quadraticCurveTo(28*k,0,10*k,1*k);c.lineTo(-26*k,1*k);c.quadraticCurveTo(-34*k,-8*k,-34*k,-22*k);c.fill();
+   c.strokeStyle='rgba(20,10,0,.5)';c.lineWidth=1;for(let i=1;i<4;i++){c.beginPath();c.moveTo(-32*k,(-22+i*5.5)*k);c.lineTo(28*k,(-18+i*5)*k);c.stroke();}c.fillStyle='#1a1008';c.beginPath();c.moveTo(4*k,-19*k);c.lineTo(14*k,-14*k);c.lineTo(10*k,-6*k);c.lineTo(2*k,-9*k);c.fill();
+   for(const px of[-20,-8]){E(px,-13,2.6,2.6,'#2a1a0a');E(px,-13,1.6,1.6,'rgba(100,180,200,.5)');}c.strokeStyle='#5a3a1a';c.lineWidth=3*k;c.beginPath();c.moveTo(-6*k,-21*k);c.lineTo(10*k,-58*k);c.stroke();c.lineWidth=2*k;c.beginPath();c.moveTo(-2*k,-46*k);c.lineTo(18*k,-38*k);c.stroke();
+   c.fillStyle='rgba(230,220,190,.5)';c.beginPath();c.moveTo(10*k,-55*k);c.lineTo(22*k,-46*k);c.lineTo(8*k,-40*k);c.fill();for(let i=0;i<4;i++)E(-28+i*16,-22,3,1.4,'#4a8a4a');break;}
+  case'castle':{const wc='#e8e0f4',sh='#c8bce0';c.fillStyle=wc;c.fillRect(-24*k,-22*k,48*k,22*k);for(let i=0;i<8;i++)c.fillRect((-24+i*6.4)*k,-25*k,3.4*k,3*k);
+   for(const [tx,hh,roof] of[[-26,40,'#7a9aff'],[18,40,'#7a9aff'],[-6,56,'#ff9ad0']]){c.fillStyle=wc;c.fillRect(tx*k,-hh*k,(tx===-6?12:8)*k,hh*k);c.fillStyle=sh;c.fillRect((tx+(tx===-6?9:6))*k,-hh*k,3*k,hh*k);P([[tx-2,-hh],[tx+(tx===-6?14:10),-hh],[tx+(tx===-6?6:4),-hh-14]],roof);
+    c.fillStyle=nt>.3?'#ffd56b':'#5a4a7a';c.fillRect((tx+(tx===-6?4:2.5))*k,(-hh+8)*k,3*k,4*k);}
+   c.fillStyle='#4a3a6a';c.beginPath();c.arc(0,-6*k,6*k,Math.PI,0);c.fill();c.fillRect(-6*k,-6*k,12*k,6*k);bub(0,-60,5,1.1);break;}
+ }
+ c.restore();}
+const tdThumbCache={};
+function tdThumb(id){if(!tdThumbCache[id]){const oc=document.createElement('canvas');oc.width=96;oc.height=80;const c=oc.getContext('2d');const g=c.createLinearGradient(0,0,0,80);g.addColorStop(0,'#3a9ac8');g.addColorStop(1,'#0c5a80');c.fillStyle=g;c.fillRect(0,0,96,80);c.fillStyle='#d8c8a0';c.fillRect(0,66,96,14);
+ const k=id==='ship'?1.05:id==='castle'?1.05:1.3;drawTankDeco(c,id,48,70,k,0,0);tdThumbCache[id]=oc.toDataURL();}return`<img src="${tdThumbCache[id]}" style="width:44px;height:36px;border-radius:6px">`;}
+function baitCardHtml(){let h=`<div class="card"><h3>🪱 餌</h3><div class="sub" style="margin-bottom:6px">使っている餌：<b style="color:var(--gold)">${curBait().ic} ${curBait().n}</b>（残り ${s.baits[s.bait]||0}）<br>魚がかかってリールを巻き始めたときに1つ使います</div>`;
+  for(const bb of BAITS){const own=s.baits[bb.id]||0,on=s.bait===bb.id;
+   h+=`<div class="up" style="${on?'outline:2px solid var(--gold)':''}"><div class="ic">${bb.ic}</div><div class="info"><b>${bb.n}</b> <span style="color:var(--gold)">×${own}</span><div class="sub">${bb.d}<br>${fmtG(bb.c)}／個</div></div>
+    <div style="display:flex;flex-direction:column;gap:4px"><button class="btn sm ${on?'ghost':''}" data-act="usebait" data-id="${bb.id}" ${on||!own?'disabled':''}>${on?'使用中':'使う'}</button>
+    <div style="display:flex;gap:4px"><button class="btn sm gold" data-act="buybait" data-id="${bb.id}" data-n="1" data-cost="${bb.c}" ${s.gold<bb.c?'disabled':''}>+1</button><button class="btn sm gold" data-act="buybait" data-id="${bb.id}" data-n="10" data-cost="${bb.c*10}" ${s.gold<bb.c*10?'disabled':''}>+10</button></div></div></div>`;}
+  h+='</div>';return h;}
+
 // ===================== 島画面 =====================
 const PALMS=[[-.75,.05],[-.55,-.45],[.3,-.6],[.8,.15],[-.15,.65]];
 const LAND_GEO=[{x:1.68,y:-.1,rx:.58,ry:.72},{x:-1.68,y:.05,rx:.58,ry:.72},{x:.9,y:1.8,rx:.62,ry:.56},{x:-.9,y:1.8,rx:.62,ry:.56}];
@@ -1529,8 +1600,8 @@ function tankAppeal(t,i){
  for(const f of t.fish){const p=SPM[f.s];cnt[f.s]=(cnt[f.s]||0)+1;let v=fishAppeal(f)*[1,.6,.4,.3,.25][Math.min(4,cnt[f.s]-1)];
   if(p.a===th||p.a==='dream'){v*=1.25;match++;}else v*=.8;base+=v;tiers.add(p.r);if(p.r>=4)star++;}
  const n=t.fish.length,uniq=Object.keys(cnt).length,variety=uniq*.05,eco=Math.max(0,tiers.size-1)*.12,unity=n>=3&&match===n?.2:0,jam=n>=3&&star/n>.5?-.25:0,dirt=tankDirt(t);
- const mul=Math.max(.1,1+variety+eco+unity+jam);
- return{base,n,uniq,tiers:tiers.size,match,variety,eco,unity,jam,dirt,mul,total:base*mul*(1-.6*dirt)};}
+ const deco=tankDecoBonus(t),mul=Math.max(.1,1+variety+eco+unity+jam+deco);
+ return{base,n,uniq,tiers:tiers.size,match,variety,eco,unity,jam,deco,dirt,mul,total:base*mul*(1-.6*dirt)};}
 function curEvent(){return s.event&&s.event.left>0?EVM[s.event.id]:null;}
 function evApp(){const e=curEvent();return e?e.app:1;}
 function evVis(){const e=curEvent();return e?e.vis:1;}
@@ -1612,6 +1683,7 @@ function renderPanel(){
    ・🐟 種類ボーナス ${pct(ta.variety)}（${ta.uniq}種）<br>
    ・🌿 生態系ボーナス ${pct(ta.eco)}（★の段階 ${ta.tiers}種類）<br>
    ・🎯 テーマ統一ボーナス ${ta.unity?'+20%':'なし'}（全部${th.n}の生き物・3匹以上）<br>
+   ・🪸 装飾ボーナス ${pct(ta.deco)}（${(tank.deco||[]).length}/${TDECO_MAX}個・島タブ「魚・釣り」で購入）<br>
    ${ta.jam?'・⚠️ 主役渋滞 -25%（★4以上が半分超え）<br>':''}
    <span style="opacity:.8">💡 同じ種類は2匹目から効果ダウン。★1〜★6を混ぜて、テーマに合った生き物で揃えると高評価！</span></div></div>`;
   h+=`<div class="card"><h3>📊 経営状況</h3><div class="sub">総魅力度 <b style="color:var(--gold)">${Math.round(APPEAL)}</b>　入場料 <b style="color:var(--gold)">${ticket()}G</b>${s.b.cafe||shopIncome()?`（+お店${s.b.cafe*4+shopIncome()}G）`:''}<br>来場ペース 約${(visRate()*60).toFixed(1)}人/分（昼）　本日 ${s.visToday}人・${fmtG(s.incToday)}<br>${s.storm?`<b style="color:#ff9a9a">${stormStage()==='damage'?'🔨 嵐の被害で魅力度40%（島タブで復興）':stormStage()==='storm'?'🌪 大嵐で休業中':'⚠️ 明日、大嵐が来ます'}</b><br>`:''}島の賑わい +${nigiwai()}%${dirtVisMul()<.99?`　濁りによる客足 ${Math.round(dirtVisMul()*100)}%`:''}</div></div>`;
@@ -1625,12 +1697,7 @@ function renderPanel(){
  else if(tab==='fish'){
   h+=`<div class="row"><button class="btn big" data-act="fishtap">🎣 キャスト / アクション</button></div>`;
   h+=`<div class="row"><button class="btn gold" id="gatherBtn" data-act="gather" style="flex:1">🏖️ 浜辺で採取</button><div class="sub" style="flex:1">いけす ${s.bucket.length}/${bucketCap()}<br>釣り竿 Lv${s.rod}（実質 ${(Math.round(effRod()*10)/10)}）</div></div>`;
-  h+=`<div class="card"><h3>🪱 餌</h3><div class="sub" style="margin-bottom:6px">使っている餌：<b style="color:var(--gold)">${curBait().ic} ${curBait().n}</b>（残り ${s.baits[s.bait]||0}）<br>魚がかかってリールを巻き始めたときに1つ使います</div>`;
-  for(const bb of BAITS){const own=s.baits[bb.id]||0,on=s.bait===bb.id;
-   h+=`<div class="up" style="${on?'outline:2px solid var(--gold)':''}"><div class="ic">${bb.ic}</div><div class="info"><b>${bb.n}</b> <span style="color:var(--gold)">×${own}</span><div class="sub">${bb.d}<br>${fmtG(bb.c)}／個</div></div>
-    <div style="display:flex;flex-direction:column;gap:4px"><button class="btn sm ${on?'ghost':''}" data-act="usebait" data-id="${bb.id}" ${on||!own?'disabled':''}>${on?'使用中':'使う'}</button>
-    <div style="display:flex;gap:4px"><button class="btn sm gold" data-act="buybait" data-id="${bb.id}" data-n="1" data-cost="${bb.c}" ${s.gold<bb.c?'disabled':''}>+1</button><button class="btn sm gold" data-act="buybait" data-id="${bb.id}" data-n="10" data-cost="${bb.c*10}" ${s.gold<bb.c*10?'disabled':''}>+10</button></div></div></div>`;}
-  h+='</div>';
+  h+=baitCardHtml();
   h+=`<div class="card"><h3>🗺️ 釣り場エリア</h3><div class="row">${AREAS.map(a=>{const ok=s.areas.includes(a.id);return`<button class="btn sm ${s.area===a.id?'':'ghost'}" data-act="area" data-id="${a.id}" ${ok?'':'disabled'}>${ok?a.ic:'🔒'} ${a.n}</button>`;}).join('')}${s.dream?`<button class="btn sm ${s.area==='dream'?'':'ghost'}" style="${s.area==='dream'?'background:#ffc8ec':''}" data-act="area" data-id="dream">🌙 夢で見た海</button>`:''}</div>`;
   const list=fishPool(s.area);const dr=s.area==='dream';
   if(dr)h+=`<div class="sub" style="color:#ffd0ee">🌙 今日だけの夢の海。釣れるのは★5〜★6だけ。判定が厳しく、竿Lvが低いとなかなかかからない<br>今日が終わると夢から覚めます（${s.dreamTrips}回目の訪問）</div>`;
@@ -1641,7 +1708,7 @@ function renderPanel(){
   h+=`<div class="card sub"><b>遊び方</b><br>① 画面（または上のボタン）をタップして仕掛けを投げる<br>② 浮きが沈んで「！」が出たらすぐタップ（早すぎると失敗）<br>③ 動くバーが<span style="color:#38d36b">緑ゾーン</span>に入った瞬間にタップ！レア魚は複数回必要<br>🏖️採取ではカニやエビなど浜辺の生き物が手に入ります</div>`;
  }
  else if(tab==='island'){
-  h+=`<div class="row">${[['fac','🔧 設備'],['resort','🌴 リゾート'],['event','🎉 イベント'],['land','🏗️ 土地'],...(s.storm?[['storm','🌪 復興']]:[])].map(([k,n])=>`<button class="btn sm ${islandSub===k?'':'ghost'}" style="flex:1;padding:6px 2px" data-act="isub" data-k="${k}">${n}</button>`).join('')}</div>`;
+  h+=`<div class="row">${[['fac','🔧 設備'],['shop','🐟 魚・釣り'],['resort','🌴 リゾート'],['event','🎉 イベント'],['land','🏗️ 土地'],...(s.storm?[['storm','🌪 復興']]:[])].map(([k,n])=>`<button class="btn sm ${islandSub===k?'':'ghost'}" style="flex:1 1 30%;padding:7px 2px" data-act="isub" data-k="${k}">${n}</button>`).join('')}</div>`;
   const ups=[];const tank=s.tanks[s.cur];
   ups.push({ic:'🎣',n:'釣り竿の強化',lv:`Lv${s.rod}${s.rod>=ROD_MAX?'（MAX）':''}`,d:'判定ゾーンが広がり、レア魚・大物が出やすく、魚がかかるのも早くなる（餌の倍率がかかる）',cost:s.rod<ROD_MAX?ROD_COST[s.rod+1]:null,req:s.rod>=6?s.rod:1,act:'rod'});
   ups.push({ic:'💧',n:`水槽${s.cur+1}の拡張`,lv:`定員${tank.cap}匹${tank.cap>=TANK_MAX?'（MAX）':''}`,d:'展示できる数が+1（水槽タブで対象を切替）。釣り場を解放するほど値段が上がる',cost:tank.cap<TANK_MAX?tankCost(tank.cap):null,req:1,act:'tankup'});
@@ -1654,7 +1721,17 @@ function renderPanel(){
   ups.push({ic:'⚓',n:'桟橋',lv:s.b.pier?'建設済':'未建設',d:'魚がかかるまでの時間-30%、いけす+6',cost:s.b.pier?null:400,req:1,act:'pier'});
   const upHtml=u=>{const lock=s.rating<u.req;return`<div class="up"><div class="ic">${u.ic}</div><div class="info"><b>${u.n}</b> <span style="color:var(--gold)">${u.lv}</span><div class="sub">${u.d}${lock&&u.cost!=null?`<br>🔒 評価Lv${u.req}で解放`:''}</div></div>${u.cost!=null?`<button class="btn sm gold" data-act="buy" data-k="${u.act}" data-cost="${u.cost}" data-lock="${lock?1:0}" ${s.gold<u.cost||lock?'disabled':''}>${fmtG(u.cost)}</button>`:'<span class="sub">完了✓</span>'}</div>`;};
   h+=`<div class="card"><h3>⭐ 島の評価 Lv${s.rating}</h3><div class="sub">次のLvまで ${Math.floor(s.xp)}/${xpNeed(s.rating)}（観光客の来場・新種発見で上昇）</div><div class="prog"><div style="width:${s.xp/xpNeed(s.rating)*100}%"></div></div></div>`;
-  if(islandSub==='fac')h+=`<div class="card"><h3>🔧 設備・投資</h3>${ups.map(upHtml).join('')}</div>`;
+  if(islandSub==='fac')h+=`<div class="card"><h3>🔧 設備・投資</h3>${ups.filter(u=>u.act!=='rod').map(upHtml).join('')}</div>`;
+  if(islandSub==='shop'){
+   h+=`<div class="card"><h3>🎣 釣り竿</h3>${upHtml(ups.find(u=>u.act==='rod'))}</div>`;
+   h+=baitCardHtml();
+   const st=s.tanks[shopTank]||s.tanks[0],td=st.deco||[];
+   h+=`<div class="card"><h3>🪸 水槽の装飾</h3><div class="sub" style="margin-bottom:6px">水槽の底に飾ると、その水槽の魅力度がアップ！1つの水槽に${TDECO_MAX}個まで置けます。</div>
+    <div class="row">${s.tanks.map((t,i)=>`<button class="btn sm ${i===shopTank?'':'ghost'}" data-act="stank" data-i="${i}">${tankTheme(i).ic}水槽${i+1}（${(t.deco||[]).length}/${TDECO_MAX}）</button>`).join('')}</div>
+    <div class="sub" style="margin:4px 0">水槽${shopTank+1}に飾っているもの：${td.length?'':'なし'}</div>
+    ${td.map((id,i)=>`<div class="up">${tdThumb(id)}<div class="info"><b>${TDM[id].n}</b><div class="sub">魅力+${TDM[id].b}%</div></div><button class="btn sm red" data-act="tdrm" data-i="${i}">外す</button></div>`).join('')}</div><div class="card"><h3>🛒 装飾ショップ</h3>`;
+   for(const d of TDECOS){const full=td.length>=TDECO_MAX,dis=full||s.gold<d.c;h+=`<div class="up">${tdThumb(d.id)}<div class="info"><b>${d.n}</b> <span style="color:var(--gold)">魅力+${d.b}%</span><div class="sub">${d.d}</div></div><button class="btn sm gold" data-act="tdbuy" data-id="${d.id}" data-cost="${d.c}" data-lock="${full?1:0}" ${dis?'disabled':''}>${fmtG(d.c)}</button></div>`;}
+   h+=`<div class="sub">※ 外した装飾はなくなります（お金は戻りません）</div></div>`;}
   if(islandSub==='resort'){const used=decoUsed(),free=slotCount()-used;
    h+=`<div class="card"><h3>🌴 リゾート装飾</h3><div class="sub">島の賑わい <b style="color:var(--gold)">+${nigiwai()}%</b>（来場ペースに加算）／区画 ${used}/${slotCount()}${free<=0?'<br>⚠️ 区画がいっぱい！撤去するか、「土地」で埋め立て・拡張しよう':''}</div></div><div class="card">`;
    let tier=-1;
@@ -1721,6 +1798,9 @@ $('#panel').addEventListener('click',e=>{
   case'clean':cleanMode=!cleanMode;cv.style.touchAction=cleanMode?'none':'manipulation';if(cleanMode){log('🧽 水槽の画面を指でこすって汚れを落とそう！');window.scrollTo({top:0,behavior:'smooth'});}break;
   case'proclean':{const t=s.tanks[s.cur],c=cleanCost(t);if(s.gold>=c&&c>0){s.gold-=c;t.dirt.fill(0);cleanMode=false;log(`🧹 業者が水槽${s.cur+1}をピカピカにした（-${c}G）`,'#7ef0ff');}break;}
   case'isub':islandSub=el.dataset.k;break;
+  case'stank':shopTank=+el.dataset.i;break;
+  case'tdbuy':{const d=TDM[el.dataset.id],t=s.tanks[shopTank];t.deco=t.deco||[];if(t.deco.length<TDECO_MAX&&s.gold>=d.c){s.gold-=d.c;t.deco.push(d.id);log(`🪸 水槽${shopTank+1}に「${d.n}」を飾った（魅力+${d.b}%）`,'#7ef0ff');}break;}
+  case'tdrm':{const t=s.tanks[shopTank];if(t.deco){const id=t.deco.splice(+el.dataset.i,1)[0];if(id)log(`水槽${shopTank+1}の「${TDM[id].n}」を外した`);}break;}
   case'usebait':if((s.baits[el.dataset.id]||0)>0){s.bait=el.dataset.id;fs.st='idle';}break;
   case'buybait':{const bb=BAITM[el.dataset.id],n=+el.dataset.n,c=bb.c*n;if(s.gold>=c){s.gold-=c;s.baits[bb.id]=(s.baits[bb.id]||0)+n;log(`${bb.ic} ${bb.n}を${n}個買った（-${fmtG(c)}）`);if(!(s.baits[s.bait]>0))s.bait=bb.id;}break;}
   case'event':startEvent(el.dataset.id);break;
