@@ -61,6 +61,10 @@ h3{margin:2px 0 8px;font-size:14.5px}
 .mbox .th img{max-width:150px;max-height:90px}
 .mbox .th .em{font-size:64px}
 .mbox table{width:100%;font-size:13px;margin:8px 0;text-align:left}
+.mbox{max-height:88vh;overflow-y:auto}
+.gmin{width:100%;padding:9px;border-radius:8px;border:1px solid #2e6a88;background:#062a3e;color:#fff;font-size:15px;font-family:inherit;-webkit-user-select:text;user-select:text}
+.gmbox{text-align:left}.gms{font-weight:bold;font-size:13px;margin:10px 0 5px;color:var(--gold)}
+[data-gm],[data-tab=dex]{-webkit-touch-callout:none;touch-action:none}
 .mbox td:first-child{color:var(--sub);width:40%}
 </style>
 </head>
@@ -94,6 +98,9 @@ const AREAS=[
  {id:'deep',n:'深海',ic:'🌑',cost:9000,req:5,w:['#1b4a7c','#01060f']},
 ];
 const AREAM={};AREAS.forEach(a=>AREAM[a.id]=a);
+const DREAM={id:'dream',n:'夢で見た海',ic:'🌙',w:['#e8d8ff','#f6d6ec']};AREAM.dream=DREAM;
+const DREAM_WAIT=[0,6,4.8,3.8,2.9,2,1.3];  // 竿Lvごとの「夢で見た海」の待ち時間倍率
+const BOAT_CHANCE=.06;                      // 雨の日に幻の小舟が現れる確率
 const RAR=['','★','★★','★★★','★★★★','★★★★★','🌈幻★6'];
 const RCOL=['','#cfd8dc','#7ee081','#5ab0ff','#c98bff','#ffcf40','#ff6bd6'];
 const WAIT_MULT=[1,1.35,1.75,2.2];      // エリアが深いほど魚がかかるまで遅い
@@ -267,6 +274,17 @@ S('scaly','スケーリーフット','deep',5,250,3,5,{shape:'shell',c1:'#3a3a3a
 S('hoshifuru','ホシフルウオ','deep',6,580,50,120,{c1:'#1a1a4a',c2:'#ffffff',h:.35,pat:'glow'},'【伝説】体に星空を宿す深海の魚。見た者は願いが叶うという。'),
 S('benikurage','ベニクラゲ','deep',3,55,.5,1,{shape:'jelly',c1:'rgba(255,200,200,0.55)',c2:'#ff3b3b',rain:1},'若返りをくり返す「不老不死のクラゲ」。'),
 S('gigant','ギガントキプリス','deep',4,95,1,3,{shape:'slug',c1:'#ffb06a',c2:'#ff6a2a',rain:1},'大きな目のような反射板をもつ、深海のミジンコの仲間。'),
+// ---- 🌙 夢で見た海（幻の小舟でのみ行ける） ----
+S('kasumimanbou','カスミマンボウ','dream',5,300,150,400,{shape:'manbou',c1:'#f6d8ef',c2:'#c8b8f0'},'霧の向こうをゆっくり漂うマンボウ。触れようとすると霞のように消える。'),
+S('yumemikurage','ユメミクラゲ','dream',5,280,20,60,{shape:'jelly',c1:'rgba(255,220,245,0.45)',c2:'#b8e8ff'},'眠る人の夢の中だけで光るといわれるクラゲ。'),
+S('hakumokuren','ハクモクレンダイ','dream',5,320,40,90,{c1:'#ffe8f4',c2:'#d8f0ff',h:.5,pat:'dream'},'白い花びらのような鱗をもつ鯛。泳いだあとに甘い香りが残る。'),
+S('soranoei','ソラノエイ','dream',5,340,100,300,{shape:'ray',c1:'#cfe8ff',c2:'#ffd8ee'},'海と空の境目を飛ぶエイ。ここでは水面がどこなのかもあいまいだ。'),
+S('nemuritatsu','ネムリタツ','dream',5,300,10,25,{shape:'seahorse',c1:'#ffd0e8',c2:'#bfe6ff'},'いつも目を閉じているタツノオトシゴ。見ていると眠くなる。'),
+S('utakata','ウタカタノツカイ','dream',6,700,300,900,{shape:'long',c1:'#fff0fa',c2:'#a8d8ff'},'【伝説】泡のようにはかない体で、夢と現実をつなぐ使者。'),
+S('hoshikuzu','ホシクズザメ','dream',6,720,200,500,{c1:'#e8d8ff',c2:'#fff6a8',h:.26,pat:'glow',shark:1},'【伝説】流れ星のかけらを食べて育ったサメ。体の光は星の名残。'),
+S('tsukimi','ツキミクジラウオ','dream',6,760,500,1500,{c1:'#bcd8ff',c2:'#8aa8e0',h:.32,pat:'ws',shark:1},'【伝説】満月の夢にだけ現れる、クジラほどの大きさの魚。'),
+S('maboroshi','マボロシクリオネ','dream',6,680,2,5,{shape:'clione',c1:'rgba(255,230,250,0.6)',c2:'#ff9ad5'},'【伝説】羽ばたくたびに小さな虹がこぼれる、幻の天使。'),
+S('yumenonushi','ユメノヌシ','dream',6,900,100,250,{c1:'#ffd8f0',c2:'#c8e8ff',h:.45,pat:'rainbow',sail:1},'【伝説】夢で見た海の主。目が覚めると誰もその姿を思い出せない。'),
 // ---- 🥾 ハズレ・漂流物（どの釣り場でも） ----
 S('boot','長靴','any',1,0,25,35,{e:'👢',junk:1,price:1},'誰かの忘れ物。なぜかいつも片方だけ釣れる…。'),
 S('can','空き缶','any',1,0,10,12,{shape:'junk',kind:'can',junk:1,price:1},'中身はからっぽ。ちゃんとゴミ箱に捨てよう。'),
@@ -330,11 +348,11 @@ const KEY='aquaIsland_v1';
 
 // ===================== 状態 =====================
 function newState(){return{v:1,gold:120,day:1,time:0.08,rating:1,xp:0,rod:1,tanks:[{cap:3,fish:[]}],cur:0,bucket:[],dex:{},
- b:{cafe:0,cottage:0,lighthouse:0,pier:0,filter:0,bucket:0},event:null,deco:{},decoList:[],land:0,areas:['beach'],area:'beach',rain:false,visToday:0,incToday:0,totalVis:0,totalInc:0,uid:1,last:Date.now()};}
+ b:{cafe:0,cottage:0,lighthouse:0,pier:0,filter:0,bucket:0},event:null,deco:{},decoList:[],land:0,boat:false,dream:false,storm:null,freeEv:0,dreamVisited:false,dreamTrips:0,areas:['beach'],area:'beach',rain:false,visToday:0,incToday:0,totalVis:0,totalInc:0,uid:1,last:Date.now()};}
 let s=load()||newState();
 let tab='tank',T=0,APPEAL=0;
 const anim={};let bubbles=[],ripples=[],present=[],sparks=[];
-let thunder=0,cleanMode=false,pdown=false,sponge=null,recalcT=0,islandSub='fac',warned={},pend={g:0,n:0,cafe:0,t:0},visAcc=0,saveT=0,topT=0,gatherCd=0,selFish=null;
+let thunder=0,boatHit=null,cleanMode=false,pdown=false,sponge=null,recalcT=0,islandSub='fac',warned={},pend={g:0,n:0,cafe:0,t:0},visAcc=0,saveT=0,topT=0,gatherCd=0,selFish=null;
 const fs={st:'idle',t:0,wait:0,sp:null,size:0,bx:0,by:0,sx:0,sy:0,hits:0,need:1,z0:0,z1:0,mk:0,md:1,speed:1,win:1,nib:0,nibT:1,res:null,flash:null};
 
 // ===================== ユーティリティ =====================
@@ -370,7 +388,7 @@ window.addEventListener('resize',resize);
 // ===================== 生き物の描画 =====================
 const EMOJI_FONT='"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
 function drawCreature(c,sp,L,t,ph,dir){
- c.save();
+ c.save();if(sp.a==='dream'){c.globalAlpha*=.85;c.shadowColor='rgba(255,210,245,.9)';c.shadowBlur=Math.min(18,L*.25);}
  if(sp.e){c.scale(-dir,1);c.rotate(Math.sin(t*2+ph)*.07);c.font=`${L}px ${EMOJI_FONT}`;c.textAlign='center';c.textBaseline='middle';c.fillText(sp.e,0,0);c.restore();return;}
  c.scale(dir,1);
  switch(sp.shape){
@@ -417,6 +435,7 @@ function drawFishBody(c,sp,L,t,ph){
  else c.ellipse(0,0,L/2,h/2,0,0,Math.PI*2);
  let g=c.createLinearGradient(0,-h/2,0,h/2);
  if(sp.pat==='rainbow'){for(let i=0;i<6;i++)g.addColorStop(i/5,`hsl(${(t*60+i*55+ph*40)%360},90%,${62+i*3}%)`);}
+ else if(sp.pat==='dream'){g.addColorStop(0,sp.c2);g.addColorStop(.5,sp.c1);g.addColorStop(1,'#ffffff');}
  else if(sp.pat==='gold'){g.addColorStop(0,'#8a6000');g.addColorStop(.4,'#ffd700');g.addColorStop(.6,'#fff3a0');g.addColorStop(1,'#d4a000');}
  else if(sp.pat==='back'||sp.pat==='stripes'||sp.pat==='ws'||sp.shark){g.addColorStop(0,sp.c2);g.addColorStop(.5,sp.c1);g.addColorStop(1,shade(sp.c1,.45));}
  else{g.addColorStop(0,shade(sp.c1,-.25));g.addColorStop(.5,sp.c1);g.addColorStop(1,shade(sp.c1,.35));}
@@ -437,7 +456,7 @@ function drawFishBody(c,sp,L,t,ph){
   case'ws':c.fillStyle='rgba(255,255,255,.75)';for(let i=0;i<14;i++)for(let j=0;j<3;j++){c.beginPath();c.arc(-L*.4+i*L*.065,-h*.35+j*h*.2+(i%2)*h*.08,h*.04,0,7);c.fill();}break;
   case'glow':{const a=.55+.45*Math.sin(t*3+ph);c.fillStyle=sp.c2;c.shadowColor=sp.c2;c.shadowBlur=6;c.globalAlpha=a;for(let i=0;i<9;i++){c.beginPath();c.arc(-L*.38+i*L*.09,h*.25,Math.max(1,h*.06),0,7);c.fill();}
    if(sp.shark){c.strokeStyle=sp.c2;c.lineWidth=2;c.beginPath();c.moveTo(-L*.35,-h*.1);for(let i=1;i<7;i++)c.lineTo(-L*.35+i*L*.1,(i%2?-1:1)*h*.18);c.stroke();}c.globalAlpha=1;c.shadowBlur=0;break;}
-  case'gold':{const x=((t*.6+ph)%2-1)*L;const sg=c.createLinearGradient(x-L*.15,0,x+L*.15,0);sg.addColorStop(0,'rgba(255,255,255,0)');sg.addColorStop(.5,'rgba(255,255,255,.7)');sg.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=sg;c.fillRect(-L,-h,L*2,h*2);break;}
+  case'dream':case'gold':{const x=((t*.6+ph)%2-1)*L;const sg=c.createLinearGradient(x-L*.15,0,x+L*.15,0);sg.addColorStop(0,'rgba(255,255,255,0)');sg.addColorStop(.5,'rgba(255,255,255,.7)');sg.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=sg;c.fillRect(-L,-h,L*2,h*2);break;}
  }
  if(sp.shark){c.strokeStyle='rgba(0,0,0,.25)';c.lineWidth=1;for(let i=0;i<4;i++){c.beginPath();c.moveTo(L*.2-i*L*.03,-h*.15);c.lineTo(L*.18-i*L*.03,h*.15);c.stroke();}}
  c.restore();
@@ -705,7 +724,7 @@ function drawTank(){
 // ===================== 釣り画面 =====================
 function skyCol(h){const K=[[0,'#0b1030','#1b2350'],[5,'#2b2f6b','#e8838a'],[7,'#7ec8f0','#ffd9a8'],[12,'#3fa8ee','#c4ecff'],[17,'#5a8fd8','#ffc58a'],[18.7,'#3b3f8a','#ff8a6b'],[20.5,'#121a45','#3a2f6b'],[24,'#0b1030','#1b2350']];
  for(let i=0;i<K.length-1;i++)if(h>=K[i][0]&&h<=K[i+1][0]){const f=(h-K[i][0])/(K[i+1][0]-K[i][0]);return[lerpCol(K[i][1],K[i+1][1],f),lerpCol(K[i][2],K[i+1][2],f)];}return[K[0][1],K[0][2]];}
-function drawRain(){ctx.strokeStyle='rgba(200,220,255,.45)';ctx.lineWidth=1;ctx.beginPath();for(let i=0;i<90;i++){const v=480+(i%5)*70,y=((i*97.3)+T*v)%(H+30)-15,x=(((i*137.5)%W)+y*.2)%W;ctx.moveTo(x,y);ctx.lineTo(x-3,y+13);}ctx.stroke();
+function drawRain(){const st=stormStage(),n=st==='storm'?220:st==='warn'?160:90,sl=st==='storm'?.6:.2;ctx.strokeStyle='rgba(200,220,255,.45)';ctx.lineWidth=1;ctx.beginPath();for(let i=0;i<n;i++){const v=480+(i%5)*70,y=((i*97.3)+T*v)%(H+30)-15,x=(((i*137.5)%W)+y*sl)%W;ctx.moveTo(x,y);ctx.lineTo(x-13*sl,y+13);}ctx.stroke();
  if(thunder>0){ctx.fillStyle=`rgba(255,255,255,${Math.min(.6,thunder*2)})`;ctx.fillRect(0,0,W,H);}}
 function drawSky(hz){
  const h=hourNow(),nt=night(h);
@@ -720,16 +739,31 @@ function drawSky(hz){
  for(let i=0;i<3;i++){const x=((T*(6+i*3)+i*W*.4)%(W+160))-80,y=hz*(.2+i*.2);for(const [dx,dy,r] of[[0,0,16],[16,-6,18],[34,0,14],[18,4,16]]){ctx.beginPath();ctx.arc(x+dx,y+dy,r,0,7);ctx.fill();}}
  return nt;
 }
+function drawDreamSky(hz){
+ let g=ctx.createLinearGradient(0,0,0,hz);g.addColorStop(0,'#ffd6ec');g.addColorStop(.55,'#e2dcff');g.addColorStop(1,'#fff2f8');ctx.fillStyle=g;ctx.fillRect(0,0,W,hz+1);
+ const mx=W*.7,my=hz*.42,mg=ctx.createRadialGradient(mx,my,0,mx,my,70);mg.addColorStop(0,'rgba(255,255,255,1)');mg.addColorStop(.25,'rgba(255,240,250,.8)');mg.addColorStop(1,'rgba(255,220,240,0)');ctx.fillStyle=mg;ctx.beginPath();ctx.arc(mx,my,70,0,7);ctx.fill();
+ for(let i=0;i<4;i++){const x=((T*(3+i)+i*W*.33)%(W+200))-100,y=hz*(.55+i*.1);ctx.fillStyle='rgba(200,180,240,.35)';ctx.beginPath();ctx.ellipse(x,y,40+i*10,8+i*2,0,0,7);ctx.fill();ctx.beginPath();ctx.ellipse(x,y-10-i*2,18+i*4,10+i*3,0,Math.PI,0);ctx.fill();}
+ for(let i=0;i<30;i++){const a=.4+.6*Math.sin(T*2+i*1.7);ctx.fillStyle=`rgba(255,255,255,${a*.8})`;ctx.fillRect((i*137)%W,(i*71)%(hz*.9),1.6,1.6);}
+ return 0;}
+function drawMist(hz){
+ for(let i=0;i<6;i++){const x=((T*(8+i*3)+i*W*.37)%(W*1.6))-W*.3,y=hz+(H-hz)*(.05+i*.17),rx2=W*(.35+(i%3)*.1),ry2=18+i*4;
+  const g=ctx.createRadialGradient(x,y,0,x,y,rx2);g.addColorStop(0,`rgba(${i%2?'255,230,245':'225,240,255'},.55)`);g.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=g;ctx.save();ctx.translate(x,y);ctx.scale(1,ry2/rx2);ctx.beginPath();ctx.arc(0,0,rx2,0,7);ctx.fill();ctx.restore();}
+ for(let i=0;i<18;i++){const y=H-((T*(10+i%4*4)+i*53)%(H+20)),x=(i*97+Math.sin(T+i)*20)%W;ctx.fillStyle=i%2?'rgba(255,190,225,.7)':'rgba(200,230,255,.7)';ctx.beginPath();ctx.ellipse(x,y,2.5,1.5,T+i,0,7);ctx.fill();}
+}
 function drawFishing(){
- const hz=H*.36,nt=drawSky(hz),ar=AREAM[s.area];
+ const hz=H*.36,dream=s.area==='dream',nt=dream?drawDreamSky(hz):drawSky(hz),ar=AREAM[s.area];
+ let g;
+ if(dream){g=ctx.createLinearGradient(0,hz,0,H);g.addColorStop(0,'#f4e4ff');g.addColorStop(.5,'#c8e2f8');g.addColorStop(1,'#f6d6ec');ctx.fillStyle=g;ctx.fillRect(0,hz,W,H-hz);
+  for(let i=0;i<5;i++){const x=W*(.1+i*.2)+Math.sin(T*.3+i)*10;g=ctx.createLinearGradient(0,hz,0,H);g.addColorStop(0,'rgba(255,255,255,.35)');g.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=g;ctx.fillRect(x-6,hz,12,H-hz);}}
+ else{
  // 遠くの島
  ctx.fillStyle=lerpCol('#5d8a73','#1a2a3a',nt);ctx.beginPath();ctx.ellipse(W*.82,hz,W*.14,hz*.18,0,Math.PI,0);ctx.fill();
  // 海
- let g=ctx.createLinearGradient(0,hz,0,H);g.addColorStop(0,shade(s.rain?'#5f7f8f':ar.w[0],-nt*.6));g.addColorStop(1,shade(ar.w[1],-nt*.5));ctx.fillStyle=g;ctx.fillRect(0,hz,W,H-hz);
+ g=ctx.createLinearGradient(0,hz,0,H);g.addColorStop(0,shade(s.rain?'#5f7f8f':ar.w[0],-nt*.6));g.addColorStop(1,shade(ar.w[1],-nt*.5));ctx.fillStyle=g;ctx.fillRect(0,hz,W,H-hz);}
  ctx.strokeStyle='rgba(255,255,255,.18)';ctx.lineWidth=1.5;
  for(let r=0;r<7;r++){const y=hz+8+r*r*7;ctx.beginPath();for(let x=0;x<=W;x+=12)ctx.lineTo(x,y+Math.sin(x*.04+T*1.5+r)*(1+r*.4));ctx.stroke();}
  // 魚影
- ctx.fillStyle='rgba(0,0,0,.13)';for(let i=0;i<3;i++){const x=((T*(15+i*8)+i*200)%(W+100))-50,y=hz+(H-hz)*(.45+i*.15);ctx.beginPath();ctx.ellipse(x,y,22-i*3,7,0,0,7);ctx.fill();}
+ ctx.fillStyle=dream?'rgba(255,255,255,.3)':'rgba(0,0,0,.13)';for(let i=0;i<3;i++){const x=((T*(15+i*8)+i*200)%(W+100))-50,y=hz+(H-hz)*(.45+i*.15);ctx.beginPath();ctx.ellipse(x,y,22-i*3,7,0,0,7);ctx.fill();}
  // 波紋
  for(const rp of ripples){ctx.strokeStyle=`rgba(255,255,255,${1-rp.t})`;ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(rp.x,rp.y,rp.t*30+4,rp.t*10+2,0,0,7);ctx.stroke();}
  // 桟橋
@@ -753,8 +787,11 @@ function drawFishing(){
  // UIテキスト
  ctx.textAlign='center';ctx.textBaseline='middle';
  const txt=(t,y,size,col)=>{ctx.font=`bold ${size}px sans-serif`;ctx.lineWidth=4;ctx.strokeStyle='rgba(0,20,40,.7)';ctx.strokeText(t,W/2,y);ctx.fillStyle=col||'#fff';ctx.fillText(t,W/2,y);};
- if(s.rain&&fs.st!=='result')drawRain();
- if(s.rain&&fs.st!=='result')txt('☔ 雨の日ステージ',H*.36+16,12,'#bfe0ff');
+ if(dream)drawMist(hz);
+ if(s.rain&&!dream&&fs.st!=='result')drawRain();
+ if(!dream&&stormStage()==='storm'){ctx.fillStyle='rgba(15,20,30,.45)';ctx.fillRect(0,0,W,H);txt('🌪 大嵐のため釣り場は閉鎖中',H*.5,17,'#ffb3b3');}
+ if(dream&&fs.st!=='result')txt('🌙 夢で見た海 — 今日だけの不思議な海',H*.36+16,12,'#fff0fa');
+ if(s.rain&&!dream&&fs.st!=='result')txt('☔ 雨の日ステージ',H*.36+16,12,'#bfe0ff');
  if(fs.st==='idle'){txt('タップでキャスト！🎣',H*.6+Math.sin(T*3)*3,18);txt(`${s.rain?'☔':ar.ic} ${ar.n}${s.rain?'（雨）':''}  ／  竿Lv${s.rod}`,H*.6+26,12,'#cfe');}
  if(fs.st==='wait'||fs.st==='cast')txt('…じっと待って、浮きが沈んだらタップ',H*.92,13,'#dff');
  if(fs.st==='bite')txt('今だ！タップ！',H*.92,18,'#ffeb3b');
@@ -769,7 +806,7 @@ function drawFishing(){
  }
  if(fs.flash&&fs.flash.t>0){ctx.globalAlpha=Math.min(1,fs.flash.t);txt(fs.flash.txt,H*.5,22,fs.flash.col);ctx.globalAlpha=1;}
  if(fs.st==='result'){
-  const r=fs.res,p=r.sp;ctx.fillStyle='rgba(0,15,30,.6)';ctx.fillRect(0,0,W,H);
+  const r=fs.res,p=r.sp;ctx.fillStyle=dream?'rgba(110,80,140,.42)':'rgba(0,15,30,.6)';ctx.fillRect(0,0,W,H);
   const gl=ctx.createRadialGradient(W/2,H*.42,0,W/2,H*.42,Math.min(W,H)*.45);gl.addColorStop(0,RCOL[p.r]+'88');gl.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=gl;ctx.fillRect(0,0,W,H);
   for(let i=0;i<12;i++){const a=i/12*Math.PI*2+T,rr=Math.min(W,H)*.3+Math.sin(T*3+i)*8;ctx.fillStyle='#fff8';ctx.beginPath();ctx.arc(W/2+Math.cos(a)*rr,H*.42+Math.sin(a)*rr*.6,2,0,7);ctx.fill();}
   let L=Math.min(W,H)*.38;if(p.junk)L*=.8;if(p.shape==='long'||p.shape==='eel')L=W*.8;if(p.shape==='angler'||p.shape==='manbou'||p.sail||p.bill)L*=.8;
@@ -783,7 +820,7 @@ function drawFishing(){
 }
 function updateFishing(dt){
  fs.t+=dt;if(fs.flash)fs.flash.t-=dt;
- if(s.rain&&Math.random()<dt*6)ripples.push({x:rand(0,W),y:rand(H*.4,H),t:.4});
+ if(s.rain&&s.area!=='dream'&&Math.random()<dt*6)ripples.push({x:rand(0,W),y:rand(H*.4,H),t:.4});
  for(const rp of ripples)rp.t+=dt*.8;ripples=ripples.filter(r=>r.t<1);
  for(const p of sparks){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=300*dt;p.l-=dt*1.2;}sparks=sparks.filter(p=>p.l>0);
  if(fs.st==='cast'&&fs.t>=.6){fs.st='wait';fs.t=0;ripples.push({x:fs.bx,y:fs.by,t:0});splash(fs.bx,fs.by,6);}
@@ -799,21 +836,23 @@ function updateFishing(dt){
 }
 function flash(txt,col){fs.flash={txt,col,t:1.4};}
 function splash(x,y,n){for(let i=0;i<n;i++)sparks.push({x,y,vx:rand(-60,60),vy:rand(-160,-60),l:1});}
-function fishPool(area){return SPECIES.filter(p=>p.a===area&&!p.g&&(s.rain||!p.rain));}
+function fishPool(area){return SPECIES.filter(p=>p.a===area&&!p.g&&(area==='dream'||s.rain||!p.rain));}
 const JRW=[0,8,5,3,1.5,.6];
-function pickSpecies(area){const rw=[0,50,28,13,5,1.6,.4];const fish=fishPool(area),junk=SPECIES.filter(p=>p.junk&&(s.rain||!p.rain)),list=fish.concat(junk);let tot=0;const jk=Math.max(.3,1.3-s.rod*.15);
+function pickSpecies(area){if(area==='dream'){const l=fishPool('dream');let tot=0;const w=l.map(p=>{const v=p.r>=6?.6:1;tot+=v;return v;});let r=Math.random()*tot;for(let i=0;i<l.length;i++){r-=w[i];if(r<=0)return l[i];}return l[0];}
+ const rw=[0,50,28,13,5,1.6,.4];const fish=fishPool(area),junk=SPECIES.filter(p=>p.junk&&(s.rain||!p.rain)),list=fish.concat(junk);let tot=0;const jk=Math.max(.3,1.3-s.rod*.15);
  const rb=(curEvent()||{}).rare||1;const ws=list.map(p=>{const w=p.junk?JRW[p.r]*jk:rw[p.r]*(1+(s.rod-1)*.22*(p.r-1))*(s.rain?(p.rain?2.2:.4):1)*(p.r>=3?rb:1);tot+=w;return w;});let r=Math.random()*tot;
  for(let i=0;i<list.length;i++){r-=ws[i];if(r<=0)return list[i];}return list[0];}
 function rollSize(p){const k=Math.pow(Math.random(),Math.max(.6,1.7-s.rod*.15));return Math.round((p.mn+(p.mx-p.mn)*k)*10)/10;}
 function bucketCap(){return 8+(s.b.pier?6:0)+(s.b.bucket||0)*4;}
-function newZone(){const w=fs.sp.junk?.4:clamp(.3+s.rod*.035-fs.sp.r*.035,.1,.45);fs.z0=rand(.05,.95-w);fs.z1=fs.z0+w;}
+function newZone(){const w=fs.sp.junk?.4:clamp(.3+s.rod*.035-fs.sp.r*.035,.1,.45)*(fs.sp.a==='dream'?.72:1);fs.z0=rand(.05,.95-w);fs.z1=fs.z0+w;}
 function fishTap(){
  switch(fs.st){
   case'idle':
+   if(stormStage()==='storm'){flash('嵐で海に出られない…','#ffb3b3');return;}
    if(s.bucket.length>=bucketCap()){flash('いけすが満杯！','#ffb3b3');log('🪣 いけすが満杯です。水槽タブで展示するか売りましょう');return;}
-   fs.st='cast';fs.t=0;fs.bx=rand(W*.45,W*.8);fs.by=rand(H*.5,H*.66);fs.wait=rand(1.5,4.2)*WAIT_MULT[areaIdx(s.area)]*(s.b.pier?.7:1);fs.nib=0;fs.nibT=rand(.5,1.2);break;
+   fs.st='cast';fs.t=0;fs.bx=rand(W*.45,W*.8);fs.by=rand(H*.5,H*.66);fs.wait=s.area==='dream'?rand(1,3)*DREAM_WAIT[s.rod]:rand(1.5,4.2)*WAIT_MULT[areaIdx(s.area)]*(s.b.pier?.7:1);fs.nib=0;fs.nibT=rand(.5,1.2);break;
   case'cast':case'wait':fs.st='idle';flash('早すぎた！','#ffb3b3');break;
-  case'bite':fs.st='reel';fs.t=0;fs.hits=0;fs.need=fs.sp.junk?1:fs.sp.r>=6?4:fs.sp.r>=5?3:fs.sp.r>=4?2:1;fs.mk=0;fs.md=1;fs.speed=fs.sp.junk?.7:.8+fs.sp.r*.22;newZone();break;
+  case'bite':fs.st='reel';fs.t=0;fs.hits=0;fs.need=fs.sp.junk?1:fs.sp.r>=6?4:fs.sp.r>=5?3:fs.sp.r>=4?2:1;fs.mk=0;fs.md=1;fs.speed=fs.sp.junk?.7:(.8+fs.sp.r*.22)*(fs.sp.a==='dream'?1.15:1);newZone();break;
   case'reel':
    if(fs.mk>=fs.z0&&fs.mk<=fs.z1){fs.hits++;splash(fs.bx,fs.by,6);if(navigator.vibrate)navigator.vibrate(30);
     if(fs.hits>=fs.need)catchFish();else{newZone();fs.speed*=1.12;}}
@@ -837,7 +876,7 @@ function catchFish(){
  save();if(tab==='fish')renderPanel();
 }
 function gather(){
- if(gatherCd>0)return;
+ if(gatherCd>0)return;if(stormStage()==='storm'){log('🌪 嵐で浜辺に出られない…');return;}
  if(s.bucket.length>=bucketCap()){log('🪣 いけすが満杯です');return;}
  gatherCd=7;
  if(Math.random()<.1){const g=Math.round(rand(15,40)*s.rating);s.gold+=g;log(`🎁 流れ着いた木箱から ${g}G 見つけた！`,'#ffd166');renderPanel();return;}
@@ -905,6 +944,15 @@ function drawEventFx(e,L,sc,nt,hz){const {cx,cy,rx,ry}=L;const id=e.id;
  const left=s.event.left,d=Math.floor(left/DAY_SEC),hh=Math.floor(left%DAY_SEC/DAY_SEC*24),txt=`${e.ic} ${e.n} 開催中 残り${d?d+'日':''}${hh}時間`;
  ctx.font='bold 11px sans-serif';const tw=ctx.measureText(txt).width+12;ctx.fillStyle='rgba(255,60,140,.8)';ctx.fillRect(4,H-40,tw,17);ctx.fillStyle='#fff';ctx.textAlign='left';ctx.textBaseline='bottom';ctx.fillText(txt,10,H-25);
 }
+function drawBoat(x,y,sc){const b=Math.sin(T*1.6)*2,p=.5+.5*Math.sin(T*2.5),R=60*sc;
+ const g=ctx.createRadialGradient(x,y,0,x,y,R);g.addColorStop(0,`rgba(255,220,245,${.5+p*.3})`);g.addColorStop(.5,'rgba(220,230,255,.3)');g.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,R,0,7);ctx.fill();
+ ctx.save();ctx.translate(x,y+b);const k=sc*1.2;
+ ctx.fillStyle='#fff';ctx.globalAlpha=.9;ctx.beginPath();ctx.moveTo(-2*k,-6*k);ctx.lineTo(-2*k,-34*k);ctx.quadraticCurveTo(14*k,-20*k,12*k,-8*k);ctx.closePath();ctx.fill();
+ ctx.strokeStyle='#d8c0e8';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-2*k,-4*k);ctx.lineTo(-2*k,-36*k);ctx.stroke();
+ const hg=ctx.createLinearGradient(0,-6*k,0,6*k);hg.addColorStop(0,'#ffc8e8');hg.addColorStop(1,'#b8d8ff');ctx.fillStyle=hg;ctx.beginPath();ctx.moveTo(-22*k,-6*k);ctx.quadraticCurveTo(0,10*k,22*k,-6*k);ctx.quadraticCurveTo(0,-1*k,-22*k,-6*k);ctx.fill();ctx.globalAlpha=1;ctx.restore();
+ for(let i=0;i<6;i++){const a=T*1.2+i*1.05,d=R*.55;ctx.fillStyle=`rgba(255,255,255,${.5+.5*Math.sin(T*4+i)})`;ctx.fillRect(x+Math.cos(a)*d,y+Math.sin(a)*d*.5-10*sc,2,2);}
+ ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillStyle=`rgba(255,240,250,${.6+p*.4})`;ctx.strokeStyle='rgba(80,40,90,.6)';ctx.lineWidth=3;ctx.strokeText('タップ？',x,y-42*sc);ctx.fillText('タップ？',x,y-42*sc);
+ boatHit={x,y:y-14*sc,r:Math.max(36,40*sc)};}
 function drawIsland(){
  const hz=H*.28,nt=drawSky(hz);
  let g=ctx.createLinearGradient(0,hz,0,H);g.addColorStop(0,shade(s.rain?'#5f8f9f':'#3cb6d6',-nt*.6));g.addColorStop(1,shade('#0c6f93',-nt*.5));ctx.fillStyle=g;ctx.fillRect(0,hz,W,H-hz);
@@ -935,19 +983,22 @@ function drawIsland(){
  const glow=[];
  // カフェ
  const cfx=cx-rx*.55,cfy=cy-ry*.05;
- if(s.b.cafe){const k=1+s.b.cafe*.15;ctx.fillStyle='#f6efe2';ctx.fillRect(cfx-18*sc*k,cfy-22*sc*k,36*sc*k,22*sc*k);
+ if(s.b.cafe&&!bOn('cafe'))drawRubble(cfx,cfy-4*sc,sc,1);
+ else if(s.b.cafe){const k=1+s.b.cafe*.15;ctx.fillStyle='#f6efe2';ctx.fillRect(cfx-18*sc*k,cfy-22*sc*k,36*sc*k,22*sc*k);
   for(let i=0;i<6;i++){ctx.fillStyle=i%2?'#fff':'#e74c3c';ctx.beginPath();const w=40*sc*k/6;ctx.moveTo(cfx-20*sc*k+i*w,cfy-22*sc*k);ctx.lineTo(cfx-20*sc*k+(i+1)*w,cfy-22*sc*k);ctx.lineTo(cfx-20*sc*k+(i+1)*w,cfy-15*sc*k);ctx.lineTo(cfx-20*sc*k+i*w,cfy-15*sc*k);ctx.fill();}
   ctx.fillStyle='#e74c3c';ctx.beginPath();ctx.moveTo(cfx-22*sc*k,cfy-22*sc*k);ctx.lineTo(cfx,cfy-34*sc*k);ctx.lineTo(cfx+22*sc*k,cfy-22*sc*k);ctx.fill();
   ctx.font=`${14*sc}px ${EMOJI_FONT}`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('☕',cfx,cfy-7*sc*k);glow.push([cfx,cfy-8*sc,30*sc]);}
  else empty(cfx,cfy-8*sc,'カフェ予定地');
  // コテージ
  for(let i=0;i<3;i++){const x=cx+rx*(.38+i*.14),y=cy+ry*(.18-i*.22);
-  if(i<s.b.cottage){ctx.fillStyle=lerpCol('#c69c6d','#4a3826',nt*.7);ctx.fillRect(x-12*sc,y-14*sc,24*sc,14*sc);ctx.fillStyle=lerpCol('#8b5a2b','#2c1d10',nt*.7);ctx.beginPath();ctx.moveTo(x-16*sc,y-14*sc);ctx.lineTo(x,y-28*sc);ctx.lineTo(x+16*sc,y-14*sc);ctx.fill();
+  if(i<s.b.cottage&&!bOn('cottage'))drawRubble(x,y,sc,0);
+  else if(i<s.b.cottage){ctx.fillStyle=lerpCol('#c69c6d','#4a3826',nt*.7);ctx.fillRect(x-12*sc,y-14*sc,24*sc,14*sc);ctx.fillStyle=lerpCol('#8b5a2b','#2c1d10',nt*.7);ctx.beginPath();ctx.moveTo(x-16*sc,y-14*sc);ctx.lineTo(x,y-28*sc);ctx.lineTo(x+16*sc,y-14*sc);ctx.fill();
    ctx.fillStyle=nt>.3?'#ffd56b':'#6a4a2a';ctx.fillRect(x-4*sc,y-10*sc,8*sc,7*sc);if(nt>.3)glow.push([x,y-7*sc,18*sc]);}
   else if(i===s.b.cottage)empty(x,y-6*sc,'コテージ予定地');}
  // 灯台
  const lx=cx+rx*.05,ly=cy-ry*.62;
- if(s.b.lighthouse){const th=46*sc;for(let i=0;i<5;i++){ctx.fillStyle=i%2?'#fff':'#e53935';const w0=12*sc-i*1.2*sc,w1=12*sc-(i+1)*1.2*sc;ctx.beginPath();ctx.moveTo(lx-w0/2-2,ly-i*th/5);ctx.lineTo(lx+w0/2+2,ly-i*th/5);ctx.lineTo(lx+w1/2+2,ly-(i+1)*th/5);ctx.lineTo(lx-w1/2-2,ly-(i+1)*th/5);ctx.fill();}
+ if(s.b.lighthouse&&!bOn('lighthouse'))drawRubble(lx,ly,sc,0);
+ else if(s.b.lighthouse){const th=46*sc;for(let i=0;i<5;i++){ctx.fillStyle=i%2?'#fff':'#e53935';const w0=12*sc-i*1.2*sc,w1=12*sc-(i+1)*1.2*sc;ctx.beginPath();ctx.moveTo(lx-w0/2-2,ly-i*th/5);ctx.lineTo(lx+w0/2+2,ly-i*th/5);ctx.lineTo(lx+w1/2+2,ly-(i+1)*th/5);ctx.lineTo(lx-w1/2-2,ly-(i+1)*th/5);ctx.fill();}
   ctx.fillStyle='#333';ctx.fillRect(lx-6*sc,ly-th-8*sc,12*sc,8*sc);ctx.fillStyle='#ffe082';ctx.fillRect(lx-4*sc,ly-th-7*sc,8*sc,6*sc);
   if(nt>.2){const a=T*1.2;ctx.save();ctx.globalAlpha=nt*.35;ctx.fillStyle='#fff6c0';ctx.beginPath();ctx.moveTo(lx,ly-th-4*sc);ctx.lineTo(lx+Math.cos(a)*W,ly-th+Math.sin(a)*W*.25-20);ctx.lineTo(lx+Math.cos(a+.15)*W,ly-th+Math.sin(a+.15)*W*.25+20);ctx.fill();ctx.restore();}}
  else empty(lx,ly-6*sc,'灯台予定地');
@@ -966,7 +1017,8 @@ function drawIsland(){
   ctx.save();ctx.translate(x+3*sc+sw*20,y-28*sc);ctx.fillStyle=lerpCol('#2e9e4f','#123a22',nt*.7);for(let k=0;k<5;k++){ctx.rotate(Math.PI*2/5);ctx.beginPath();ctx.ellipse(10*sc,0,12*sc,3.5*sc,.3+sw,0,7);ctx.fill();}ctx.restore();});
  // リゾート装飾（奥から順に）
  const items=s.decoList.slice(0,slotCount()).map((id,i)=>{const [x,y]=slotPos(i,L);return{id,x,y,i};}).sort((a,b)=>a.y-b.y);
- for(const it of items)drawDeco(it.id,it.x,it.y,sc,nt,it.i,glow);
+ {const bs=brokenSet();for(const it of items){if(bs.has(it.i))drawRubble(it.x,it.y,sc,BIG_DECO[it.id]||it.id==='ferris');else drawDeco(it.id,it.x,it.y,sc,nt,it.i,glow);}}
+ if(s.storm&&s.storm.debris){if(s.storm.debris.main)drawDebris(cx,cy,rx*.8,ry*.8,sc,0);for(let i=0;i<s.land;i++)if(s.storm.debris['l'+i]){const p=LAND_GEO[i];drawDebris(cx+p.x*rx,cy+p.y*ry,p.rx*rx,p.ry*ry,sc,i+1);}}
  // 観光客
  const pieces=1+s.land,n=Math.min(present.length,16+s.land*10+Math.floor(s.decoList.length/2)),cols=['#ff7b8a','#ffd166','#4fd1c5','#9b8cff','#ffffff','#7ee081'];
  for(let i=0;i<n;i++){const v=present[i],pi=v.ix%pieces,a=T*.12*(v.ix%2?1:-1)+v.ix*2.4,b=Math.abs(Math.sin(T*8+i))*1.5;let x,y;
@@ -978,6 +1030,8 @@ function drawIsland(){
   ctx.globalCompositeOperation='source-over';}
  if(s.rain)drawRain();
  if(EV)drawEventFx(EV,L,sc,nt,hz);
+ boatHit=null;if(s.boat)drawBoat(cx-rx*.68,cy+ry*.72,sc);
+ drawStormFx(L,sc,hz);
  // 賑わい表示
  ctx.font='bold 11px sans-serif';ctx.textAlign='right';ctx.textBaseline='bottom';ctx.fillStyle='rgba(0,0,0,.35)';ctx.fillRect(W-150,H-20,146,17);ctx.fillStyle='#fff';ctx.fillText(`🎉 賑わい +${nigiwai()}%　区画 ${Math.min(s.decoList.length,slotCount())}/${slotCount()}`,W-8,H-5);
 }
@@ -1000,7 +1054,7 @@ function tankTheme(i){return AREAS[Math.min(i,3)];}
 function tankAppeal(t,i){
  const th=tankTheme(i).id,cnt={},tiers=new Set();let base=0,match=0,star=0;
  for(const f of t.fish){const p=SPM[f.s];cnt[f.s]=(cnt[f.s]||0)+1;let v=fishAppeal(f)*[1,.6,.4,.3,.25][Math.min(4,cnt[f.s]-1)];
-  if(p.a===th){v*=1.25;match++;}else v*=.8;base+=v;tiers.add(p.r);if(p.r>=4)star++;}
+  if(p.a===th||p.a==='dream'){v*=1.25;match++;}else v*=.8;base+=v;tiers.add(p.r);if(p.r>=4)star++;}
  const n=t.fish.length,uniq=Object.keys(cnt).length,variety=uniq*.05,eco=Math.max(0,tiers.size-1)*.12,unity=n>=3&&match===n?.2:0,jam=n>=3&&star/n>.5?-.25:0,dirt=tankDirt(t);
  const mul=Math.max(.1,1+variety+eco+unity+jam);
  return{base,n,uniq,tiers:tiers.size,match,variety,eco,unity,jam,dirt,mul,total:base*mul*(1-.6*dirt)};}
@@ -1008,42 +1062,50 @@ function curEvent(){return s.event&&s.event.left>0?EVM[s.event.id]:null;}
 function evApp(){const e=curEvent();return e?e.app:1;}
 function evVis(){const e=curEvent();return e?e.vis:1;}
 let APPEAL_BASE=0;
-function recalc(){let a=0;s.tanks.forEach((t,i)=>a+=tankAppeal(t,i).total);APPEAL_BASE=a;APPEAL=a*evApp();}
+function recalc(){let a=0;s.tanks.forEach((t,i)=>a+=tankAppeal(t,i).total);APPEAL_BASE=a;APPEAL=a*evApp()*stormApp();}
 function evReqOk(e){for(const k in e.req){const v=e.req[k];if(k==='_pier'&&!s.b.pier)return false;if(k==='_lighthouse'&&!s.b.lighthouse)return false;if(k==='_rating'&&s.rating<v)return false;if(k==='_land'&&s.land<v)return false;if(k[0]!=='_'&&(s.deco[k]||0)<v)return false;}return true;}
 function evReqText(e){return Object.entries(e.req).map(([k,v])=>{const ok=k==='_pier'?s.b.pier:k==='_lighthouse'?s.b.lighthouse:k==='_rating'?s.rating>=v:k==='_land'?s.land>=v:(s.deco[k]||0)>=v;
  const n=k==='_pier'?'⚓桟橋':k==='_lighthouse'?'💡灯台':k==='_rating'?`⭐評価Lv${v}`:k==='_land'?`🏗️埋め立て${v}段階`:`${DECOM[k].ic}${DECOM[k].n}${v>1?'×'+v:''}`;return`${ok?'✅':'🔒'}${n}`;}).join(' ');}
 function avgTM(night){let a=0;for(let i=0;i<24;i++){const h=i+.5;a+=night&&(h>=19||h<6)?.95:timeMult(h);}return a/24;}
-function estDaily(e){const A=APPEAL_BASE*(e?e.app:1);if(A<=0)return 0;const tk=Math.round(4+Math.sqrt(A)*1.2+s.rating*1.5)+s.b.cafe*4+shopIncome();
- const vr=(.1+Math.sqrt(A)/40)*(1+.12*s.b.cottage)*(s.b.lighthouse?1.15:1)*(s.rain?.7:1)*(1+nigiwai()/100)*dirtVisMul()*(e?e.vis:1);
+function estDaily(e){const A=APPEAL_BASE*(e?e.app:1);if(A<=0)return 0;const tk=Math.round(4+Math.sqrt(A)*1.2+s.rating*1.5)+cafeLv()*4+shopIncome();
+ const vr=(.1+Math.sqrt(A)/40)*(1+.12*cottLv())*(lhOn()?1.15:1)*(s.rain?.7:1)*(1+nigiwai()/100)*dirtVisMul()*(e?e.vis:1);
  let tm=0;for(let i=0;i<24;i++){const h=i+.5;tm+=e&&e.night&&(h>=19||h<6)?.95:(h>=9&&h<19?1:h>=6&&h<9?.5:h>=19&&h<22?.6:.15);}return vr*(tm/24)*DAY_SEC*tk;}
 function eventCost(e){return Math.round((e.min+Math.max(0,estDaily(e)-estDaily(null))*e.days*1.2)/100)*100;}
-function startEvent(id){const e=EVM[id];if(curEvent()||!evReqOk(e))return;const c=eventCost(e);if(s.gold<c)return;
- s.gold-=c;s.event={id,left:e.days*DAY_SEC,cost:c,inc:0};recalc();log(`${e.ic} ${e.n} 開催！（${e.days}日間・開催費 -${fmtG(c)}）`,'#ff9ad5');addXp(10*e.days);}
+function startEvent(id){const e=EVM[id];if(s.storm){log('🌪 嵐の影響で、今はイベントを開催できない…');return;}if(curEvent()||!evReqOk(e))return;const free=(s.freeEv||0)>0,c=free?0:eventCost(e);if(s.gold<c)return;
+ if(free)s.freeEv--;s.gold-=c;s.event={id,left:e.days*DAY_SEC,cost:c,inc:0};recalc();log(`${e.ic} ${e.n} 開催！（${e.days}日間・${free?'🎫 無料券を使用':'開催費 -'+fmtG(c)}）`,'#ff9ad5');addXp(10*e.days);}
 function updateEvent(dt){if(!s.event)return;if(s.event.left>0){s.event.left-=dt;if(s.event.left<=0){const e=EVM[s.event.id];
  log(`${e.ic} ${e.n} 終了！期間中の売上 ${fmtG(s.event.inc)}（開催費 ${fmtG(s.event.cost)}）`,'#ff9ad5');s.event=null;recalc();if(tab==='island')renderPanel();}}}
-function nigiwai(){let b=s.land*10;for(const id in s.deco)b+=(DECOM[id]?DECOM[id].b:0)*s.deco[id];return Math.round(b);}
-function shopIncome(){let g=0;for(const id in s.deco)g+=(DECOM[id]&&DECOM[id].shop||0)*s.deco[id];return g;}
-function nightIncome(){let g=0;for(const id in s.deco)g+=(DECOM[id]&&DECOM[id].night||0)*s.deco[id];return Math.round(g*(1+s.rating*.05));}
+function nigiwai(){const st=s.storm&&s.storm.debris||{};let b=0;for(let i=0;i<s.land;i++)if(!st['l'+i])b+=10;const a=activeDeco();for(const id in a)b+=(DECOM[id]?DECOM[id].b:0)*a[id];return Math.round(b);}
+function shopIncome(){let g=0;const a=activeDeco();for(const id in a)g+=(DECOM[id]&&DECOM[id].shop||0)*a[id];return g;}
+function nightIncome(){let g=0;const a=activeDeco();for(const id in a)g+=(DECOM[id]&&DECOM[id].night||0)*a[id];return Math.round(g*(1+s.rating*.05));}
 function dirtVisMul(){let w=0,d=0;for(const t of s.tanks){w+=t.fish.length;d+=tankDirt(t)*t.fish.length;}return w?1-.6*d/w:1;}
 function decoCost(id){return Math.round(DECOM[id].c*Math.pow(1.45,s.deco[id]||0));}
 function ticket(){return Math.round(4+Math.sqrt(APPEAL)*1.2+s.rating*1.5);}
 
-function visRate(){if(APPEAL<=0)return 0;return(.1+Math.sqrt(APPEAL)/40)*(1+.12*s.b.cottage)*(s.b.lighthouse?1.15:1)*(s.rain?.7:1)*(1+nigiwai()/100)*dirtVisMul()*evVis();}
+function visRate(){if(APPEAL<=0)return 0;return(.1+Math.sqrt(APPEAL)/40)*(1+.12*cottLv())*(lhOn()?1.15:1)*(s.rain?.7:1)*(1+nigiwai()/100)*dirtVisMul()*evVis()*stormVis();}
 function addXp(x){s.xp+=x;let need;while(s.xp>=(need=xpNeed(s.rating))){s.xp-=need;s.rating++;log(`🎉 島の評価が Lv${s.rating} にアップ！新しい施設やエリアが解放されるかも`,'#ffd166');if(tab==='island')renderPanel();}}
 function updateEconomy(dt){
  s.time+=dt/DAY_SEC;if(s.time>=1)endDay();
  const h=hourNow();
  visAcc+=visRate()*timeMult(h)*dt;
- while(visAcc>=1){visAcc--;const tk=ticket(),cafe=s.b.cafe*4+shopIncome();s.gold+=tk+cafe;pend.g+=tk;pend.cafe+=cafe;pend.n++;s.visToday++;s.totalVis++;s.incToday+=tk+cafe;if(s.event)s.event.inc+=tk+cafe;s.totalInc+=tk+cafe;
-  present.push({until:T+rand(18,30),ix:Math.floor(Math.random()*1000),kid:Math.random()<.3});addXp((s.b.lighthouse?1.5:1)*((curEvent()||{}).xp||1));}
+ while(visAcc>=1){visAcc--;const tk=ticket(),cafe=cafeLv()*4+shopIncome();s.gold+=tk+cafe;pend.g+=tk;pend.cafe+=cafe;pend.n++;s.visToday++;s.totalVis++;s.incToday+=tk+cafe;if(s.event)s.event.inc+=tk+cafe;s.totalInc+=tk+cafe;
+  present.push({until:T+rand(18,30),ix:Math.floor(Math.random()*1000),kid:Math.random()<.3});addXp((lhOn()?1.5:1)*((curEvent()||{}).xp||1));}
  present=present.filter(v=>v.until>T);
  pend.t+=dt;if(pend.t>=7){if(pend.n>0)log(`🎫 入場料 +${pend.g}G（${pend.n}人）${pend.cafe?` ☕お店 +${pend.cafe}G`:''}`,'#4fd1c5');pend={g:0,n:0,cafe:0,t:0};}
 }
+function boardBoat(){if(!s.boat)return;s.boat=false;s.dream=true;s.dreamVisited=true;s.dreamTrips=(s.dreamTrips||0)+1;s.time=0;s.area='dream';fs.st='idle';
+ log('⛵ 小舟に乗ると、深い霧に包まれた…気がつくと、その日の朝に戻っていた。','#ffc8ec');log('🌙 「夢で見た海」へ！今日1日だけ、伝説級の魚が釣れる','#ffc8ec');
+ save();document.querySelector('[data-tab=fish]').click();}
 function endDay(){
- const bonus=s.b.cottage*30*s.rating+nightIncome();s.gold+=bonus;
+ const bonus=stormStage()==='storm'?0:cottLv()*30*s.rating+nightIncome();s.gold+=bonus;
  log(`🌙 Day ${s.day} 終了 — 来場 ${s.visToday}人 / 売上 ${fmtG(s.incToday+bonus)}${bonus?`（宿泊 +${bonus}G）`:''}`,'#c98bff');
  s.day++;s.time=0;s.visToday=0;s.incToday=0;
- const was=s.rain;s.rain=Math.random()<rainChance();
+ if(s.boat){s.boat=false;log('🌫️ 砂浜の幻の小舟は、霧の中へ消えていった…','#d8c8ff');}
+ if(s.dream){s.dream=false;if(s.area==='dream')s.area='beach';fs.st='idle';log('🌙 目が覚めると、いつもの島の朝だった…','#ffc8ec');}
+ const was=s.rain;
+ if(stormNextDay()){if(tab==='fish'||tab==='dex'||tab==='island')renderPanel();save();return;}
+ s.rain=Math.random()<rainChance();
+ if(s.rain&&!s.storm&&Math.random()<BOAT_CHANCE){s.boat=true;log('🌫️ 雨にけむる砂浜に、見慣れない小舟が流れ着いている…？（島タブ）','#d8c8ff');}
  if(s.rain)log(`☔ Day ${s.day} は雨…どの釣り場も「雨の日ステージ」に！雨の日限定の魚を狙おう`,'#7ab8ff');else if(was)log(`☀️ Day ${s.day} 雨が上がって晴れた！`,'#ffd166');
  if(tab==='fish'||tab==='dex')renderPanel();save();
 }
@@ -1054,13 +1116,13 @@ function updateTop(){
  const h=hourNow(),hh=Math.floor(h),mm=Math.floor((h-hh)*6)*10;
  $('#sD').textContent=`Day ${s.day} ${hh}:${String(mm).padStart(2,'0')}`;
  $('#sV').textContent=`${present.length}人`;
- {const e=curEvent();$('#sW').textContent=(s.rain?'☔ 雨':'☀️ 晴れ')+(e?' '+e.ic:'');}
+ {const e=curEvent(),st=stormStage();$('#sW').textContent=(st==='storm'?'🌪 大嵐':st==='warn'?'⛈ 大雨':s.rain?'☔ 雨':'☀️ 晴れ')+(e?' '+e.ic:'')+(st==='damage'?' 🔨':'');}
  $('#sR').textContent=`Lv${s.rating} ${'⭐'.repeat(Math.min(3,Math.ceil(s.rating/3)))}`;
  $('#dayFill').style.width=(s.time*100)+'%';
  if(tab==='fish'){const gb=$('#gatherBtn');if(gb){gb.disabled=gatherCd>0;gb.textContent=gatherCd>0?`🏖️ 採取（${Math.ceil(gatherCd)}秒）`:'🏖️ 浜辺で採取';}}
  if(tab==='island'){document.querySelectorAll('[data-cost]').forEach(b=>{b.disabled=s.gold<+b.dataset.cost||b.dataset.lock==='1';});}
 }
-function fishItem(f,btns,ti){const p=SPM[f.s],m=ti!=null&&p.a===tankTheme(ti).id;return`<div class="item">${thumb(p)}<div class="info"><div style="color:${p.junk?'#aaa':RCOL[p.r]}">${p.n}</div><div class="sub">${p.junk?'🥾 ハズレ（展示不可）':`${fmtSize(f.z)} 魅力${Math.round(fishAppeal(f))}${m?' <span style="color:#7ee081">◎テーマ</span>':''} ${AREAM[p.a].ic}`}</div><div class="row" style="margin:3px 0 0">${btns}</div></div></div>`;}
+function fishItem(f,btns,ti){const p=SPM[f.s],m=ti!=null&&(p.a===tankTheme(ti).id||p.a==='dream');return`<div class="item">${thumb(p)}<div class="info"><div style="color:${p.junk?'#aaa':RCOL[p.r]}">${p.n}</div><div class="sub">${p.junk?'🥾 ハズレ（展示不可）':`${fmtSize(f.z)} 魅力${Math.round(fishAppeal(f))}${m?' <span style="color:#7ee081">◎テーマ</span>':''} ${AREAM[p.a].ic}`}</div><div class="row" style="margin:3px 0 0">${btns}</div></div></div>`;}
 function sellPrice(f){const p=SPM[f.s];return p.junk?p.price:Math.max(1,Math.round(fishAppeal(f)*2));}
 function renderPanel(){
  const P=$('#panel');let h='';
@@ -1078,7 +1140,7 @@ function renderPanel(){
    ・🎯 テーマ統一ボーナス ${ta.unity?'+20%':'なし'}（全部${th.n}の生き物・3匹以上）<br>
    ${ta.jam?'・⚠️ 主役渋滞 -25%（★4以上が半分超え）<br>':''}
    <span style="opacity:.8">💡 同じ種類は2匹目から効果ダウン。★1〜★6を混ぜて、テーマに合った生き物で揃えると高評価！</span></div></div>`;
-  h+=`<div class="card"><h3>📊 経営状況</h3><div class="sub">総魅力度 <b style="color:var(--gold)">${Math.round(APPEAL)}</b>　入場料 <b style="color:var(--gold)">${ticket()}G</b>${s.b.cafe||shopIncome()?`（+お店${s.b.cafe*4+shopIncome()}G）`:''}<br>来場ペース 約${(visRate()*60).toFixed(1)}人/分（昼）　本日 ${s.visToday}人・${fmtG(s.incToday)}<br>島の賑わい +${nigiwai()}%${dirtVisMul()<.99?`　濁りによる客足 ${Math.round(dirtVisMul()*100)}%`:''}</div></div>`;
+  h+=`<div class="card"><h3>📊 経営状況</h3><div class="sub">総魅力度 <b style="color:var(--gold)">${Math.round(APPEAL)}</b>　入場料 <b style="color:var(--gold)">${ticket()}G</b>${s.b.cafe||shopIncome()?`（+お店${s.b.cafe*4+shopIncome()}G）`:''}<br>来場ペース 約${(visRate()*60).toFixed(1)}人/分（昼）　本日 ${s.visToday}人・${fmtG(s.incToday)}<br>${s.storm?`<b style="color:#ff9a9a">${stormStage()==='damage'?'🔨 嵐の被害で魅力度40%（島タブで復興）':stormStage()==='storm'?'🌪 大嵐で休業中':'⚠️ 明日、大嵐が来ます'}</b><br>`:''}島の賑わい +${nigiwai()}%${dirtVisMul()<.99?`　濁りによる客足 ${Math.round(dirtVisMul()*100)}%`:''}</div></div>`;
   h+=`<div class="card"><h3>🐠 水槽${s.cur+1}に展示中（${tank.fish.length}/${tank.cap}）</h3>`;
   h+=tank.fish.length?`<div class="list">${tank.fish.map(f=>fishItem(f,`<button class="btn sm ghost" data-act="back" data-u="${f.u}">いけすへ</button>`,s.cur)).join('')}</div>`:`<div class="sub">まだ何もいません。下のいけすから展示しよう。</div>`;
   h+=`</div><div class="card"><h3>🪣 いけす（未展示） ${s.bucket.length}/${bucketCap()}</h3>`;
@@ -1089,16 +1151,17 @@ function renderPanel(){
  else if(tab==='fish'){
   h+=`<div class="row"><button class="btn big" data-act="fishtap">🎣 キャスト / アクション</button></div>`;
   h+=`<div class="row"><button class="btn gold" id="gatherBtn" data-act="gather" style="flex:1">🏖️ 浜辺で採取</button><div class="sub" style="flex:1">いけす ${s.bucket.length}/${bucketCap()}<br>釣り竿 Lv${s.rod}</div></div>`;
-  h+=`<div class="card"><h3>🗺️ 釣り場エリア</h3><div class="row">${AREAS.map(a=>{const ok=s.areas.includes(a.id);return`<button class="btn sm ${s.area===a.id?'':'ghost'}" data-act="area" data-id="${a.id}" ${ok?'':'disabled'}>${ok?a.ic:'🔒'} ${a.n}</button>`;}).join('')}</div>`;
-  const list=fishPool(s.area);const wm=WAIT_MULT[areaIdx(s.area)];
-  h+=`<div class="sub">アタリまでの時間：${['ふつう','やや遅い','遅い','とても遅い'][areaIdx(s.area)]}（×${wm}${s.b.pier?'・桟橋で短縮中':''}）</div>`;
-  if(s.rain)h+=`<div class="sub" style="color:#9fd0ff;margin-top:4px">☔ 今日は雨！どのエリアも雨の日ステージ。雨の日限定の魚がかかりやすい</div>`;
+  h+=`<div class="card"><h3>🗺️ 釣り場エリア</h3><div class="row">${AREAS.map(a=>{const ok=s.areas.includes(a.id);return`<button class="btn sm ${s.area===a.id?'':'ghost'}" data-act="area" data-id="${a.id}" ${ok?'':'disabled'}>${ok?a.ic:'🔒'} ${a.n}</button>`;}).join('')}${s.dream?`<button class="btn sm ${s.area==='dream'?'':'ghost'}" style="${s.area==='dream'?'background:#ffc8ec':''}" data-act="area" data-id="dream">🌙 夢で見た海</button>`:''}</div>`;
+  const list=fishPool(s.area);const dr=s.area==='dream';
+  if(dr)h+=`<div class="sub" style="color:#ffd0ee">🌙 今日だけの夢の海。釣れるのは★5〜★6だけ。判定が厳しく、竿Lvが低いとなかなかかからない（待ち時間 ×${DREAM_WAIT[s.rod]}）<br>今日が終わると夢から覚めます（${s.dreamTrips}回目の訪問）</div>`;
+  else h+=`<div class="sub">アタリまでの時間：${['ふつう','やや遅い','遅い','とても遅い'][areaIdx(s.area)]}（×${WAIT_MULT[areaIdx(s.area)]}${s.b.pier?'・桟橋で短縮中':''}）</div>`;
+  if(dr);else if(s.rain)h+=`<div class="sub" style="color:#9fd0ff;margin-top:4px">☔ 今日は雨！どのエリアも雨の日ステージ。雨の日限定の魚がかかりやすい</div>`;
   else h+=`<div class="sub" style="margin-top:4px">☀️ 晴れ（雨の確率 ${Math.round(rainChance()*100)}%／日）</div>`;
-  h+=`<div class="sub" style="margin-top:6px">${s.rain?'雨の日に':'このエリアで'}釣れる魚：</div><div class="row">${list.map(p=>`<div title="${s.dex[p.id]?p.n:'？？？'}" style="position:relative">${thumb(p,!s.dex[p.id])}${p.rain?'<span style="position:absolute;right:-2px;top:-4px;font-size:10px">☔</span>':''}</div>`).join('')}</div></div>`;
+  h+=`<div class="sub" style="margin-top:6px">${dr?'夢の海で':s.rain?'雨の日に':'このエリアで'}釣れる魚：</div><div class="row">${list.map(p=>`<div title="${s.dex[p.id]?p.n:'？？？'}" style="position:relative">${thumb(p,!s.dex[p.id])}${p.rain?'<span style="position:absolute;right:-2px;top:-4px;font-size:10px">☔</span>':''}</div>`).join('')}</div></div>`;
   h+=`<div class="card sub"><b>遊び方</b><br>① 画面（または上のボタン）をタップして仕掛けを投げる<br>② 浮きが沈んで「！」が出たらすぐタップ（早すぎると失敗）<br>③ 動くバーが<span style="color:#38d36b">緑ゾーン</span>に入った瞬間にタップ！レア魚は複数回必要<br>🏖️採取ではカニやエビなど浜辺の生き物が手に入ります</div>`;
  }
  else if(tab==='island'){
-  h+=`<div class="row">${[['fac','🔧 設備'],['resort','🌴 リゾート'],['event','🎉 イベント'],['land','🏗️ 土地']].map(([k,n])=>`<button class="btn sm ${islandSub===k?'':'ghost'}" style="flex:1;padding:6px 2px" data-act="isub" data-k="${k}">${n}</button>`).join('')}</div>`;
+  h+=`<div class="row">${[['fac','🔧 設備'],['resort','🌴 リゾート'],['event','🎉 イベント'],['land','🏗️ 土地'],...(s.storm?[['storm','🌪 復興']]:[])].map(([k,n])=>`<button class="btn sm ${islandSub===k?'':'ghost'}" style="flex:1;padding:6px 2px" data-act="isub" data-k="${k}">${n}</button>`).join('')}</div>`;
   const ups=[];const tank=s.tanks[s.cur];
   ups.push({ic:'🎣',n:'釣り竿の強化',lv:`Lv${s.rod}${s.rod>=6?'（MAX）':''}`,d:'判定ゾーンが広がり、レア魚・大物が出やすくなる',cost:s.rod<6?ROD_COST[s.rod+1]:null,req:1,act:'rod'});
   ups.push({ic:'💧',n:`水槽${s.cur+1}の拡張`,lv:`定員${tank.cap}匹${tank.cap>=TANK_MAX?'（MAX）':''}`,d:'展示できる数が+1（水槽タブで対象を切替）。釣り場を解放するほど値段が上がる',cost:tank.cap<TANK_MAX?tankCost(tank.cap):null,req:1,act:'tankup'});
@@ -1117,12 +1180,21 @@ function renderPanel(){
    for(const d of DECOS){const own=s.deco[d.id]||0,mx=own>=d.max,lockL=s.land<(d.land||0),cost=decoCost(d.id),dis=mx||lockL||free<=0||s.gold<cost;
     h+=`<div class="up"><div class="ic">${d.ic}</div><div class="info"><b>${d.n}</b> <span style="color:var(--gold)">${own}/${d.max}</span><div class="sub">賑わい+${d.b}%${d.shop?`／客1人+${d.shop}G`:''}${d.night?`／毎晩+${d.night}G`:''}${lockL?`<br>🔒 埋め立て${d.land}段階目で解放`:''}</div></div>${mx?'<span class="sub">MAX</span>':`<button class="btn sm gold" data-act="deco" data-id="${d.id}" data-cost="${cost}" data-lock="${lockL||free<=0?1:0}" ${dis?'disabled':''}>${fmtG(cost)}</button>`}</div>`;}
    h+='</div>';}
+  if(islandSub==='storm'&&!s.storm)islandSub='fac';
+  if(islandSub==='storm'){const st=stormStage();
+   if(st==='warn')h+=`<div class="card" style="border:2px solid #ffb36b"><h3>⚠️ 気象警報</h3><div class="sub">今日は大雨。明日、大型の嵐が島を直撃します。<br>嵐の日はリゾートが休業（来場0人）になり、釣りにも出られません。<br>嵐が去ると、建物や装飾の一部が崩壊し、島が荒れてしまいます…</div></div>`;
+   else if(st==='storm')h+=`<div class="card" style="border:2px solid #ff8a8a"><h3>🌪 大嵐が上陸中</h3><div class="sub">本日は臨時休業です。嵐が過ぎ去るのを待とう…<br>明日、被害状況が明らかになります。</div></div>`;
+   else{const L=repairList(),tot=L.reduce((a,x)=>a+x.c,0);
+    h+=`<div class="card" style="border:2px solid #ff8a8a"><h3>🔨 復興作業（残り${L.length}件）</h3><div class="sub">嵐で崩れた建物は建設費の30%で再建できます。荒れた土地の片付けにも大きな費用がかかります。<br><b style="color:#ff9a9a">すべて復興するまで、魅力度は40%のまま</b>。復興が完了すると🎫イベント無料券がもらえます。壊れた装飾・建物は効果がなくなっています。</div>
+     <div class="row" style="margin-top:8px"><button class="btn gold" data-act="fixall" data-cost="${tot}" ${s.gold<tot?'disabled':''}>まとめて復興 ${fmtG(tot)}</button></div></div><div class="card">`;
+    for(const it of L)h+=`<div class="up"><div class="ic">${it.ic}</div><div class="info"><b>${it.n}</b></div><button class="btn sm gold" data-act="fix" data-k="${it.k}" data-cost="${it.c}" ${s.gold<it.c?'disabled':''}>${fmtG(it.c)}</button></div>`;
+    h+='</div>';}}
   if(islandSub==='event'){const ce=curEvent();
-   h+=`<div class="card"><h3>🎉 イベント</h3><div class="sub">開催すると数日間、魅力度と客足が大きくアップ！ただし開催費は「期間中に増える売上の見込み」より少し高めです。お金もうけより、島の評価や賑わいを楽しむためのものです。開催は同時に1つまで。</div></div>`;
+   h+=`<div class="card"><h3>🎉 イベント</h3><div class="sub">開催すると数日間、魅力度と客足が大きくアップ！ただし開催費は「期間中に増える売上の見込み」より少し高めです。お金もうけより、島の評価や賑わいを楽しむためのものです。開催は同時に1つまで。</div>${s.freeEv?`<div style="margin-top:8px;padding:8px;border-radius:8px;background:#5a2a4a;color:#ffd0ee;font-weight:bold">🎫 イベント無料券 ×${s.freeEv}　次の開催は費用0G！</div>`:''}</div>`;
    if(ce){const d=Math.floor(s.event.left/DAY_SEC),hh=Math.floor(s.event.left%DAY_SEC/DAY_SEC*24);h+=`<div class="card" style="border:2px solid #ff9ad5"><h3>${ce.ic} ${ce.n} 開催中！</h3><div class="sub">残り ${d}日${hh}時間／魅力×${ce.app}・客足×${ce.vis}<br>期間中の売上 ${fmtG(s.event.inc)}（開催費 ${fmtG(s.event.cost)}）</div></div>`;}
    h+='<div class="card">';
-   for(const e of EVENTS){const ok=evReqOk(e),c=eventCost(e),dis=!!ce||!ok||s.gold<c;
-    h+=`<div class="up"><div class="ic">${e.ic}</div><div class="info"><b>${e.n}</b> <span style="color:var(--gold)">${e.days}日間</span><div class="sub">魅力×${e.app}・客足×${e.vis}　${e.d}<br>${evReqText(e)}</div></div><button class="btn sm gold" data-act="event" data-id="${e.id}" data-cost="${c}" data-lock="${ce||!ok?1:0}" ${dis?'disabled':''}>開催<br>${fmtG(c)}</button></div>`;}
+   for(const e of EVENTS){const ok=evReqOk(e),free=(s.freeEv||0)>0,c=free?0:eventCost(e),dis=!!ce||!ok||s.gold<c||!!s.storm;
+    h+=`<div class="up"><div class="ic">${e.ic}</div><div class="info"><b>${e.n}</b> <span style="color:var(--gold)">${e.days}日間</span><div class="sub">魅力×${e.app}・客足×${e.vis}　${e.d}<br>${evReqText(e)}</div></div><button class="btn sm gold" data-act="event" data-id="${e.id}" data-cost="${c}" data-lock="${ce||!ok||s.storm?1:0}" ${dis?'disabled':''}>${free?'🎫 無料で<br>開催':`開催<br>${fmtG(c)}`}</button></div>`;}
    h+='</div>';}
   if(islandSub==='land'){
    h+=`<div class="card"><h3>🏗️ 土地の埋め立て（${s.land}/${LAND.length}）</h3><div class="sub" style="margin-bottom:6px">島を広げて区画+${LAND_SLOTS.length}、賑わい+10%。大型施設の建設にも必要</div>${LAND.map((l,i)=>{const done=i<s.land,next=i===s.land,lock=s.rating<l.q;return`<div class="up"><div class="ic">${done?'✅':'🏗️'}</div><div class="info"><b>${l.n}</b><div class="sub">${done?'完成済み':`${lock?`🔒 評価Lv${l.q}で解放`:'工事可能'}${next?'':'（前の土地が先）'}`}</div></div>${done?'':`<button class="btn sm gold" data-act="land" data-cost="${l.c}" data-lock="${lock||!next?1:0}" ${lock||!next||s.gold<l.c?'disabled':''}>${fmtG(l.c)}</button>`}</div>`;}).join('')}</div>`;
@@ -1132,16 +1204,17 @@ function renderPanel(){
  }
  else if(tab==='dex'){
   const c=Object.keys(s.dex).length;
-  h+=`<div class="card"><h3>📖 魚図鑑 ${c}/${SPECIES.length}</h3><div class="prog"><div style="width:${c/SPECIES.length*100}%"></div></div></div>`;
+  h+=`<div class="card" data-gm><h3>📖 魚図鑑 ${c}/${SPECIES.length}</h3><div class="prog"><div style="width:${c/SPECIES.length*100}%"></div></div></div>`;
   const card=p=>{const d=s.dex[p.id];return`<div class="dc" data-act="dex" data-id="${p.id}" style="border-color:${d?RCOL[p.r]+'66':'transparent'}">${thumb(p,!d)}<div style="color:${d?'#fff':'#789'}">${d?p.n:'？？？'}</div><div style="color:${RCOL[p.r]}">${RAR[p.r]}</div></div>`;};
   const sec=(title,list)=>{const got=list.filter(p=>s.dex[p.id]).length;return`<div class="card"><h3>${title} <span class="sub">${got}/${list.length}</span></h3><div class="dex">${list.map(card).join('')}</div></div>`;};
   for(const a of AREAS){h+=sec(`${a.ic} ${a.n}`,SPECIES.filter(p=>p.a===a.id&&!p.rain&&!p.g));if(a.id==='beach')h+=sec('🏖️ 浜辺の採取',SPECIES.filter(p=>p.g&&!p.rain));}
+  h+=sec(s.dreamVisited?'🌙 夢で見た海':'❓ ？？？',SPECIES.filter(p=>p.a==='dream'));
   h+=sec('☔ 雨の日限定',SPECIES.filter(p=>p.rain&&!p.junk));
   h+=sec('🥾 ハズレ・漂流物',SPECIES.filter(p=>p.junk));
  }
  P.innerHTML=h;
 }
-function areaLabel(p){return p.a==='any'?'🌊 どこでも':`${AREAM[p.a].ic} ${AREAM[p.a].n}`;}
+function areaLabel(p){return p.a==='any'?'🌊 どこでも':p.a==='dream'?(s.dreamVisited?'🌙 夢で見た海':'？？？'):`${AREAM[p.a].ic} ${AREAM[p.a].n}`;}
 function showDex(id){
  const p=SPM[id],d=s.dex[id];
  $('#mbox').innerHTML=d?`${thumb(p)}<h3 style="color:${RCOL[p.r]}">${p.n}</h3><div style="color:${RCOL[p.r]}">${RAR[p.r]}</div>
@@ -1161,6 +1234,8 @@ $('#panel').addEventListener('click',e=>{
   case'proclean':{const t=s.tanks[s.cur],c=cleanCost(t);if(s.gold>=c&&c>0){s.gold-=c;t.dirt.fill(0);cleanMode=false;log(`🧹 業者が水槽${s.cur+1}をピカピカにした（-${c}G）`,'#7ef0ff');}break;}
   case'isub':islandSub=el.dataset.k;break;
   case'event':startEvent(el.dataset.id);break;
+  case'fix':fixItem(el.dataset.k);break;
+  case'fixall':{const tot=repairList().reduce((a,x)=>a+x.c,0);if(s.gold>=tot)for(const it of repairList())fixItem(it.k);break;}
   case'deco':{const d=DECOM[el.dataset.id],own=s.deco[d.id]||0,c=decoCost(d.id);if(own<d.max&&s.land>=(d.land||0)&&s.decoList.length<slotCount()&&s.gold>=c){s.gold-=c;s.deco[d.id]=own+1;s.decoList.push(d.id);log(`${d.ic} ${d.n}を設置した！島がにぎやかに（賑わい+${d.b}%）`,'#ffd166');}break;}
   case'land':{const l=LAND[s.land];if(l&&s.gold>=l.c&&s.rating>=l.q){s.gold-=l.c;s.land++;log(`🏗️ ${l.n}が完成！区画+${LAND_SLOTS.length}・賑わい+10%`,'#ffd166');}break;}
   case'put':{const tank=s.tanks[s.cur],f=findFish(u);if(f&&tank.fish.length<tank.cap){s.bucket=s.bucket.filter(x=>x.u!==u);tank.fish.push(f);log(`🐠 ${SPM[f.s].n}を水槽${s.cur+1}に展示した`);}break;}
@@ -1169,12 +1244,12 @@ $('#panel').addEventListener('click',e=>{
   case'sellall':{const g=s.bucket.reduce((a,f)=>a+sellPrice(f),0);s.gold+=g;log(`💰 いけすの${s.bucket.length}匹を ${g}G で売った`,'#ffd166');s.bucket=[];break;}
   case'fishtap':fishTap();return;
   case'gather':gather();return;
-  case'area':s.area=el.dataset.id;fs.st='idle';break;
+  case'area':if(el.dataset.id!=='dream'||s.dream){s.area=el.dataset.id;fs.st='idle';}break;
   case'buy':buy(el.dataset.k);break;
   case'area_buy':{const a=AREAM[el.dataset.id];if(s.gold>=a.cost&&s.rating>=a.req&&!s.areas.includes(a.id)){s.gold-=a.cost;s.areas.push(a.id);log(`⛵ 新エリア「${a.n}」を解放！釣り場で選べます（☔雨の確率が${Math.round(rainChance()*100)}%に）`,'#ffd166');}break;}
   case'dex':showDex(el.dataset.id);return;
   case'save':save();log('💾 セーブしました');return;
-  case'reset':if(confirm('本当にデータを消して最初からやり直しますか？')){localStorage.removeItem(KEY);s=newState();for(const k in anim)delete anim[k];log('🌴 新しい島での生活が始まった！');}break;
+  case'reset':askConfirm('本当にデータを消して\n最初からやり直しますか？',()=>{localStorage.removeItem(KEY);s=newState();for(const k in anim)delete anim[k];log('🌴 新しい島での生活が始まった！');afterChange();});return;
  }
  recalc();save();renderPanel();updateTop();
 });
@@ -1206,9 +1281,160 @@ window.addEventListener('pointerup',()=>pdown=false);window.addEventListener('po
 cv.addEventListener('pointerdown',e=>{
  const [x,y]=ptr(e);pdown=true;
  if(tab==='tank'&&cleanMode){sponge={x,y,t:T};wipe(x,y);return;}
+ if(tab==='island'&&boatHit&&Math.hypot(x-boatHit.x,y-boatHit.y)<boatHit.r){askConfirm('⛵ 不思議な小舟に乗りますか？\n\n時間がその日の朝に戻り、\n今日1日だけ「夢で見た海」で釣りができます',boardBoat);return;}
  if(tab==='fish')fishTap();
  else if(tab==='tank'){let best=null,bd=1e9;for(const f of s.tanks[s.cur].fish){const a=anim[f.u];if(!a)continue;const d=Math.hypot(a.x-x,a.y-y);if(d<Math.max(30,a.L*.6)&&d<bd){bd=d;best=f;}}
   if(best)selFish={u:best.u,until:T+2.5};else for(let i=0;i<6;i++)bubbles.push({x:x+rand(-6,6),y,r:rand(2,5),v:rand(40,70),ph:rand(0,6)});}
+});
+
+// ===================== 🌪 嵐（やり込み後のイベント） =====================
+const STORM_CHANCE=.03;   // 全部そろえた後、1日ごとに嵐が来る確率
+function endgameDone(){return s.areas.length>=AREAS.length&&s.land>=LAND.length&&s.decoList.length>=slotCount();}
+function stormStage(){return s.storm?s.storm.stage:null;}
+function bOn(k){return s.b[k]&&!(s.storm&&s.storm.bld&&s.storm.bld[k]);}
+function cafeLv(){return bOn('cafe')?s.b.cafe:0;}
+function cottLv(){return bOn('cottage')?s.b.cottage:0;}
+function lhOn(){return !!bOn('lighthouse');}
+function brokenSet(){return new Set(s.storm&&s.storm.broken||[]);}
+function activeDeco(){const bs=brokenSet(),c={};s.decoList.forEach((id,i)=>{if(i<slotCount()&&!bs.has(i))c[id]=(c[id]||0)+1;});return c;}
+function stormApp(){return stormStage()==='damage'?.4:1;}
+function stormVis(){const st=stormStage();return st==='storm'?0:st==='warn'?.7:1;}
+function decoPaid(i){const id=s.decoList[i];let n=0;for(let k=0;k<i;k++)if(s.decoList[k]===id)n++;return DECOM[id].c*Math.pow(1.45,n);}
+function repairList(){if(stormStage()!=='damage')return[];const st=s.storm,L=[];
+ if(st.debris.main)L.push({k:'main',ic:'🧹',n:'本島の片付け（倒木・がれき撤去）',c:100000});
+ for(let i=0;i<s.land;i++)if(st.debris['l'+i])L.push({k:'l'+i,ic:'🧹',n:`${LAND[i].n}の片付け`,c:Math.round(LAND[i].c*.3)});
+ const sum=(arr,n)=>arr.slice(0,n).reduce((a,x)=>a+x.c,0);
+ if(st.bld.cafe)L.push({k:'cafe',ic:'☕',n:'カフェの再建',c:Math.round(sum(CAFE,s.b.cafe)*.3)});
+ if(st.bld.cottage)L.push({k:'cottage',ic:'🛖',n:`コテージ${s.b.cottage}棟の再建`,c:Math.round(sum(COTT,s.b.cottage)*.3)});
+ if(st.bld.lighthouse)L.push({k:'lighthouse',ic:'💡',n:'灯台の再建',c:450});
+ st.broken.forEach(i=>{const d=DECOM[s.decoList[i]];L.push({k:'d'+i,ic:d.ic,n:`${d.n}の再建`,c:Math.round(decoPaid(i)*.3)});});
+ return L;}
+function stormDamage(){
+ const idx=s.decoList.map((_,i)=>i).filter(i=>i<slotCount());for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}
+ const broken=idx.slice(0,Math.max(1,Math.round(idx.length*rand(.3,.5)))).sort((a,b)=>a-b);
+ const bld={};if(s.b.cafe&&Math.random()<.5)bld.cafe=1;if(s.b.cottage&&Math.random()<.6)bld.cottage=1;if(s.b.lighthouse&&Math.random()<.4)bld.lighthouse=1;
+ const debris={main:1};for(let i=0;i<s.land;i++)debris['l'+i]=1;
+ s.storm={stage:'damage',broken,bld,debris};
+ s.tanks.forEach(t=>{ensureDirt(t);for(let i=0;i<t.dirt.length;i++)t.dirt[i]=Math.min(100,t.dirt[i]+40);});
+ const tot=repairList().reduce((a,x)=>a+x.c,0);
+ log(`🌪 嵐が去った…装飾${broken.length}か所と${Object.keys(bld).length}つの建物が崩壊し、島は荒れ果ててしまった`,'#ff8a8a');
+ log(`🔨 復興に必要な費用：約${fmtG(tot)}。すべて復興するまで魅力度は40%に…（島タブ「🌪 復興」）`,'#ff8a8a');}
+function fixItem(k){const it=repairList().find(x=>x.k===k);if(!it||s.gold<it.c)return false;s.gold-=it.c;const st=s.storm;
+ if(k==='main'||/^l\d+$/.test(k))delete st.debris[k];else if(k[0]==='d')st.broken=st.broken.filter(i=>i!==+k.slice(1));else delete st.bld[k];
+ log(`${it.ic} ${it.n}が完了（-${fmtG(it.c)}）`,'#ffd166');
+ if(!repairList().length){s.storm=null;s.freeEv=(s.freeEv||0)+1;log('🎉 復興完了！リゾートが元の輝きを取り戻した！','#7ef0ff');log('🎫 お祝いに「イベント無料券」を1枚もらった！好きなイベントを無料で開催できます（島タブ→🎉イベント）','#ff9ad5');addXp(100);}
+ return true;}
+function stormNextDay(){ // endDay から呼ぶ（日付が進んだ後）
+ const st=stormStage();
+ if(st==='warn'){s.storm.stage='storm';s.rain=true;log('🌪 大型の嵐が上陸！本日リゾートは臨時休業です。釣りにも出られない…','#ff8a8a');return true;}
+ if(st==='storm'){stormDamage();s.rain=false;return true;}
+ if(!s.storm&&endgameDone()&&!curEvent()&&!s.dream&&Math.random()<STORM_CHANCE){s.storm={stage:'warn'};s.rain=true;
+  log('⚠️ 気象警報：今日は大雨。明日、大型の嵐🌪が島を直撃する見込みです…','#ffb36b');return true;}
+ return false;}
+function drawRubble(x,y,sc,big){const k=(big?1.6:1)*sc;ctx.fillStyle='rgba(0,0,0,.2)';ctx.beginPath();ctx.ellipse(x,y,16*k,5*k,0,0,7);ctx.fill();
+ ctx.strokeStyle='#7a5a3a';ctx.lineWidth=3*k;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x-12*k,y-2*k);ctx.lineTo(x+4*k,y-12*k);ctx.moveTo(x-2*k,y-1*k);ctx.lineTo(x+13*k,y-8*k);ctx.stroke();
+ const cols=['#8a8a8a','#a0a0a0','#6a6a6a'];for(let i=0;i<5;i++){ctx.fillStyle=cols[i%3];ctx.beginPath();ctx.ellipse(x+(i-2)*5*k,y-2*k-(i%2)*3*k,4*k,3*k,i,0,7);ctx.fill();}
+ ctx.fillStyle='rgba(200,180,150,.35)';const p=(T*.5+x)%1;ctx.beginPath();ctx.arc(x+4*k,y-14*k-p*6*k,3*k*(1-p)+1,0,7);ctx.fill();}
+function drawDebris(px,py,prx,pry,sc,seed){for(let i=0;i<14;i++){const a=((i*137.5+seed*61)%360)*Math.PI/180,r=((i*37+seed*13)%80)/100,x=px+Math.cos(a)*prx*r*.85,y=py+Math.sin(a)*pry*r*.75;
+ if(i%4===0){ctx.fillStyle='rgba(90,110,130,.55)';ctx.beginPath();ctx.ellipse(x,y,10*sc,4*sc,0,0,7);ctx.fill();}
+ else if(i%4===1){ctx.strokeStyle='#6a4a2a';ctx.lineWidth=2.5*sc;ctx.beginPath();ctx.moveTo(x-7*sc,y);ctx.lineTo(x+7*sc,y-3*sc);ctx.stroke();}
+ else if(i%4===2){ctx.fillStyle='#4a6a2a';ctx.beginPath();ctx.ellipse(x,y,7*sc,2.5*sc,i,0,7);ctx.fill();}
+ else{ctx.fillStyle='#7a6a5a';ctx.beginPath();ctx.arc(x,y,3*sc,0,7);ctx.fill();}}}
+function drawStormFx(L,sc,hz){const st=stormStage();if(!st)return;
+ if(st==='warn'||st==='storm'){ctx.fillStyle=`rgba(15,20,30,${st==='storm'?.45:.25})`;ctx.fillRect(0,0,W,H);}
+ if(st==='storm'){const tx=W*.5+Math.sin(T*.25)*W*.38,ty=L.cy;ctx.save();ctx.translate(tx,ty);ctx.rotate(Math.sin(T*3)*.08);ctx.font=`${70*sc+30}px ${EMOJI_FONT}`;ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillStyle='#000';ctx.globalAlpha=.85;ctx.fillText('🌪️',0,10);ctx.restore();
+  for(let i=0;i<16;i++){const a=T*4+i*.4,r=20+i*3;ctx.fillStyle=i%2?'#6a4a2a':'#4a6a2a';ctx.fillRect(tx+Math.cos(a)*r,ty-30-i*5+Math.sin(a)*r*.3,3,3);}
+  ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='rgba(180,30,30,.85)';ctx.fillRect(L.cx-62,L.cy+L.ry*.05-55*sc-10,124,20);ctx.fillStyle='#fff';ctx.fillText('🚫 本日臨時休業',L.cx,L.cy+L.ry*.05-55*sc);}
+ const txt=st==='warn'?'⚠️ 大雨 — 明日、大嵐が上陸します':st==='storm'?'🌪 大嵐のため休業中':`🔨 復興作業中（残り${repairList().length}件）魅力40%`;
+ ctx.font='bold 11px sans-serif';const tw=ctx.measureText(txt).width+12;ctx.fillStyle='rgba(200,60,40,.85)';ctx.fillRect(4,H-60,tw,17);ctx.fillStyle='#fff';ctx.textAlign='left';ctx.textBaseline='bottom';ctx.fillText(txt,10,H-45);}
+
+// ===================== 確認ダイアログ（ゲーム内） =====================
+let confirmCb=null;
+function askConfirm(msg,cb){confirmCb=cb;$('#mbox').innerHTML=`<div style="white-space:pre-line;font-size:14px;line-height:1.6;margin:6px 0 14px">${msg}</div><div class="row" style="justify-content:center"><button class="btn" data-yes>はい</button><button class="btn ghost" data-close>やめる</button></div>`;$('#modal').style.display='flex';}
+function closeModal(){$('#modal').style.display='none';}
+function afterChange(){recalc();save();renderPanel();updateTop();}
+
+// ===================== GMモード（動作確認用） =====================
+// 「📖 図鑑」タブと「魚図鑑 ○/○」の欄を同時に長押し → コード入力 →「GMモード」
+const gmPress={tab:false,card:false},gmPtr={};let gmTimer=null;
+function gmCheck(){if(gmPress.tab&&gmPress.card){if(!gmTimer)gmTimer=setTimeout(()=>{gmTimer=null;if(gmPress.tab&&gmPress.card){gmPress.tab=gmPress.card=false;openCodeInput();}},900);}
+ else if(gmTimer){clearTimeout(gmTimer);gmTimer=null;}}
+document.querySelector('[data-tab=dex]').addEventListener('pointerdown',e=>{gmPtr[e.pointerId]='tab';gmPress.tab=true;gmCheck();});
+$('#panel').addEventListener('pointerdown',e=>{if(e.target.closest('[data-gm]')){gmPtr[e.pointerId]='card';gmPress.card=true;gmCheck();}});
+function gmUp(e){const k=gmPtr[e.pointerId];if(k){gmPress[k]=false;delete gmPtr[e.pointerId];gmCheck();}}
+window.addEventListener('pointerup',gmUp);window.addEventListener('pointercancel',gmUp);
+document.addEventListener('contextmenu',e=>{if(e.target.closest('[data-gm],[data-tab=dex]'))e.preventDefault();});
+function openCodeInput(){
+ $('#mbox').innerHTML=`<h3>🔐 コード入力</h3><input id="gmCode" class="gmin" type="text" autocomplete="off" placeholder="コードを入力"><div id="gmMsg" class="sub" style="min-height:18px;margin:6px 0"></div><div class="row" style="justify-content:center"><button class="btn" data-gmok>決定</button><button class="btn ghost" data-close>やめる</button></div>`;
+ $('#modal').style.display='flex';setTimeout(()=>{const i=$('#gmCode');if(i)i.focus();},50);
+ $('#gmCode').addEventListener('keydown',e=>{if(e.key==='Enter')checkCode();});
+}
+function checkCode(){const v=($('#gmCode').value||'').replace(/\s/g,'').toUpperCase();
+ if(v==='GMモード'||v==='GMﾓｰﾄﾞ')openGM();else $('#gmMsg').textContent='❌ コードが違います';}
+function gmSpeciesOptions(){const groups=[...AREAS.map(a=>[a.id,`${a.ic} ${a.n}`]),['dream','🌙 夢で見た海'],['any','🥾 ハズレ']];
+ return groups.map(([id,n])=>`<optgroup label="${n}">${SPECIES.filter(p=>p.a===id).map(p=>`<option value="${p.id}">${p.n} ${RAR[p.r]}${p.rain?' ☔':''}${p.g?' (採取)':''}</option>`).join('')}</optgroup>`).join('');}
+let gmLastSp='iwashi';
+function openGM(msg){
+ const b=(act,label,cls='')=>`<button class="btn sm ${cls}" data-gma="${act}">${label}</button>`;
+ $('#mbox').innerHTML=`<h3>🛠️ GMモード</h3><div class="sub" style="margin-bottom:6px">動作確認用の管理画面です</div><div id="gmMsg" class="sub" style="color:#7ee081;min-height:18px">${msg||''}</div>
+ <div class="gmbox">
+ <div class="gms">💰 お金（所持 ${fmtG(s.gold)}）</div><div class="row">${b('g1k','+1,000G')}${b('g100k','+10万G')}${b('g10m','+1000万G')}${b('g0','0Gにする','red')}</div>
+ <div class="gms">🐟 魚を追加</div>
+ <select id="gmSp" class="gmin">${gmSpeciesOptions()}</select>
+ <div class="row" style="margin-top:6px"><span class="sub">数</span><input id="gmN" class="gmin" type="number" min="1" max="50" value="1" style="width:64px"><label class="sub"><input id="gmBig" type="checkbox" checked> 最大サイズ</label></div>
+ <div class="row">${b('fishBucket','いけすへ追加')}${b('fishTank','今の水槽へ展示')}</div>
+ <div class="row">${b('fishRand','ランダム5匹')}${b('dexAll','図鑑を全部登録','gold')}${b('dexClear','図鑑リセット','red')}</div>
+ <div class="gms">🌦️ 天気・時間（${s.rain?'☔ 雨':'☀️ 晴れ'}／Day ${s.day}）</div>
+ <div class="row">${b('sun','☀️ 晴れ')}${b('rain','☔ 雨')}${b('t6','朝')}${b('t12','昼')}${b('t18','夕方')}${b('t22','夜')}${b('nextDay','▶ 次の日へ')}</div>
+ <div class="gms">⛵ 幻の小舟・夢の海（小舟:${s.boat?'あり':'なし'}／夢:${s.dream?'訪問中':'—'}）</div>
+ <div class="row">${b('boat','小舟を砂浜に出す')}${b('dreamGo','すぐ夢の海へ','gold')}${b('dreamEnd','夢から覚める')}</div>
+ <div class="gms">⭐ 島・設備</div>
+ <div class="row">${b('lv1','評価Lv+1')}${b('lv5','評価Lv+5')}${b('areas','全エリア解放')}${b('rod','竿MAX')}${b('tanks','水槽4基・定員MAX')}</div>
+ <div class="row">${b('land','埋め立て+1')}${b('decoAll','装飾を全部置く')}${b('evEnd','イベント終了')}</div>
+ <div class="gms">🌪 嵐（${stormStage()||'なし'}／条件:${endgameDone()?'達成':'未達成'}）</div>
+ <div class="row">${b('stormWarn','嵐を予報')}${b('stormNow','すぐ大嵐')}${b('stormDmg','すぐ被害')}${b('stormFix','復興完了','gold')}${b('ticket','🎫無料券+1')}</div>
+ <div class="gms">🧽 水槽の濁り</div>
+ <div class="row">${b('dirty','全水槽を汚す')}${b('cleanAll','全水槽をピカピカ')}</div>
+ </div><button class="btn" style="width:100%;margin-top:10px" data-close>閉じる</button>`;
+ $('#modal').style.display='flex';
+ const sel=$('#gmSp');if(sel)sel.value=gmLastSp;
+}
+function gmAct(a){
+ const sp=SPM[($('#gmSp')||{}).value]||SPM.iwashi,n=clamp(+(($('#gmN')||{}).value)||1,1,50),big=($('#gmBig')||{}).checked;gmLastSp=sp.id;
+ const sz=p=>big?p.mx:rollSize(p);let m='✅ 実行しました';
+ switch(a){
+  case'g1k':s.gold+=1000;break;case'g100k':s.gold+=1e5;break;case'g10m':s.gold+=1e7;break;case'g0':s.gold=0;break;
+  case'fishBucket':for(let i=0;i<n;i++)registerCatch(sp,sz(sp));m=`✅ ${sp.n}×${n} をいけすへ`;break;
+  case'fishTank':{const t=s.tanks[s.cur];let k=0;if(sp.junk){m='❌ ハズレは展示できません';break;}for(let i=0;i<n&&t.fish.length<t.cap;i++){registerCatch(sp,sz(sp));t.fish.push(s.bucket.pop());k++;}m=`✅ ${sp.n}×${k} を水槽${s.cur+1}へ（定員 ${t.fish.length}/${t.cap}）`;break;}
+  case'fishRand':for(let i=0;i<5;i++){const p=SPECIES[Math.floor(Math.random()*SPECIES.length)];registerCatch(p,rollSize(p));}m='✅ ランダムに5匹いけすへ';break;
+  case'dexAll':SPECIES.forEach(p=>{if(!s.dex[p.id])s.dex[p.id]={c:1,max:p.mx};});s.dreamVisited=true;m='✅ 図鑑を全部登録しました';break;
+  case'dexClear':s.dex={};s.dreamVisited=false;m='✅ 図鑑をリセットしました';break;
+  case'sun':s.rain=false;break;case'rain':s.rain=true;break;
+  case't6':s.time=0;break;case't12':s.time=.25;break;case't18':s.time=.5;break;case't22':s.time=16/24;break;
+  case'nextDay':endDay();m=`✅ Day ${s.day} になりました`;break;
+  case'boat':s.rain=true;s.boat=true;m='✅ 雨の砂浜に小舟を出しました（島タブ）';break;
+  case'dreamGo':s.boat=true;closeModal();boardBoat();afterChange();return;
+  case'dreamEnd':if(s.dream){s.dream=false;if(s.area==='dream')s.area='beach';fs.st='idle';}m='✅ 夢から覚めました';break;
+  case'lv1':s.rating++;break;case'lv5':s.rating+=5;break;
+  case'areas':s.areas=AREAS.map(x=>x.id);break;case'rod':s.rod=6;break;
+  case'tanks':while(s.tanks.length<4)s.tanks.push({cap:3,fish:[]});s.tanks.forEach(t=>{t.cap=TANK_MAX;ensureDirt(t);});break;
+  case'land':if(s.land<LAND.length)s.land++;break;
+  case'decoAll':for(const d of DECOS)while((s.deco[d.id]||0)<d.max&&s.decoList.length<slotCount()){s.deco[d.id]=(s.deco[d.id]||0)+1;s.decoList.push(d.id);}m=`✅ 区画 ${s.decoList.length}/${slotCount()} まで配置`;break;
+  case'evEnd':if(s.event){s.event.left=0.001;}break;
+  case'stormWarn':s.storm={stage:'warn'};s.rain=true;m='✅ 今日は大雨、明日が大嵐です';break;
+  case'stormNow':s.storm={stage:'storm'};s.rain=true;m='✅ 大嵐になりました（休業中）';break;
+  case'stormDmg':s.storm={stage:'storm'};stormDamage();s.rain=false;m=`✅ 被害が発生（復興${repairList().length}件）`;break;
+  case'stormFix':if(s.storm&&stormStage()==='damage'){for(const it of repairList()){s.gold+=it.c;fixItem(it.k);}}else s.storm=null;m='✅ 復興完了にしました';break;
+  case'ticket':s.freeEv=(s.freeEv||0)+1;m=`✅ 無料券 ${s.freeEv}枚`;break;
+  case'dirty':s.tanks.forEach(t=>{ensureDirt(t);t.dirt.fill(90);});break;
+  case'cleanAll':s.tanks.forEach(t=>{ensureDirt(t);t.dirt.fill(0);});break;
+ }
+ afterChange();openGM(m);
+}
+$('#mbox').addEventListener('click',e=>{
+ if(e.target.closest('[data-yes]')){const cb=confirmCb;confirmCb=null;closeModal();if(cb)cb();return;}
+ if(e.target.closest('[data-gmok]')){checkCode();return;}
+ const g=e.target.closest('[data-gma]');if(g)gmAct(g.dataset.gma);
 });
 
 // ===================== セーブ/ロード =====================
@@ -1224,6 +1450,7 @@ function loop(now){
  updateEconomy(dt);updateDirt(dt);updateEvent(dt);if(gatherCd>0)gatherCd-=dt;
  recalcT-=dt;if(recalcT<=0){recalcT=1;recalc();}
  if(thunder>0)thunder-=dt;else if(s.rain&&Math.random()<dt*.04){thunder=.35;if(tab==='fish')log('⚡ ゴロゴロ…');}
+ if(stormStage()==='storm'&&thunder<=0&&Math.random()<dt*.35)thunder=.3;
  if(tab==='tank')updateTank(dt);
  if(tab==='fish'||fs.st!=='idle')updateFishing(dt);
  if(tab==='dex'){for(const b of bubbles){b.y-=b.v*dt;if(b.y<-10){b.y=H+10;b.x=rand(0,W);}}}
