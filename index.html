@@ -99,7 +99,7 @@ const AREAS=[
 ];
 const AREAM={};AREAS.forEach(a=>AREAM[a.id]=a);
 const DREAM={id:'dream',n:'夢で見た海',ic:'🌙',w:['#e8d8ff','#f6d6ec']};AREAM.dream=DREAM;
-const DREAM_WAIT=[0,6,4.8,3.8,2.9,2,1.3];  // 竿Lvごとの「夢で見た海」の待ち時間倍率
+const DREAM_WAIT=[0,5.6,4.5,3.5,2.7,1.85,1.2];  // 竿Lvごとの「夢で見た海」の待ち時間倍率
 const BOAT_CHANCE=.06;                      // 雨の日に幻の小舟が現れる確率
 const RAR=['','★','★★','★★★','★★★★','★★★★★','🌈幻★6'];
 const RCOL=['','#cfd8dc','#7ee081','#5ab0ff','#c98bff','#ffcf40','#ff6bd6'];
@@ -306,7 +306,7 @@ const ROD_COST=[0,0,150,500,1500,4000,10000];
 const NEWTANK_COST=[0,800,3000,9000];
 const CAFE=[{c:300,q:2},{c:1500,q:3},{c:5000,q:5}];
 const COTT=[{c:600,q:2},{c:2500,q:4},{c:7000,q:6}];
-const DAY_SEC=90;
+const DAY_SEC=135;
 const DECOS=[
  {id:'palm',n:'ヤシの木',ic:'🌴',c:300,max:12,b:1},
  {id:'parasol',n:'ビーチパラソル',ic:'⛱️',c:500,max:10,b:1.5},
@@ -315,15 +315,16 @@ const DECOS=[
  {id:'icecream',n:'アイス屋台',ic:'🍦',c:3000,max:3,b:3,shop:1},
  {id:'bbq',n:'BBQ広場',ic:'🍖',c:5000,max:2,b:4,shop:2},
  {id:'statue',n:'モアイ像',ic:'🗿',c:12000,max:3,b:5},
- {id:'fountain',n:'噴水広場',ic:'⛲',c:18000,max:2,b:6},
- {id:'surf',n:'サーフショップ',ic:'🏄',c:25000,max:1,b:7,shop:3},
- {id:'boat',n:'グラスボート乗り場',ic:'🚤',c:40000,max:1,b:9,shop:4},
- {id:'carousel',n:'メリーゴーランド',ic:'🎠',c:70000,max:1,b:12,land:1},
+ {id:'pool',n:'プール',ic:'🏊',c:20000,max:2,b:6,shop:2},
+ {id:'fountain',n:'噴水広場',ic:'⛲',c:18000,max:2,b:6,land:1},
+ {id:'boat',n:'グラスボート乗り場',ic:'🚤',c:40000,max:1,b:9,shop:4,land:1},
  {id:'tent',n:'サーカステント',ic:'🎪',c:100000,max:1,b:14,shop:5,land:1},
- {id:'onsen',n:'海の見える温泉',ic:'♨️',c:150000,max:1,b:15,night:2500,land:2},
+ {id:'onsen',n:'海の見える温泉',ic:'♨️',c:150000,max:2,b:15,night:2500,land:1,lvl:1,lv2:3},
+ {id:'hotel',n:'リゾートホテル',ic:'🏨',c:400000,max:6,b:18,night:5000,land:1,lmax:{1:2,2:4,3:5,4:6}},
+ {id:'carousel',n:'メリーゴーランド',ic:'🎠',c:70000,max:1,b:12,land:2},
  {id:'ferris',n:'観覧車',ic:'🎡',c:250000,max:1,b:22,land:2},
+ {id:'surf',n:'サーフショップ',ic:'🏄',c:25000,max:1,b:7,shop:3,land:3},
  {id:'fireworks',n:'花火の打ち上げ台',ic:'🎆',c:300000,max:1,b:20,land:3},
- {id:'hotel',n:'リゾートホテル',ic:'🏨',c:400000,max:2,b:18,night:5000,land:3},
  {id:'castle',n:'リゾートキャッスル',ic:'🏰',c:1000000,max:1,b:40,land:4},
 ];
 const DECOM={};DECOS.forEach(d=>DECOM[d.id]=d);
@@ -337,6 +338,7 @@ const EVENTS=[
  {id:'tv',n:'テレビ取材',ic:'🎥',req:{_rating:4},min:5000,days:1,app:1.2,vis:1.6,xp:3,d:'放送中は評価の経験値×3'},
  {id:'night',n:'ナイトアクアリウム',ic:'🌙',req:{_lighthouse:1},min:4000,days:2,app:1.4,vis:1.2,night:1,d:'夜の来場者が昼と同じくらいに'},
  {id:'sand',n:'砂の芸術祭',ic:'🗿',req:{statue:2},min:15000,days:2,app:1.6,vis:1.6,d:'モアイ像の前に巨大な砂像がずらり'},
+ {id:'poolparty',n:'ナイトプールパーティ',ic:'🏊',req:{pool:1},min:30000,days:2,app:1.8,vis:1.9,night:1,d:'ライトアップしたプールでDJナイト！夜も大にぎわい'},
  {id:'circus',n:'サーカス公演',ic:'🎪',req:{tent:1},min:40000,days:2,app:2,vis:2,d:'空中ブランコに火の輪くぐり！'},
  {id:'fireworks',n:'花火大会',ic:'🎆',req:{fireworks:1},min:80000,days:2,app:2.2,vis:2.2,night:1,d:'夜空を埋め尽くす大輪の花火'},
  {id:'parade',n:'遊園地パレード',ic:'🎠',req:{carousel:1,ferris:1},min:120000,days:2,app:2.4,vis:2.4,d:'光るフロートが島を一周'},
@@ -348,7 +350,7 @@ const KEY='aquaIsland_v1';
 
 // ===================== 状態 =====================
 function newState(){return{v:1,gold:120,day:1,time:0.08,rating:1,xp:0,rod:1,tanks:[{cap:3,fish:[]}],cur:0,bucket:[],dex:{},
- b:{cafe:0,cottage:0,lighthouse:0,pier:0,filter:0,bucket:0},event:null,deco:{},decoList:[],land:0,boat:false,dream:false,storm:null,freeEv:0,dreamVisited:false,dreamTrips:0,areas:['beach'],area:'beach',rain:false,visToday:0,incToday:0,totalVis:0,totalInc:0,uid:1,last:Date.now()};}
+ b:{cafe:0,cottage:0,lighthouse:0,pier:0,filter:0,bucket:0},event:null,deco:{},decoList:[],land:0,landLv:[],slotKeys:null,boat:false,dream:false,storm:null,freeEv:0,dreamVisited:false,dreamTrips:0,areas:['beach'],area:'beach',rain:false,visToday:0,incToday:0,totalVis:0,totalInc:0,uid:1,last:Date.now()};}
 let s=load()||newState();
 let tab='tank',T=0,APPEAL=0;
 const anim={};let bubbles=[],ripples=[],present=[],sparks=[];
@@ -844,7 +846,7 @@ function pickSpecies(area){if(area==='dream'){const l=fishPool('dream');let tot=
  for(let i=0;i<list.length;i++){r-=ws[i];if(r<=0)return list[i];}return list[0];}
 function rollSize(p){const k=Math.pow(Math.random(),Math.max(.6,1.7-s.rod*.15));return Math.round((p.mn+(p.mx-p.mn)*k)*10)/10;}
 function bucketCap(){return 8+(s.b.pier?6:0)+(s.b.bucket||0)*4;}
-function newZone(){const w=fs.sp.junk?.4:clamp(.3+s.rod*.035-fs.sp.r*.035,.1,.45)*(fs.sp.a==='dream'?.72:1);fs.z0=rand(.05,.95-w);fs.z1=fs.z0+w;}
+function newZone(){const w=fs.sp.junk?.4:clamp(.3+s.rod*.035-fs.sp.r*.035,.1,.45)*(fs.sp.a==='dream'?.8:1);fs.z0=rand(.05,.95-w);fs.z1=fs.z0+w;}
 function fishTap(){
  switch(fs.st){
   case'idle':
@@ -852,7 +854,7 @@ function fishTap(){
    if(s.bucket.length>=bucketCap()){flash('いけすが満杯！','#ffb3b3');log('🪣 いけすが満杯です。水槽タブで展示するか売りましょう');return;}
    fs.st='cast';fs.t=0;fs.bx=rand(W*.45,W*.8);fs.by=rand(H*.5,H*.66);fs.wait=s.area==='dream'?rand(1,3)*DREAM_WAIT[s.rod]:rand(1.5,4.2)*WAIT_MULT[areaIdx(s.area)]*(s.b.pier?.7:1);fs.nib=0;fs.nibT=rand(.5,1.2);break;
   case'cast':case'wait':fs.st='idle';flash('早すぎた！','#ffb3b3');break;
-  case'bite':fs.st='reel';fs.t=0;fs.hits=0;fs.need=fs.sp.junk?1:fs.sp.r>=6?4:fs.sp.r>=5?3:fs.sp.r>=4?2:1;fs.mk=0;fs.md=1;fs.speed=fs.sp.junk?.7:(.8+fs.sp.r*.22)*(fs.sp.a==='dream'?1.15:1);newZone();break;
+  case'bite':fs.st='reel';fs.t=0;fs.hits=0;fs.need=fs.sp.junk?1:fs.sp.r>=6?4:fs.sp.r>=5?3:fs.sp.r>=4?2:1;fs.mk=0;fs.md=1;fs.speed=fs.sp.junk?.7:(.8+fs.sp.r*.22)*(fs.sp.a==='dream'?1.08:1);newZone();break;
   case'reel':
    if(fs.mk>=fs.z0&&fs.mk<=fs.z1){fs.hits++;splash(fs.bx,fs.by,6);if(navigator.vibrate)navigator.vibrate(30);
     if(fs.hits>=fs.need)catchFish();else{newZone();fs.speed*=1.12;}}
@@ -891,34 +893,109 @@ const PALMS=[[-.75,.05],[-.55,-.45],[.3,-.6],[.8,.15],[-.15,.65]];
 const LAND_GEO=[{x:1.68,y:-.1,rx:.58,ry:.72},{x:-1.68,y:.05,rx:.58,ry:.72},{x:.9,y:1.8,rx:.62,ry:.56},{x:-.9,y:1.8,rx:.62,ry:.56}];
 const MAIN_SLOTS=[[-.8,.32],[-.48,.62],[-.12,.82],[.22,.8],[.55,.62],[.84,.36],[-.9,-.22],[-.3,-.5],[.38,-.58],[-.66,-.62]];
 const LAND_SLOTS=[[-.5,-.35],[0,-.42],[.5,-.35],[-.5,.32],[0,.4],[.5,.32]];
-const BIG_DECO={carousel:1,tent:1,onsen:1,hotel:1,castle:1};
-function slotCount(){return MAIN_SLOTS.length+s.land*LAND_SLOTS.length;}
+const LV_SLOTS=[LAND_SLOTS,[[-.78,0],[-.26,0],[.26,0],[.78,0]],[[-.3,-.72],[.3,-.72],[-.3,.72],[.3,.72]]];
+const LAND_LV_MAX=3,LAND_LV_SCALE=[1,1.22,1.42],LAND_UP_COST=[0,.6,1.2];
+function landLv(i){return(s.landLv&&s.landLv[i])||1;}
+function landGeo(i){const b=LAND_GEO[i],k=LAND_LV_SCALE[landLv(i)-1],rx=b.rx*k,ry=b.ry*k;return i<2?{x:Math.sign(b.x)*(1.1+rx),y:b.y,rx,ry}:{x:Math.sign(b.x)*Math.max(.9,rx+.1),y:1.25+ry,rx,ry};}
+function slotKeys(){if(!s.slotKeys){s.slotKeys=[];for(let i=0;i<s.land;i++)for(let l=1;l<=landLv(i);l++)LV_SLOTS[l-1].forEach(([u,v])=>s.slotKeys.push([i,u,v]));}return s.slotKeys;}
+function addLandSlots(i,lv){slotKeys();LV_SLOTS[lv-1].forEach(([u,v])=>s.slotKeys.push([i,u,v]));}
+function decoUsed(){let n=0;for(let i=0;i<Math.min(s.decoList.length,slotCount());i++)if(s.decoList[i])n++;return n;}
+function freeSlot(){const n=slotCount();for(let i=0;i<n;i++)if(!s.decoList[i])return i;return -1;}
+function maxNow(d){if(s.land<(d.land||0))return 0;if(d.lmax){let m=0;for(const l in d.lmax)if(s.land>=+l)m=Math.max(m,d.lmax[l]);return m;}return d.lvl?(s.land>=d.lv2?2:1):d.max;}
+function nextLmax(d){if(!d.lmax)return null;for(const l of Object.keys(d.lmax).map(Number).sort((a,b)=>a-b))if(s.land<l)return{land:l,max:d.lmax[l]};return null;}
+function placeDeco(id){const d=DECOM[id];if(d.lvl&&(s.deco[id]||0)>=1){s.deco[id]++;return true;}const i=freeSlot();if(i<0)return false;s.decoList[i]=id;s.deco[id]=(s.deco[id]||0)+1;return true;}
+function removeCost(i){return Math.max(100,Math.round(decoPaid(i)*.2));}
+function landUpCost(i){return Math.round(LAND[i].c*LAND_UP_COST[landLv(i)]);}
+const BIG_DECO={carousel:1,tent:1,onsen:1,hotel:1,castle:1,pool:1};
+function slotCount(){return MAIN_SLOTS.length+slotKeys().length;}
 function islandLayout(hz){
  let x0=-1.1,x1=1.1,y0=-1.55,y1=1.15;
- for(let i=0;i<s.land;i++){const g=LAND_GEO[i];x0=Math.min(x0,g.x-g.rx-.06);x1=Math.max(x1,g.x+g.rx+.06);y0=Math.min(y0,g.y-g.ry-.5);y1=Math.max(y1,g.y+g.ry+.1);}
+ for(let i=0;i<s.land;i++){const g=landGeo(i);x0=Math.min(x0,g.x-g.rx-.06);x1=Math.max(x1,g.x+g.rx+.06);y0=Math.min(y0,g.y-g.ry-.5);y1=Math.max(y1,g.y+g.ry+.1);}
  const aw=W*.96,ah=(H-hz)*.94,k=Math.min(aw/(x1-x0),ah/((y1-y0)*.6)),ry=k*.6;
  return{k,rx:k,ry,cx:W/2-(x0+x1)/2*k,cy:hz+(H-hz-(y1-y0)*ry)/2+(-y0)*ry,sc:clamp(k/170,.42,1.3)};
 }
 function slotPos(i,L){
  if(i<MAIN_SLOTS.length){const [u,v]=MAIN_SLOTS[i];return[L.cx+u*L.rx,L.cy+v*L.ry];}
- i-=MAIN_SLOTS.length;const g=LAND_GEO[Math.floor(i/LAND_SLOTS.length)],[u,v]=LAND_SLOTS[i%LAND_SLOTS.length];
+ const key=slotKeys()[i-MAIN_SLOTS.length];if(!key)return[-999,-999];const g=landGeo(key[0]),u=key[1],v=key[2];
  return[L.cx+(g.x+u*g.rx)*L.rx,L.cy+(g.y+v*g.ry)*L.ry];
 }
 function drawDeco(id,x,y,sc,nt,i,glow){
- const d=DECOM[id];ctx.textAlign='center';ctx.textBaseline='bottom';
- ctx.fillStyle='rgba(0,0,0,.18)';ctx.beginPath();ctx.ellipse(x,y,(BIG_DECO[id]?20:9)*sc,(BIG_DECO[id]?6:3)*sc,0,0,7);ctx.fill();
+ const d=DECOM[id],big=BIG_DECO[id],lv=d.lvl?Math.max(1,s.deco[id]||1):1,k=sc*(lv>=2?1.15:1),lit=nt>.3;
+ ctx.fillStyle='rgba(0,0,0,.18)';ctx.beginPath();ctx.ellipse(x,y,(big?20:9)*k,(big?6:3)*k,0,0,7);ctx.fill();
  if(id==='ferris'){const R=34*sc,cy2=y-R-8*sc;ctx.strokeStyle='#ddd';ctx.lineWidth=3*sc;ctx.beginPath();ctx.moveTo(x-R*.6,y);ctx.lineTo(x,cy2);ctx.lineTo(x+R*.6,y);ctx.stroke();
-  ctx.strokeStyle=nt>.3?'#ffd56b':'#fff';ctx.lineWidth=2*sc;ctx.beginPath();ctx.arc(x,cy2,R,0,7);ctx.stroke();
+  ctx.strokeStyle=lit?'#ffd56b':'#fff';ctx.lineWidth=2*sc;ctx.beginPath();ctx.arc(x,cy2,R,0,7);ctx.stroke();
   const cols=['#ff6b6b','#ffd166','#4fd1c5','#9b8cff','#ff9ad5','#7ee081'];
-  for(let k=0;k<12;k++){const a=T*.25+k*Math.PI/6;ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,cy2);ctx.lineTo(x+Math.cos(a)*R,cy2+Math.sin(a)*R);ctx.stroke();
-   ctx.fillStyle=cols[k%6];ctx.fillRect(x+Math.cos(a)*R-3*sc,cy2+Math.sin(a)*R,6*sc,6*sc);}
-  if(nt>.3)glow.push([x,cy2,R*1.4]);return;}
- const big=BIG_DECO[id],size=(big?34:id==='palm'?24:19)*sc;
- ctx.save();ctx.translate(x,y);
- if(id==='parasol'||id==='palm')ctx.rotate(Math.sin(T*1.2+i)*.06);
- ctx.fillStyle='#000';ctx.font=`${size}px ${EMOJI_FONT}`;ctx.fillText(d.ic,0,2);ctx.restore();
- if(id==='fountain'){for(let k=0;k<8;k++){const ph=(T*1.5+k/8)%1,a=k/8*Math.PI*2;ctx.fillStyle=`rgba(200,240,255,${1-ph})`;ctx.beginPath();ctx.arc(x+Math.cos(a)*ph*12*sc,y-size*.9-Math.sin(ph*Math.PI)*14*sc,1.6*sc,0,7);ctx.fill();}}
- if((d.shop||d.night)&&nt>.3)glow.push([x,y-size*.5,size*1.1]);
+  for(let j=0;j<12;j++){const a=T*.25+j*Math.PI/6;ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,cy2);ctx.lineTo(x+Math.cos(a)*R,cy2+Math.sin(a)*R);ctx.stroke();
+   ctx.fillStyle=cols[j%6];ctx.fillRect(x+Math.cos(a)*R-3*sc,cy2+Math.sin(a)*R,6*sc,6*sc);}
+  if(lit)glow.push([x,cy2,R*1.4]);return;}
+ const c=ctx;c.save();c.translate(x,y);
+ const R=(x0,y0,w,h,col)=>{c.fillStyle=col;c.fillRect(x0*k,y0*k,w*k,h*k);};
+ const E=(x0,y0,rx,ry,col,a0=0,a1=7)=>{c.fillStyle=col;c.beginPath();c.ellipse(x0*k,y0*k,rx*k,ry*k,0,a0,a1);c.fill();};
+ const P=(pts,col)=>{c.fillStyle=col;c.beginPath();pts.forEach(([px,py],j)=>j?c.lineTo(px*k,py*k):c.moveTo(px*k,py*k));c.closePath();c.fill();};
+ const L=(pts,col,w)=>{c.strokeStyle=col;c.lineWidth=w*k;c.lineCap='round';c.beginPath();pts.forEach(([px,py],j)=>j?c.lineTo(px*k,py*k):c.moveTo(px*k,py*k));c.stroke();};
+ const G=(gx,gy,r)=>{if(lit)glow.push([x+gx*k,y+gy*k,r*k]);};
+ switch(id){
+  case'palm':{const sw=Math.sin(T*1.3+i)*.12;c.strokeStyle='#8b6b3d';c.lineWidth=3.5*k;c.beginPath();c.moveTo(0,0);c.quadraticCurveTo(5*k,-12*k,2*k+sw*18,-26*k);c.stroke();
+   c.save();c.translate(2*k+sw*18,-26*k);c.fillStyle='#2e9e4f';for(let j=0;j<6;j++){c.rotate(Math.PI/3);c.beginPath();c.ellipse(9*k,0,11*k,3*k,.3+sw,0,7);c.fill();}c.fillStyle='#7a5a2a';c.beginPath();c.arc(0,2*k,2*k,0,7);c.fill();c.restore();break;}
+  case'parasol':{R(-7,-3,14,3,'#ffd166');R(-7,-3,14,1,'#ff8a5a');c.rotate(Math.sin(T*1.2+i)*.05);L([[0,0],[0,-22]],'#eee',1.5);
+   for(let j=0;j<6;j++){c.fillStyle=j%2?'#fff':'#ff5a5a';c.beginPath();c.moveTo(0,-25*k);c.lineTo((-14+j*28/6)*k,-14*k);c.quadraticCurveTo((-14+(j+.5)*28/6)*k,-12*k,(-14+(j+1)*28/6)*k,-14*k);c.closePath();c.fill();}
+   E(0,-25.5,1.5,1.5,'#fff');break;}
+  case'chair':{R(-11,-13,22,3,'#b8834a');R(-11,-7,22,3,'#a0703a');R(-10,-13,2,13,'#5a3a1a');R(8,-13,2,13,'#5a3a1a');R(-11,-14,22,1,'#d0a060');break;}
+  case'flower':{E(0,-3,14,5,'#9a9a9a');E(0,-4,12,3.8,'#6a4a2a');const cols=['#ff5a8a','#ffd166','#ff8a3a','#c38bff','#ff6b6b'];
+   for(let j=0;j<8;j++){const fx=-10.5+j*3,fy=-8-(j%2)*3+Math.sin(T*2+j)*.6;L([[fx,-4],[fx,fy]],'#3a8a3a',1);E(fx-1.5,fy+2,1.5,.8,'#4caf50');for(let q=0;q<5;q++){const a=q/5*Math.PI*2;E(fx+Math.cos(a)*1.6,fy+Math.sin(a)*1.6,1.3,1.3,cols[j%5]);}E(fx,fy,.9,.9,'#fff3a0');}break;}
+  case'icecream':{R(-10,-12,20,10,'#fff0f5');R(-10,-12,20,2.5,'#ff9ab8');R(-6,-9,12,4,'#e8f8ff');E(-6,-1,2.4,2.4,'#444');E(6,-1,2.4,2.4,'#444');E(-6,-1,1,1,'#aaa');E(6,-1,1,1,'#aaa');
+   L([[-9,-12],[-9,-18]],'#ccc',1);L([[9,-12],[9,-18]],'#ccc',1);for(let j=0;j<5;j++)P([[-11+j*4.4,-18],[-6.6+j*4.4,-18],[-6.6+j*4.4,-15],[-11+j*4.4,-15]],j%2?'#fff':'#5ab0ff');
+   P([[-3.2,-25],[3.2,-25],[0,-18.5]],'#e8b878');E(0,-26.5,4,3.5,'#ff9ad5');E(-1.5,-28,1.2,1,'#fff');G(0,-12,22);break;}
+  case'bbq':{R(-14,-7,12,2,'#a0703a');R(-13,-5,1.5,5,'#6a4a2a');R(-4.5,-5,1.5,5,'#6a4a2a');E(-10,-8,1.8,.8,'#fff');E(-6,-8,1.8,.8,'#fff');
+   L([[3,0],[6,-7]],'#333',1.2);L([[11,0],[8,-7]],'#333',1.2);E(7,-8,6,4.5,'#2a2a2a',Math.PI,0);R(1,-8,12,1.4,'#555');
+   E(7,-9,4,1.3,`rgba(255,${120+Math.sin(T*8)*40|0},40,.85)`);for(let j=0;j<3;j++){const ph=(T*.6+j/3)%1;E(7+Math.sin(T+j)*2,-13-ph*14,2+ph*3,1.5+ph*2,`rgba(225,225,225,${(1-ph)*.55})`);}G(7,-9,16);break;}
+  case'statue':{E(0,-1,9,3,'#8a8a6a');P([[-6,-1],[6,-1],[5,-23],[-5,-23]],'#7d7d7d');P([[2,-1],[6,-1],[5,-23],[3,-23]],'#6a6a6a');R(-6,-24,12,4,'#6e6e6e');
+   P([[0,-18],[3,-10],[-1,-10]],'#5a5a5a');R(-3,-15,2.5,2,'#444');R(1.5,-15,2.5,2,'#444');L([[-3,-7],[3,-7]],'#4a4a4a',1);break;}
+  case'fountain':{E(0,-3,15,5.5,'#d8d0c0');E(0,-4,12.5,4,'#5ab8e8');E(-3,-4.5,4,1,'rgba(255,255,255,.5)');R(-1.5,-16,3,12,'#e0d8c8');E(0,-16,6,2,'#d8d0c0');E(0,-16.5,4.5,1.3,'#5ab8e8');
+   for(let j=0;j<10;j++){const ph=(T*1.5+j/10)%1,a=j/10*Math.PI*2;c.fillStyle=`rgba(210,240,255,${1-ph})`;c.beginPath();c.arc(Math.cos(a)*ph*12*k,(-17-Math.sin(ph*Math.PI)*11+ph*12)*k,1.4*k,0,7);c.fill();}break;}
+  case'surf':{R(-12,-14,16,14,'#3ad0c0');R(-12,-14,16,2,'#2aa8a0');P([[-14,-14],[6,-14],[-4,-22]],'#f4e4b0');L([[-14,-14],[-4,-22],[6,-14]],'#d8c080',1);R(-7,-8,5,8,'#2a6a7a');R(-11,-12,3,3,'#bff3ff');
+   R(-8,-20,8,3,'#ff6b6b');c.fillStyle='#fff';c.font=`bold ${2.6*k}px sans-serif`;c.textAlign='center';c.textBaseline='middle';c.fillText('SURF',-4*k,-18.5*k);
+   for(const [bx,col,rot] of[[8,'#ff6b6b',.18],[12,'#ffd166',.1],[16,'#5ab0ff',.22]]){c.save();c.translate(bx*k,-1*k);c.rotate(rot);E(0,-9,2.6,9.5,col);L([[0,-17],[0,-1]],'rgba(255,255,255,.7)',.7);c.restore();}G(-4,-10,18);break;}
+  case'boat':{R(-14,-4,15,3,'#9c6b3a');R(-13,-4,1.5,5,'#6a4a2a');R(-2,-4,1.5,5,'#6a4a2a');const b=Math.sin(T*2+i)*1;c.translate(0,b*k);
+   P([[0,-3],[19,-3],[16,2],[2,2]],'#ffffff');R(2,-1,13,2,'#5ad8ff');R(5,-8,8,5,'#e8f4ff');R(5,-9,8,1.3,'#ff6b6b');R(6.5,-7,2,2,'#5ab0ff');R(10,-7,2,2,'#5ab0ff');L([[1,-3],[18,-3]],'#2a7ad8',.8);break;}
+  case'carousel':{E(0,-2,17,4.5,'#d4a04a');E(0,-3,15,3.5,'#f4d08a');for(let j=0;j<6;j++){const a=T*.8+j/6*Math.PI*2,px=Math.cos(a)*12,front=Math.sin(a)>0;if(!front)continue;}
+   for(let j=0;j<5;j++)L([[-13+j*6.5,-3],[-13+j*6.5,-19]],'#e8c060',1);
+   for(let j=0;j<6;j++){const a=T*.8+j/6*Math.PI*2,px=Math.cos(a)*12,py=-9+Math.sin(T*3+j)*2;if(Math.sin(a)<0)continue;E(px,py,3.2,2,'#fff');E(px+2.2*Math.sign(Math.cos(a+1.57)||1),py-1.6,1.3,1.6,'#fff');E(px,py-1,1,.6,['#ff6b6b','#5ab0ff','#ffd166'][j%3]);}
+   for(let j=0;j<10;j++){const t0=j/10,t1=(j+1)/10;P([[0,-32],[-18+t0*36,-19],[-18+t1*36,-19]],(j+Math.floor(T*2))%2?'#ff6b8a':'#fff');}
+   for(let j=0;j<9;j++)E(-16+j*4,-19,2,1.5,'#ffd166');L([[0,-32],[0,-36]],'#999',1);P([[0,-36],[5,-35],[0,-34]],'#ff4a4a');G(0,-18,26);break;}
+  case'tent':{for(let j=0;j<8;j++)P([[-16+j*4,0],[-12+j*4,0],[-13+(j+1)*3.25,-16],[-13+j*3.25,-16]],j%2?'#fff':'#e53935');
+   P([[-6,0],[6,0],[0,-10]],'#3a1a1a');P([[-15,-16],[15,-16],[0,-31]],'#e53935');P([[-5,-16],[5,-16],[0,-31]],'#fff');
+   for(let j=0;j<8;j++)E(-14+j*4,-16,2,1.5,'#ffd166');L([[0,-31],[0,-37]],'#777',1);P([[0,-37],[6+Math.sin(T*4)*1.5,-35.5],[0,-34]],'#ffd166');G(0,-8,24);break;}
+  case'onsen':{if(lv>=2){R(-17,-21,14,12,'#a0703a');P([[-19,-21],[-1,-21],[-10,-27]],'#5a3a2a');R(-14,-17,8,4,'#c0392b');R(-14,-13,8,4,'#2a2a2a');G(-10,-15,14);}
+   for(let j=0;j<12;j++){const a=j/12*Math.PI*2;E(Math.cos(a)*15,-5+Math.sin(a)*5.5,3,2.2,j%2?'#8a8a8a':'#a0a0a0');}
+   E(0,-5,13,4.5,'#6fe0d8');E(-4,-6,4,1,'rgba(255,255,255,.55)');
+   for(let j=0;j<3;j++){const ph=(T*.5+j/3)%1;c.strokeStyle=`rgba(255,255,255,${(1-ph)*.6})`;c.lineWidth=1.5*k;c.beginPath();const sx=(-6+j*6)*k,sy=(-7-ph*16)*k;c.moveTo(sx,sy+6*k);c.quadraticCurveTo(sx+3*k*Math.sin(T*2+j),sy+3*k,sx,sy);c.stroke();}
+   E(13,-12,1.6,2.4,'#ffb04a');G(0,-6,20);break;}
+  case'fireworks':{R(-13,-4,26,4,'#5a5a6a');R(-13,-5,26,1.5,'#7a7a8a');for(const [tx,rot] of[[-7,-.25],[0,0],[7,.25]]){c.save();c.translate(tx*k,-5*k);c.rotate(rot);R(-1.8,-11,3.6,11,'#8a2a2a');E(0,-11,1.8,.7,'#3a1010');c.restore();}
+   L([[11,-5],[11,-17]],'#888',.8);P([[11,-17],[16,-15.5],[11,-14]],'#ffd166');
+   if(lit){const ph=(T*.9+i*.3)%1;c.fillStyle=`hsla(${(T*90)%360},100%,70%,${1-ph})`;c.beginPath();c.arc(0,(-16-ph*40)*k,1.6*k,0,7);c.fill();}break;}
+  case'hotel':{const tall=i%2===1,fl=tall?6:4,top=-fl*6-2;if(tall){R(13,-18,11,18,'#efe2cc');for(let f=0;f<2;f++)for(let j=0;j<2;j++)R(15+j*4.5,-15+f*7,3,3.5,lit&&(f+j)%2?'#ffd56b':'#7ab8e0');}
+   R(-13,top,26,fl*6+2,'#f6ecda');R(9,top,4,fl*6+2,'#dccfb8');for(let f=0;f<fl;f++)for(let j=0;j<4;j++){const on=lit&&((j*7+f*3+i)%3!==0);R(-11+j*5.2,top+3+f*6,3.4,3.5,on?'#ffd56b':'#7ab8e0');}
+   R(-14,top-3,28,3,'#c0392b');R(-7,top-8,14,5,'#1a3a5a');c.fillStyle='#ffd166';c.font=`bold ${3.2*k}px sans-serif`;c.textAlign='center';c.textBaseline='middle';c.fillText('HOTEL',0,(top-5.5)*k);
+   R(-4,-6,8,6,'#5a3a2a');R(-6,-7,12,1.5,'#c0392b');E(-10,-1,2.5,1.5,'#2e9e4f');E(10,-1,2.5,1.5,'#2e9e4f');if(lit)glow.push([x,y+top*k*.5,30*k]);break;}
+  case'castle':{const wc='#ece4f4',sh='#d4c8e4';R(-18,-16,36,16,wc);for(let j=0;j<9;j++)R(-18+j*4,-18,2.4,2.2,wc);
+   for(const tx of[-20,12]){R(tx,-27,8,27,'#f4ecfa');R(tx+6,-27,2,27,sh);P([[tx-1.5,-27],[tx+9.5,-27],[tx+4,-38]],'#5a7ad8');R(tx+3,-21,2,3,lit?'#ffd56b':'#6a5a8a');}
+   R(-7,-32,14,16,'#f8f2fc');R(4,-32,3,16,sh);P([[-9,-32],[9,-32],[0,-46]],'#ff8ab8');R(-1.5,-27,3,4,lit?'#ffd56b':'#6a5a8a');
+   E(0,-4,4.5,5,'#4a3a5a',Math.PI,0);R(-4.5,-4,9,4,'#4a3a5a');for(const [fx,fy] of[[0,-46],[-16,-38],[16,-38]]){L([[fx,fy],[fx,fy-5]],'#888',.8);P([[fx,fy-5],[fx+4+Math.sin(T*4+fx)*1,fy-4],[fx,fy-3]],'#ff4a6a');}
+   if(lit)glow.push([x,y-20*k,40*k]);break;}
+  case'pool':{const pp=(curEvent()||{}).id==='poolparty'&&nt>.2;c.fillStyle='#f4f0e8';c.beginPath();c.roundRect?c.roundRect(-19*k,-13*k,38*k,13*k,3*k):c.rect(-19*k,-13*k,38*k,13*k);c.fill();
+   const g=c.createLinearGradient(0,-11*k,0,-2*k);g.addColorStop(0,lit?'#3af0ff':'#7fe8ff');g.addColorStop(1,lit?'#0a6ab0':'#2a9ad8');c.fillStyle=g;c.fillRect(-16*k,-11*k,32*k,9*k);
+   for(let j=0;j<3;j++){c.strokeStyle='rgba(255,255,255,.55)';c.lineWidth=.8*k;c.beginPath();for(let q=-15;q<=15;q+=2)c.lineTo(q*k,(-9+j*2.8+Math.sin(T*2+q*.5+j)*.5)*k);c.stroke();}
+   L([[13,-13],[13,-8]],'#bbb',.8);L([[15,-13],[15,-8]],'#bbb',.8);const fb=Math.sin(T*1.5+i)*1.2;
+   c.strokeStyle='#ff5a5a';c.lineWidth=1.8*k;c.beginPath();c.ellipse((-6+fb)*k,-6*k,3*k,1.5*k,0,0,7);c.stroke();E(5-fb,-5,2.5,1.2,'#ffd166');
+   E(-22,-4,3,1.5,'#fff');R(-24,-6,5,1,'#5ab0ff');
+   if(lit)glow.push([x,y-6*k,26*k]);
+   if(pp){for(let j=0;j<4;j++){const hue=(T*90+j*90)%360;c.strokeStyle=`hsla(${hue},100%,65%,.9)`;c.lineWidth=1.4*k;c.beginPath();c.ellipse(0,-7*k,(17+j*1.3)*k,(6+j*.6)*k,0,0,7);c.stroke();}
+    for(let j=0;j<3;j++){const a=Math.sin(T*1.6+j*2)*.6-Math.PI/2;c.fillStyle=`hsla(${(T*120+j*120)%360},100%,70%,.25)`;c.beginPath();c.moveTo(0,-6*k);c.lineTo(Math.cos(a-.12)*60*k,-6*k+Math.sin(a-.12)*60*k);c.lineTo(Math.cos(a+.12)*60*k,-6*k+Math.sin(a+.12)*60*k);c.fill();}}
+   break;}
+  default:c.fillStyle='#000';c.font=`${19*k}px ${EMOJI_FONT}`;c.textAlign='center';c.textBaseline='bottom';c.fillText(d.ic,0,2);
+ }
+ c.restore();
 }
 function drawEventFx(e,L,sc,nt,hz){const {cx,cy,rx,ry}=L;const id=e.id;
  // 紙吹雪
@@ -934,6 +1011,7 @@ function drawEventFx(e,L,sc,nt,hz){const {cx,cy,rx,ry}=L;const id=e.id;
   ctx.font=`${18*sc+4}px ${EMOJI_FONT}`;ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillStyle='#000';ctx.fillText('🎤',sx,sy-10*sc);
   ctx.fillStyle='#fff';ctx.font=`bold ${14*sc+4}px sans-serif`;for(let i=0;i<6;i++){const ph=(T*.6+i/6)%1;ctx.globalAlpha=1-ph;ctx.fillText(i%2?'♪':'♫',sx+Math.sin(i*2+T)*50*sc,sy-20*sc-ph*80*sc);}ctx.globalAlpha=1;
   ctx.fillStyle='rgba(20,20,40,.75)';for(let i=0;i<30;i++){const x=sx+((i*37)%100-50)*sc*1.1,y=sy+8*sc+((i*13)%14)*sc+Math.abs(Math.sin(T*6+i))*-3;ctx.beginPath();ctx.arc(x,y,3*sc,0,7);ctx.fill();}}
+ if(id==='poolparty'){ctx.fillStyle='#fff';ctx.font=`bold ${12*sc+5}px sans-serif`;ctx.textAlign='center';for(let i=0;i<8;i++){const ph=(T*.5+i/8)%1;ctx.globalAlpha=(1-ph)*(.4+nt*.6);ctx.fillStyle=`hsl(${(i*45+T*60)%360},100%,75%)`;ctx.fillText(i%2?'♪':'♫',W*(.1+i*.11),H*.9-ph*H*.5);}ctx.globalAlpha=1;}
  // 釣り大会の船団
  if(id==='fishcup'){ctx.font=`${14*sc+6}px ${EMOJI_FONT}`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#000';for(let i=0;i<8;i++){const x=((T*(6+i)+i*W/8)%(W+40))-20,y=hz+12+(i%3)*12+Math.sin(T*2+i)*2;ctx.fillText(i%3?'🚤':'⛵',x,y);}}
  // テレビ
@@ -963,7 +1041,7 @@ function drawIsland(){
   for(let j=0;j<18;j++){const a=j/18*Math.PI*2;ctx.fillStyle=`hsla(${hue},100%,70%,${(1-ph)*nt})`;ctx.beginPath();ctx.arc(bx+Math.cos(a)*ph*45,by+Math.sin(a)*ph*45+ph*ph*12,2,0,7);ctx.fill();}}}
  const L=islandLayout(hz),{cx,cy,rx,ry,sc}=L;
  // 埋め立て地
- for(let i=0;i<s.land;i++){const p=LAND_GEO[i],px=cx+p.x*rx,py=cy+p.y*ry,prx=p.rx*rx,pry=p.ry*ry;
+ for(let i=0;i<s.land;i++){const p=landGeo(i),px=cx+p.x*rx,py=cy+p.y*ry,prx=p.rx*rx,pry=p.ry*ry;
   ctx.strokeStyle=lerpCol('#e8d7a0','#4a4434',nt*.8);ctx.lineWidth=10*sc;ctx.beginPath();ctx.moveTo(cx+(p.x*.45)*rx,cy+(p.y*.45)*ry);ctx.lineTo(px,py);ctx.stroke();
   ctx.fillStyle='rgba(255,255,255,.22)';ctx.beginPath();ctx.ellipse(px,py+3,prx*1.05,pry*1.08,0,0,7);ctx.fill();
   ctx.fillStyle=lerpCol('#b8bcc0','#4a4e52',nt*.8);ctx.beginPath();ctx.ellipse(px,py,prx,pry,0,0,7);ctx.fill();
@@ -1016,13 +1094,13 @@ function drawIsland(){
  PALMS.forEach(([px,py],i)=>{const x=cx+px*rx*.85,y=cy+py*ry*.8,sw=Math.sin(T*1.3+i)*.12;ctx.strokeStyle=lerpCol('#8b6b3d','#3a2c1a',nt*.7);ctx.lineWidth=4*sc;ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+6*sc,y-14*sc,x+3*sc+sw*20,y-28*sc);ctx.stroke();
   ctx.save();ctx.translate(x+3*sc+sw*20,y-28*sc);ctx.fillStyle=lerpCol('#2e9e4f','#123a22',nt*.7);for(let k=0;k<5;k++){ctx.rotate(Math.PI*2/5);ctx.beginPath();ctx.ellipse(10*sc,0,12*sc,3.5*sc,.3+sw,0,7);ctx.fill();}ctx.restore();});
  // リゾート装飾（奥から順に）
- const items=s.decoList.slice(0,slotCount()).map((id,i)=>{const [x,y]=slotPos(i,L);return{id,x,y,i};}).sort((a,b)=>a.y-b.y);
+ const items=s.decoList.slice(0,slotCount()).map((id,i)=>{if(!id)return null;const [x,y]=slotPos(i,L);return{id,x,y,i};}).filter(Boolean).sort((a,b)=>a.y-b.y);
  {const bs=brokenSet();for(const it of items){if(bs.has(it.i))drawRubble(it.x,it.y,sc,BIG_DECO[it.id]||it.id==='ferris');else drawDeco(it.id,it.x,it.y,sc,nt,it.i,glow);}}
- if(s.storm&&s.storm.debris){if(s.storm.debris.main)drawDebris(cx,cy,rx*.8,ry*.8,sc,0);for(let i=0;i<s.land;i++)if(s.storm.debris['l'+i]){const p=LAND_GEO[i];drawDebris(cx+p.x*rx,cy+p.y*ry,p.rx*rx,p.ry*ry,sc,i+1);}}
+ if(s.storm&&s.storm.debris){if(s.storm.debris.main)drawDebris(cx,cy,rx*.8,ry*.8,sc,0);for(let i=0;i<s.land;i++)if(s.storm.debris['l'+i]){const p=landGeo(i);drawDebris(cx+p.x*rx,cy+p.y*ry,p.rx*rx,p.ry*ry,sc,i+1);}}
  // 観光客
- const pieces=1+s.land,n=Math.min(present.length,16+s.land*10+Math.floor(s.decoList.length/2)),cols=['#ff7b8a','#ffd166','#4fd1c5','#9b8cff','#ffffff','#7ee081'];
+ const pieces=1+s.land,n=Math.min(present.length,16+s.land*10+Math.floor(decoUsed()/2)),cols=['#ff7b8a','#ffd166','#4fd1c5','#9b8cff','#ffffff','#7ee081'];
  for(let i=0;i<n;i++){const v=present[i],pi=v.ix%pieces,a=T*.12*(v.ix%2?1:-1)+v.ix*2.4,b=Math.abs(Math.sin(T*8+i))*1.5;let x,y;
-  if(pi===0){x=cx+Math.cos(a)*rx*.5;y=cy+Math.sin(a)*ry*.42;}else{const p=LAND_GEO[pi-1];x=cx+(p.x+Math.cos(a)*p.rx*.6)*rx;y=cy+(p.y+Math.sin(a)*p.ry*.55)*ry;}
+  if(pi===0){x=cx+Math.cos(a)*rx*.5;y=cy+Math.sin(a)*ry*.42;}else{const p=landGeo(pi-1);x=cx+(p.x+Math.cos(a)*p.rx*.6)*rx;y=cy+(p.y+Math.sin(a)*p.ry*.55)*ry;}
   ctx.fillStyle=cols[v.ix%6];ctx.fillRect(x-2.5*sc,y-8*sc-b,5*sc,7*sc);ctx.fillStyle='#f3c9a0';ctx.beginPath();ctx.arc(x,y-10*sc-b,2.6*sc,0,7);ctx.fill();}
  // 夜
  if(nt>0){ctx.fillStyle=`rgba(8,12,45,${nt*.45})`;ctx.fillRect(0,0,W,H);ctx.globalCompositeOperation='lighter';
@@ -1033,7 +1111,7 @@ function drawIsland(){
  boatHit=null;if(s.boat)drawBoat(cx-rx*.68,cy+ry*.72,sc);
  drawStormFx(L,sc,hz);
  // 賑わい表示
- ctx.font='bold 11px sans-serif';ctx.textAlign='right';ctx.textBaseline='bottom';ctx.fillStyle='rgba(0,0,0,.35)';ctx.fillRect(W-150,H-20,146,17);ctx.fillStyle='#fff';ctx.fillText(`🎉 賑わい +${nigiwai()}%　区画 ${Math.min(s.decoList.length,slotCount())}/${slotCount()}`,W-8,H-5);
+ ctx.font='bold 11px sans-serif';ctx.textAlign='right';ctx.textBaseline='bottom';ctx.fillStyle='rgba(0,0,0,.35)';ctx.fillRect(W-150,H-20,146,17);ctx.fillStyle='#fff';ctx.fillText(`🎉 賑わい +${nigiwai()}%　区画 ${decoUsed()}/${slotCount()}`,W-8,H-5);
 }
 
 // ===================== 図鑑画面の背景 =====================
@@ -1079,7 +1157,7 @@ function nigiwai(){const st=s.storm&&s.storm.debris||{};let b=0;for(let i=0;i<s.
 function shopIncome(){let g=0;const a=activeDeco();for(const id in a)g+=(DECOM[id]&&DECOM[id].shop||0)*a[id];return g;}
 function nightIncome(){let g=0;const a=activeDeco();for(const id in a)g+=(DECOM[id]&&DECOM[id].night||0)*a[id];return Math.round(g*(1+s.rating*.05));}
 function dirtVisMul(){let w=0,d=0;for(const t of s.tanks){w+=t.fish.length;d+=tankDirt(t)*t.fish.length;}return w?1-.6*d/w:1;}
-function decoCost(id){return Math.round(DECOM[id].c*Math.pow(1.45,s.deco[id]||0));}
+function decoCost(id){const d=DECOM[id];return Math.round(d.c*Math.pow(d.lvl?2:1.45,s.deco[id]||0));}
 function ticket(){return Math.round(4+Math.sqrt(APPEAL)*1.2+s.rating*1.5);}
 
 function visRate(){if(APPEAL<=0)return 0;return(.1+Math.sqrt(APPEAL)/40)*(1+.12*cottLv())*(lhOn()?1.15:1)*(s.rain?.7:1)*(1+nigiwai()/100)*dirtVisMul()*evVis()*stormVis();}
@@ -1175,10 +1253,17 @@ function renderPanel(){
   const upHtml=u=>{const lock=s.rating<u.req;return`<div class="up"><div class="ic">${u.ic}</div><div class="info"><b>${u.n}</b> <span style="color:var(--gold)">${u.lv}</span><div class="sub">${u.d}${lock&&u.cost!=null?`<br>🔒 評価Lv${u.req}で解放`:''}</div></div>${u.cost!=null?`<button class="btn sm gold" data-act="buy" data-k="${u.act}" data-cost="${u.cost}" data-lock="${lock?1:0}" ${s.gold<u.cost||lock?'disabled':''}>${fmtG(u.cost)}</button>`:'<span class="sub">完了✓</span>'}</div>`;};
   h+=`<div class="card"><h3>⭐ 島の評価 Lv${s.rating}</h3><div class="sub">次のLvまで ${Math.floor(s.xp)}/${xpNeed(s.rating)}（観光客の来場・新種発見で上昇）</div><div class="prog"><div style="width:${s.xp/xpNeed(s.rating)*100}%"></div></div></div>`;
   if(islandSub==='fac')h+=`<div class="card"><h3>🔧 設備・投資</h3>${ups.map(upHtml).join('')}</div>`;
-  if(islandSub==='resort'){const used=Math.min(s.decoList.length,slotCount()),free=slotCount()-s.decoList.length;
-   h+=`<div class="card"><h3>🌴 リゾート装飾</h3><div class="sub">島の賑わい <b style="color:var(--gold)">+${nigiwai()}%</b>（来場ペースに加算）／区画 ${used}/${slotCount()}${free<=0?'<br>⚠️ 区画がいっぱい！「土地・エリア」で埋め立てよう':''}</div></div><div class="card">`;
-   for(const d of DECOS){const own=s.deco[d.id]||0,mx=own>=d.max,lockL=s.land<(d.land||0),cost=decoCost(d.id),dis=mx||lockL||free<=0||s.gold<cost;
-    h+=`<div class="up"><div class="ic">${d.ic}</div><div class="info"><b>${d.n}</b> <span style="color:var(--gold)">${own}/${d.max}</span><div class="sub">賑わい+${d.b}%${d.shop?`／客1人+${d.shop}G`:''}${d.night?`／毎晩+${d.night}G`:''}${lockL?`<br>🔒 埋め立て${d.land}段階目で解放`:''}</div></div>${mx?'<span class="sub">MAX</span>':`<button class="btn sm gold" data-act="deco" data-id="${d.id}" data-cost="${cost}" data-lock="${lockL||free<=0?1:0}" ${dis?'disabled':''}>${fmtG(cost)}</button>`}</div>`;}
+  if(islandSub==='resort'){const used=decoUsed(),free=slotCount()-used;
+   h+=`<div class="card"><h3>🌴 リゾート装飾</h3><div class="sub">島の賑わい <b style="color:var(--gold)">+${nigiwai()}%</b>（来場ペースに加算）／区画 ${used}/${slotCount()}${free<=0?'<br>⚠️ 区画がいっぱい！撤去するか、「土地」で埋め立て・拡張しよう':''}</div></div><div class="card">`;
+   let tier=-1;
+   for(const d of DECOS){const dl=d.land||0;if(dl!==tier){tier=dl;h+=`<div class="gms" style="margin:8px 0 5px">${dl?`🏗️ ${LAND[dl-1].n}（埋め立て${dl}段階目）で解禁`:'🏝️ はじめから置ける'}</div>`;}
+    const own=s.deco[d.id]||0,mn=maxNow(d),mx=own>=d.max,lockL=s.land<dl,lock2=d.lvl&&own>=1&&own<d.max&&s.land<d.lv2,needSlot=!(d.lvl&&own>=1),cost=decoCost(d.id),dis=mx||own>=mn||(needSlot&&free<=0)||s.gold<cost;
+    const cnt=d.lvl?(own?`Lv${own}/${d.max}`:'未建設'):`${own}/${d.max}`,btn=d.lvl&&own>=1?`Lv${own+1}へ<br>${fmtG(cost)}`:fmtG(cost);
+    h+=`<div class="up"><div class="ic">${d.ic}</div><div class="info"><b>${d.n}</b> <span style="color:var(--gold)">${cnt}</span><div class="sub">賑わい+${d.b}%${d.shop?`／客1人+${d.shop}G`:''}${d.night?`／毎晩+${d.night}G`:''}${d.lvl?'（Lv2で効果2倍・区画は1つのまま）':''}${lockL?`<br>🔒 埋め立て${dl}段階目で解禁`:''}${lock2?`<br>🔒 Lv2は埋め立て${d.lv2}段階目で解禁`:''}${!lockL&&d.lmax&&own>=mn&&nextLmax(d)?`<br>🔒 ${nextLmax(d).max}棟目までは埋め立て${nextLmax(d).land}段階目で解禁（今は${mn}棟まで）`:''}</div></div>${mx?'<span class="sub">MAX</span>':`<button class="btn sm gold" data-act="deco" data-id="${d.id}" data-cost="${cost}" data-lock="${lockL||lock2||own>=mn||(needSlot&&free<=0)?1:0}" ${dis?'disabled':''}>${btn}</button>`}</div>`;}
+   h+='</div>';}
+  if(islandSub==='resort'){const placed=DECOS.filter(d=>(s.deco[d.id]||0)>0);
+   h+=`<div class="card"><h3>🚧 撤去</h3><div class="sub" style="margin-bottom:6px">置いた装飾を1つずつ撤去して区画を空けられます。撤去費は購入額の20%（お金は戻りません）。最後に置いたものから撤去されます。</div>`;
+   h+=placed.length?placed.map(d=>{const i=s.decoList.lastIndexOf(d.id),c=i>=0?removeCost(i):0;return`<div class="up"><div class="ic">${d.ic}</div><div class="info"><b>${d.n}</b> <span class="sub">${d.lvl?'Lv'+s.deco[d.id]+'（建物ごと撤去）':'×'+s.deco[d.id]}</span></div><button class="btn sm red" data-act="rmdeco" data-id="${d.id}" data-cost="${c}" data-lock="${s.storm?1:0}" ${s.gold<c||s.storm?'disabled':''}>撤去 ${fmtG(c)}</button></div>`;}).join(''):'<div class="sub">まだ何も置いていません</div>';
    h+='</div>';}
   if(islandSub==='storm'&&!s.storm)islandSub='fac';
   if(islandSub==='storm'){const st=stormStage();
@@ -1197,7 +1282,7 @@ function renderPanel(){
     h+=`<div class="up"><div class="ic">${e.ic}</div><div class="info"><b>${e.n}</b> <span style="color:var(--gold)">${e.days}日間</span><div class="sub">魅力×${e.app}・客足×${e.vis}　${e.d}<br>${evReqText(e)}</div></div><button class="btn sm gold" data-act="event" data-id="${e.id}" data-cost="${c}" data-lock="${ce||!ok||s.storm?1:0}" ${dis?'disabled':''}>${free?'🎫 無料で<br>開催':`開催<br>${fmtG(c)}`}</button></div>`;}
    h+='</div>';}
   if(islandSub==='land'){
-   h+=`<div class="card"><h3>🏗️ 土地の埋め立て（${s.land}/${LAND.length}）</h3><div class="sub" style="margin-bottom:6px">島を広げて区画+${LAND_SLOTS.length}、賑わい+10%。大型施設の建設にも必要</div>${LAND.map((l,i)=>{const done=i<s.land,next=i===s.land,lock=s.rating<l.q;return`<div class="up"><div class="ic">${done?'✅':'🏗️'}</div><div class="info"><b>${l.n}</b><div class="sub">${done?'完成済み':`${lock?`🔒 評価Lv${l.q}で解放`:'工事可能'}${next?'':'（前の土地が先）'}`}</div></div>${done?'':`<button class="btn sm gold" data-act="land" data-cost="${l.c}" data-lock="${lock||!next?1:0}" ${lock||!next||s.gold<l.c?'disabled':''}>${fmtG(l.c)}</button>`}</div>`;}).join('')}</div>`;
+   h+=`<div class="card"><h3>🏗️ 土地の埋め立て（${s.land}/${LAND.length}）</h3><div class="sub" style="margin-bottom:6px">島を広げて区画+${LAND_SLOTS.length}、賑わい+10%。大型施設の建設にも必要</div>${LAND.map((l,i)=>{const done=i<s.land,next=i===s.land,lock=s.rating<l.q;return`<div class="up"><div class="ic">${done?'✅':'🏗️'}</div><div class="info"><b>${l.n}</b><div class="sub">🔓 ${DECOS.filter(d=>d.land===i+1).map(d=>d.ic+d.n+(d.lvl?'Lv1':d.lmax?`（${d.lmax[i+1]}棟まで）`:'')).concat(DECOS.filter(d=>d.lv2===i+1).map(d=>d.ic+d.n+'Lv2'),DECOS.filter(d=>d.lmax&&d.lmax[i+1]&&d.land!==i+1).map(d=>`${d.ic}${d.n}（${d.lmax[i+1]}棟まで）`)).join('・')}<br>${done?`完成済み — <b style="color:var(--gold)">Lv${landLv(i)}</b>${landLv(i)<LAND_LV_MAX?`（拡張で一回り大きく・区画+${LV_SLOTS[landLv(i)].length}）`:'（MAX）'}`:`${lock?`🔒 評価Lv${l.q}で解放`:'工事可能'}${next?'':'（前の土地が先）'}`}</div></div>${done?(landLv(i)<LAND_LV_MAX?`<button class="btn sm gold" data-act="landup" data-i="${i}" data-cost="${landUpCost(i)}" ${s.gold<landUpCost(i)?'disabled':''}>Lv${landLv(i)+1}へ<br>${fmtG(landUpCost(i))}</button>`:'<span class="sub">MAX</span>'):`<button class="btn sm gold" data-act="land" data-cost="${l.c}" data-lock="${lock||!next?1:0}" ${lock||!next||s.gold<l.c?'disabled':''}>${fmtG(l.c)}</button>`}</div>`;}).join('')}</div>`;
    h+=`<div class="card"><h3>⛵ 新エリア解放</h3><div class="sub" style="margin-bottom:6px">☔ 現在の雨の確率 ${Math.round(rainChance()*100)}%（エリアを解放するごとに+10%、最大30%）</div>${AREAS.slice(1).map(a=>{const ok=s.areas.includes(a.id),lock=s.rating<a.req;return`<div class="up"><div class="ic">${a.ic}</div><div class="info"><b>${a.n}</b><div class="sub">${ok?'解放済み — 釣り場で選択できます':`${lock?`🔒 評価Lv${a.req}で解放 / `:''}新しい魚が釣れる（魚がかかるまでの時間 ×${WAIT_MULT[areaIdx(a.id)]}）`}</div></div>${ok?'<span class="sub">✓</span>':`<button class="btn sm gold" data-act="area_buy" data-id="${a.id}" data-cost="${a.cost}" data-lock="${lock?1:0}" ${s.gold<a.cost||lock?'disabled':''}>${fmtG(a.cost)}</button>`}</div>`;}).join('')}</div>`;
   }
   h+=`<div class="card"><h3>💾 データ</h3><div class="sub">自動セーブされます（ブラウザを閉じてもOK）。累計来場 ${s.totalVis}人 / 累計売上 ${fmtG(s.totalInc)}</div><div class="row" style="margin-top:6px"><button class="btn sm" data-act="save">今すぐセーブ</button><button class="btn sm red" data-act="reset">データを消して最初から</button></div></div>`;
@@ -1234,10 +1319,13 @@ $('#panel').addEventListener('click',e=>{
   case'proclean':{const t=s.tanks[s.cur],c=cleanCost(t);if(s.gold>=c&&c>0){s.gold-=c;t.dirt.fill(0);cleanMode=false;log(`🧹 業者が水槽${s.cur+1}をピカピカにした（-${c}G）`,'#7ef0ff');}break;}
   case'isub':islandSub=el.dataset.k;break;
   case'event':startEvent(el.dataset.id);break;
+  case'landup':{const i=+el.dataset.i,lv=landLv(i),c=landUpCost(i);if(i<s.land&&lv<LAND_LV_MAX&&s.gold>=c){s.gold-=c;s.landLv[i]=lv+1;addLandSlots(i,lv+1);log(`🏗️ ${LAND[i].n}が Lv${lv+1} に！一回り大きくなって区画+${LV_SLOTS[lv].length}`,'#ffd166');}break;}
+  case'rmdeco':{if(s.storm){log('🌪 嵐の対応中は撤去できない…');return;}const id=el.dataset.id,i=s.decoList.lastIndexOf(id);if(i<0)break;const c=removeCost(i);if(s.gold<c)break;
+   s.gold-=c;s.decoList[i]=null;if(DECOM[id].lvl)s.deco[id]=0;else s.deco[id]--;log(`🚧 ${DECOM[id].n}を1つ撤去した（-${fmtG(c)}）区画が1つ空いた`,'#c8a060');break;}
   case'fix':fixItem(el.dataset.k);break;
   case'fixall':{const tot=repairList().reduce((a,x)=>a+x.c,0);if(s.gold>=tot)for(const it of repairList())fixItem(it.k);break;}
-  case'deco':{const d=DECOM[el.dataset.id],own=s.deco[d.id]||0,c=decoCost(d.id);if(own<d.max&&s.land>=(d.land||0)&&s.decoList.length<slotCount()&&s.gold>=c){s.gold-=c;s.deco[d.id]=own+1;s.decoList.push(d.id);log(`${d.ic} ${d.n}を設置した！島がにぎやかに（賑わい+${d.b}%）`,'#ffd166');}break;}
-  case'land':{const l=LAND[s.land];if(l&&s.gold>=l.c&&s.rating>=l.q){s.gold-=l.c;s.land++;log(`🏗️ ${l.n}が完成！区画+${LAND_SLOTS.length}・賑わい+10%`,'#ffd166');}break;}
+  case'deco':{const d=DECOM[el.dataset.id],own=s.deco[d.id]||0,c=decoCost(d.id);if(own<maxNow(d)&&((d.lvl&&own>=1)||freeSlot()>=0)&&s.gold>=c){s.gold-=c;placeDeco(d.id);log(`${d.ic} ${d.n}を設置した！島がにぎやかに（賑わい+${d.b}%）`,'#ffd166');}break;}
+  case'land':{const l=LAND[s.land];if(l&&s.gold>=l.c&&s.rating>=l.q){s.gold-=l.c;s.landLv[s.land]=1;addLandSlots(s.land,1);s.land++;log(`🏗️ ${l.n}が完成！区画+${LAND_SLOTS.length}・賑わい+10%`,'#ffd166');}break;}
   case'put':{const tank=s.tanks[s.cur],f=findFish(u);if(f&&tank.fish.length<tank.cap){s.bucket=s.bucket.filter(x=>x.u!==u);tank.fish.push(f);log(`🐠 ${SPM[f.s].n}を水槽${s.cur+1}に展示した`);}break;}
   case'back':{const tank=s.tanks[s.cur],f=tank.fish.find(x=>x.u===u);if(!f)break;if(s.bucket.length>=bucketCap()){log('🪣 いけすが満杯です');return;}tank.fish=tank.fish.filter(x=>x.u!==u);delete anim[u];s.bucket.push(f);break;}
   case'sell':{const f=findFish(u);if(f){const g=sellPrice(f);s.gold+=g;s.bucket=s.bucket.filter(x=>x.u!==u);log(`💰 ${SPM[f.s].n}を ${g}G で売った`,'#ffd166');}break;}
@@ -1289,20 +1377,20 @@ cv.addEventListener('pointerdown',e=>{
 
 // ===================== 🌪 嵐（やり込み後のイベント） =====================
 const STORM_CHANCE=.03;   // 全部そろえた後、1日ごとに嵐が来る確率
-function endgameDone(){return s.areas.length>=AREAS.length&&s.land>=LAND.length&&s.decoList.length>=slotCount();}
+function endgameDone(){return s.areas.length>=AREAS.length&&s.land>=LAND.length&&(freeSlot()<0||DECOS.every(d=>(s.deco[d.id]||0)>=d.max));}
 function stormStage(){return s.storm?s.storm.stage:null;}
 function bOn(k){return s.b[k]&&!(s.storm&&s.storm.bld&&s.storm.bld[k]);}
 function cafeLv(){return bOn('cafe')?s.b.cafe:0;}
 function cottLv(){return bOn('cottage')?s.b.cottage:0;}
 function lhOn(){return !!bOn('lighthouse');}
 function brokenSet(){return new Set(s.storm&&s.storm.broken||[]);}
-function activeDeco(){const bs=brokenSet(),c={};s.decoList.forEach((id,i)=>{if(i<slotCount()&&!bs.has(i))c[id]=(c[id]||0)+1;});return c;}
+function activeDeco(){const bs=brokenSet(),c={};s.decoList.forEach((id,i)=>{if(id&&i<slotCount()&&!bs.has(i))c[id]=(c[id]||0)+(DECOM[id].lvl?(s.deco[id]||1):1);});return c;}
 function stormApp(){return stormStage()==='damage'?.4:1;}
 function stormVis(){const st=stormStage();return st==='storm'?0:st==='warn'?.7:1;}
-function decoPaid(i){const id=s.decoList[i];let n=0;for(let k=0;k<i;k++)if(s.decoList[k]===id)n++;return DECOM[id].c*Math.pow(1.45,n);}
+function decoPaid(i){const id=s.decoList[i],d=DECOM[id];if(d.lvl){let t=0;for(let j=0;j<(s.deco[id]||1);j++)t+=d.c*Math.pow(2,j);return t;}let n=0;for(let k=0;k<i;k++)if(s.decoList[k]===id)n++;return DECOM[id].c*Math.pow(1.45,n);}
 function repairList(){if(stormStage()!=='damage')return[];const st=s.storm,L=[];
  if(st.debris.main)L.push({k:'main',ic:'🧹',n:'本島の片付け（倒木・がれき撤去）',c:100000});
- for(let i=0;i<s.land;i++)if(st.debris['l'+i])L.push({k:'l'+i,ic:'🧹',n:`${LAND[i].n}の片付け`,c:Math.round(LAND[i].c*.3)});
+ for(let i=0;i<s.land;i++)if(st.debris['l'+i])L.push({k:'l'+i,ic:'🧹',n:`${LAND[i].n}の片付け`,c:Math.round(LAND[i].c*.3*(1+(landLv(i)-1)*.5))});
  const sum=(arr,n)=>arr.slice(0,n).reduce((a,x)=>a+x.c,0);
  if(st.bld.cafe)L.push({k:'cafe',ic:'☕',n:'カフェの再建',c:Math.round(sum(CAFE,s.b.cafe)*.3)});
  if(st.bld.cottage)L.push({k:'cottage',ic:'🛖',n:`コテージ${s.b.cottage}棟の再建`,c:Math.round(sum(COTT,s.b.cottage)*.3)});
@@ -1310,7 +1398,7 @@ function repairList(){if(stormStage()!=='damage')return[];const st=s.storm,L=[];
  st.broken.forEach(i=>{const d=DECOM[s.decoList[i]];L.push({k:'d'+i,ic:d.ic,n:`${d.n}の再建`,c:Math.round(decoPaid(i)*.3)});});
  return L;}
 function stormDamage(){
- const idx=s.decoList.map((_,i)=>i).filter(i=>i<slotCount());for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}
+ const idx=s.decoList.map((_,i)=>i).filter(i=>i<slotCount()&&s.decoList[i]);for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}
  const broken=idx.slice(0,Math.max(1,Math.round(idx.length*rand(.3,.5)))).sort((a,b)=>a-b);
  const bld={};if(s.b.cafe&&Math.random()<.5)bld.cafe=1;if(s.b.cottage&&Math.random()<.6)bld.cottage=1;if(s.b.lighthouse&&Math.random()<.4)bld.lighthouse=1;
  const debris={main:1};for(let i=0;i<s.land;i++)debris['l'+i]=1;
@@ -1390,7 +1478,7 @@ function openGM(msg){
  <div class="row">${b('boat','小舟を砂浜に出す')}${b('dreamGo','すぐ夢の海へ','gold')}${b('dreamEnd','夢から覚める')}</div>
  <div class="gms">⭐ 島・設備</div>
  <div class="row">${b('lv1','評価Lv+1')}${b('lv5','評価Lv+5')}${b('areas','全エリア解放')}${b('rod','竿MAX')}${b('tanks','水槽4基・定員MAX')}</div>
- <div class="row">${b('land','埋め立て+1')}${b('decoAll','装飾を全部置く')}${b('evEnd','イベント終了')}</div>
+ <div class="row">${b('land','埋め立て+1')}${b('landMax','埋立地Lv MAX')}${b('decoAll','装飾を全部置く')}${b('evEnd','イベント終了')}</div>
  <div class="gms">🌪 嵐（${stormStage()||'なし'}／条件:${endgameDone()?'達成':'未達成'}）</div>
  <div class="row">${b('stormWarn','嵐を予報')}${b('stormNow','すぐ大嵐')}${b('stormDmg','すぐ被害')}${b('stormFix','復興完了','gold')}${b('ticket','🎫無料券+1')}</div>
  <div class="gms">🧽 水槽の濁り</div>
@@ -1418,8 +1506,9 @@ function gmAct(a){
   case'lv1':s.rating++;break;case'lv5':s.rating+=5;break;
   case'areas':s.areas=AREAS.map(x=>x.id);break;case'rod':s.rod=6;break;
   case'tanks':while(s.tanks.length<4)s.tanks.push({cap:3,fish:[]});s.tanks.forEach(t=>{t.cap=TANK_MAX;ensureDirt(t);});break;
-  case'land':if(s.land<LAND.length)s.land++;break;
-  case'decoAll':for(const d of DECOS)while((s.deco[d.id]||0)<d.max&&s.decoList.length<slotCount()){s.deco[d.id]=(s.deco[d.id]||0)+1;s.decoList.push(d.id);}m=`✅ 区画 ${s.decoList.length}/${slotCount()} まで配置`;break;
+  case'land':if(s.land<LAND.length){s.landLv[s.land]=1;addLandSlots(s.land,1);s.land++;}break;
+  case'landMax':for(let i=0;i<s.land;i++)while(landLv(i)<LAND_LV_MAX){const lv=landLv(i);s.landLv[i]=lv+1;addLandSlots(i,lv+1);}break;
+  case'decoAll':for(const d of DECOS)while((s.deco[d.id]||0)<d.max&&placeDeco(d.id));m=`✅ 区画 ${decoUsed()}/${slotCount()} まで配置`;break;
   case'evEnd':if(s.event){s.event.left=0.001;}break;
   case'stormWarn':s.storm={stage:'warn'};s.rain=true;m='✅ 今日は大雨、明日が大嵐です';break;
   case'stormNow':s.storm={stage:'storm'};s.rain=true;m='✅ 大嵐になりました（休業中）';break;
@@ -1439,7 +1528,7 @@ $('#mbox').addEventListener('click',e=>{
 
 // ===================== セーブ/ロード =====================
 function save(){s.last=Date.now();for(const t of s.tanks)if(t.dirt)t.dirt=t.dirt.map(v=>Math.round(v*10)/10);try{localStorage.setItem(KEY,JSON.stringify(s));}catch(e){}}
-function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.v===1){const n=newState();d.b=Object.assign(n.b,d.b||{});(d.tanks||[]).forEach(ensureDirt);return Object.assign(n,d);}}catch(e){}return null;}
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.v===1){const n=newState();d.b=Object.assign(n.b,d.b||{});if(!d.landLv)d.landLv=[];if(d.decoList)for(const dd of DECOS)if(dd.lvl){let f=-1;d.decoList.forEach((x,i)=>{if(x===dd.id){if(f<0)f=i;else d.decoList[i]=null;}});if(d.deco&&d.deco[dd.id])d.deco[dd.id]=Math.min(dd.max,d.deco[dd.id]);}(d.tanks||[]).forEach(ensureDirt);return Object.assign(n,d);}}catch(e){}return null;}
 window.addEventListener('pagehide',save);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
 
@@ -1465,6 +1554,8 @@ resize();recalc();
 (function offline(){const el=Math.min(7200,(Date.now()-(s.last||Date.now()))/1000);if(el>60){updateDirt(el*.5);recalc();}
  if(el>60&&APPEAL>0){const g=Math.round(visRate()*.6*ticket()*el*.4);s.gold+=g;log(`🌙 留守の間に観光客が来ていた！ +${fmtG(g)}`,'#ffd166');}})();
 if(!s.totalVis&&!Object.keys(s.dex).length)setTimeout(()=>log('🌴 ようこそ無人島へ！まずは「🎣釣り場」で魚を釣ってみよう'),300);
+(function migrateHotel(){const n=s.decoList.filter(x=>x==='hotel').length,own=s.deco.hotel||0;if(own>n){let short=own-n;while(short>0){const i=freeSlot();if(i<0)break;s.decoList[i]='hotel';short--;}
+ if(short>0){s.deco.hotel=own-short;const g=Math.round(400000*short);s.gold+=g;log(`🏨 ホテルの仕様変更のため、置けなかった${short}棟分 ${fmtG(g)} を返金しました`,'#ffd166');}save();}})();
 renderPanel();updateTop();requestAnimationFrame(loop);
 </script>
 </body>
