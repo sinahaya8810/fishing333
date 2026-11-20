@@ -293,6 +293,10 @@ S('yumenonushi','ユメノヌシ','dream',6,900,100,250,{c1:'#d8d0ff',c2:'#a8f0f
 S('skeleton','スケルトンフィッシュ','dream',5,330,30,80,{shape:'skeleton',c1:'#f4f0e6',c2:'#7ff0ff'},'完全に骨だけなのに、なぜか元気に泳いでいる。夢の中では常識が通じない。'),
 S('tonton','トントン','dream',5,310,20,60,{shape:'pig',c1:'#ffb3c8',c2:'#ff8aa8',h:.5,pat:'none'},'顔が完全にブタ。「ブヒ」と鳴くらしいが、水の中なので誰も聞いたことがない。'),
 S('reisho','レイショウウオ','dream',6,750,20,40,{shape:'reisho',c1:'#ffe14d',c2:'#e8c020',h:.58,pat:'none',noEye:1,talk:'うおw'},'【伝説】体の横の顔でいつも薄く笑っている。黒縁メガネと前歯がチャームポイント。水槽に入れると何かつぶやく。'),
+S('reisho_kita','キタレイショウウオ','dream',6,750,20,40,{shape:'reisho',c1:'#f2f2f8',c2:'#c8c8dc',h:.58,pat:'none',noEye:1,talk:'どわーw'},'【伝説】北の海から来たレイショウウオ。雪のように白い。驚くとすぐ「どわー」と言う。'),
+S('reisho_nishi','ニシレイショウウオ','dream',6,750,20,40,{shape:'reisho',c1:'#ff9a3a',c2:'#e0761a',h:.58,pat:'none',noEye:1,talk:'冗談ですやんw'},'【伝説】西の海のレイショウウオ。夕日色の体で、ツッコまれるとすぐ冗談にする。'),
+S('reisho_umi','ウミレイショウウオ','dream',6,750,20,40,{shape:'reisho',c1:'#3ac8a0',c2:'#1fa080',h:.58,pat:'none',noEye:1,talk:'ひっしやんw'},'【伝説】深い海の色をしたレイショウウオ。必死な魚を見つけると、すかさずいじる。'),
+S('reisho_oo','オオレイショウウオ','dream',6,780,40,70,{shape:'reisho',c1:'#ff5a5a',c2:'#d83a3a',h:.58,pat:'none',noEye:1,talk:'ごめんてw'},'【伝説】ひときわ大きな赤いレイショウウオ。怒られてもあまり反省していない。'),
 // ---- 🥾 ハズレ・漂流物（どの釣り場でも） ----
 S('boot','長靴','any',1,0,25,35,{shape:'junk',kind:'boot',junk:1,price:1},'誰かの忘れ物。なぜかいつも片方だけ釣れる…。'),
 S('can','空き缶','any',1,0,10,12,{shape:'junk',kind:'can',junk:1,price:1},'中身はからっぽ。ちゃんとゴミ箱に捨てよう。'),
@@ -321,6 +325,47 @@ S('soko','ソコダラ','deep',2,9,20,50,{c1:'#8a8a80',c2:'#4a4a44',h:.3,tail:'p
 S('munaeso','ムネエソ','deep',3,22,4,8,{c1:'#d8e0e8',c2:'#5ad8ff',h:.9,pat:'glow',bigEye:1,sn:.2,tail:'fork'},'斧のような薄い体で、お腹の発光器で影を消して身を隠す。'),
 S('ookuchi','オオクチホシエソ','deep',4,58,10,25,{shape:'long',c1:'#2a1a1a',c2:'#ff4a3a'},'赤い光を出す珍しい深海魚。赤い光が見えない獲物をこっそり照らして狩る。'),
 S('kagura','カグラザメ','deep',4,64,200,480,{c1:'#5a5a52',c2:'#3a3a34',h:.24,pat:'back',shark:1,bigEye:1},'エラ穴が6対ある原始的なサメ。目が蛍光グリーンに光る。'),
+S('umazura','ウマヅラハギ','beach',1,4,15,30,{c1:'#8a98a8',c2:'#4a5868',h:.42,pat:'mottled',sn:.75,tail:'square',tc:'#3a7ad8'},'馬のように長い顔のカワハギ。青いひれがよく目立つ。'),
+S('kusafugu','クサフグ','beach',1,3,8,15,{c1:'#6a7a5a',c2:'#2a3a20',h:.5,sn:.15,pat:'speck',bellyCol:'rgba(255,255,255,.85)',tail:'round',dor:'none'},'砂浜の波打ち際にもいる小さなフグ。満月の夜に集団で産卵する。'),
+S('hiiragi','ヒイラギ','beach',1,3,6,12,{c1:'#d8dce4',c2:'#ffd84a',h:.6,sn:.3,shoulder:'#ffd84a',tail:'fork'},'体がぬるぬるで薄い銀色の魚。口を下に伸ばして食べ、首元が黄色い。'),
+S('agohaze','アゴハゼ','beach',1,3,5,8,{c1:'#7a6a50',c2:'#e8e0c8',h:.3,pat:'speck',bigEye:1,tail:'round',sn:.15},'磯のタイドプールの常連。あごが大きく、白い点々がある。'),
+S('ginpo','ギンポ','beach',2,9,15,25,{shape:'eel',c1:'#9a7a4a',c2:'#5a3a1a'},'ヌルヌルの細長い体。「江戸前天ぷら」の高級ネタ。'),
+S('konoshiro','コノシロ','beach',2,9,15,25,{c1:'#c8d0d8',c2:'#2a3a4a',h:.4,pat:'dotline',tail:'fork',sn:.4,shoulder:'#1a1a2a'},'小さいうちは「コハダ」と呼ばれる出世魚。背中に黒い点の列。'),
+S('meichi','メイチダイ','beach',2,11,20,35,{c1:'#c8b8a0',c2:'#4a3a2a',h:.5,pat:'eyebar',sn:.45,bigEye:1},'目を通る黒い帯が名前の由来（目一）。上品な白身の魚。'),
+S('koshou','コショウダイ','beach',3,24,30,50,{c1:'#d8d4c8',c2:'#2a2a2a',h:.45,pat:'spots',sn:.3,tc:'#e8d040'},'こしょうをふりかけたような黒い点。くちびるが厚い。'),
+S('hedai','ヘダイ','beach',2,11,25,40,{c1:'#c8ccd0',c2:'#d8c060',h:.5,pat:'line',sn:.2,dor:'spiny'},'タイの仲間で丸い顔。体に淡い黄色の線がうっすらと走る。'),
+S('shirogu','シログチ','beach',2,9,20,35,{c1:'#e0dcd4',c2:'#a89880',h:.32,sn:.6,tail:'pointed',bigMouth:1},'釣り上げると浮き袋で「グーグー」と鳴く。別名イシモチ。'),
+S('misuji','ミスジリュウキュウスズメダイ','reef',1,4,4,7,{c1:'#f4f4f4',c2:'#1a1a1a',h:.65,pat:'vstripe',sn:.3,tail:'fork'},'白黒3本のしま。危ないとサンゴの枝の間にさっと隠れる。'),
+S('aosuji','アオスジテンジクダイ','reef',1,3,5,9,{c1:'#e8c070',c2:'#3a8ae8',h:.4,pat:'hstripe',bigEye:1,tail:'fork',dor:'double'},'金色の体に青い縦じま。夜になると群れでエサを探す。'),
+S('gomachou','ゴマチョウチョウウオ','reef',2,12,10,18,{c1:'#f4f4ec',c2:'#2a2a2a',h:.85,pat:'speck',sn:.75,tc:'#ffd84a',fin:'#ffd84a'},'ゴマをまいたような細かい点の白いチョウチョウウオ。ひれは黄色。'),
+S('rokusen','ロクセンスズメダイ','reef',1,4,10,18,{c1:'#e8ecf0',c2:'#2a3a3a',h:.6,pat:'vstripe',bellyCol:'rgba(255,230,120,.5)',sn:.3},'6本のしま模様。背中が黄色っぽく、なわばりを強く守る。'),
+S('tsuyubera','ツユベラ','reef',2,12,20,35,{c1:'#4aa86a',c2:'#ff7aa8',h:.38,pat:'wave',sn:.6,tc:'#ff7aa8'},'子どもはオレンジに白い斑点、大人は緑とピンクの華やかな姿に変身する。'),
+S('montsuki','モンツキカエルウオ','reef',2,11,8,12,{c1:'#5a7a8a',c2:'#ff8a3a',h:.3,pat:'twospot',bigEye:1,sn:0,dor:'long'},'岩の穴から顔だけ出す、とぼけた顔のギンポ。'),
+S('shimofuri','シモフリタナバタウオ','reef',3,25,15,20,{c1:'#2a2a3a',c2:'#ffffff',h:.42,pat:'speck',tail:'round',dor:'long',sn:.3,shoulder:'#3ab8ff'},'黒地に白い霜ふり模様。背びれのウソの目玉でウツボのふりをする。'),
+S('nishikibera','ニシキベラ','reef',1,4,10,18,{c1:'#3ac88a',c2:'#ff5a5a',h:.3,pat:'band',sn:.6,tc:'#3a6ae8'},'緑・赤・青の錦のような色。磯で釣るとエサをすぐ取られる。'),
+S('inazuma','イナズマヤッコ','reef',4,60,20,30,{c1:'#ffe04a',c2:'#3a6ae8',h:.68,pat:'wave',sn:.4},'青い稲妻のような線が体を走るヤッコ。めったに会えない人気者。'),
+S('kudagonbe','クダゴンベ','reef',3,26,8,12,{c1:'#f6f0ea',c2:'#e8402a',h:.4,pat:'mesh',sn:.95,tube:1},'赤いチェック柄の体と長い口。ヤギ（サンゴの仲間）の上でじっとしている。'),
+S('binnaga','ビンナガ','open',3,26,60,100,{c1:'#a8b8c8',c2:'#2a3a5a',h:.3,pat:'back',tail:'lunate',wing:1,finlet:'#e8e8f0',sn:.65},'胸びれがとても長いマグロ。ツナ缶の「シーチキン」はこの魚。'),
+S('mebachi','メバチ','open',4,68,100,180,{c1:'#b8c0d0',c2:'#1a2440',h:.32,pat:'back',tail:'lunate',bigEye:1,finlet:'#ffd84a',sn:.6},'目が大きいことから「目鉢」。深いところを泳ぐマグロ。'),
+S('hagatsuo','ハガツオ','open',2,12,40,70,{c1:'#c8d0d8',c2:'#2a3a5a',h:.24,pat:'stripes',tail:'lunate',fang:1,sn:.8},'歯が鋭いカツオの仲間。背中に斜めの縦じま。'),
+S('muroaji','ムロアジ','open',1,4,20,35,{c1:'#9ab0c0',c2:'#e8c04a',h:.22,pat:'midline',tail:'fork',sn:.75},'細長いアジの仲間。干物の「くさや」の原料になる。'),
+S('aori','アオリイカ','open',2,13,20,40,{shape:'squid',c1:'#e8d0c0',c2:'#8a5a4a'},'大きなひれを波打たせて泳ぐイカ。「イカの王様」と呼ばれる。'),
+S('surume','スルメイカ','open',1,5,20,30,{shape:'squid',c1:'#d8906a',c2:'#8a3a2a'},'干すとスルメになるイカ。夜は集魚灯の光に集まる。'),
+S('tsubame','ツバメウオ','open',2,12,30,50,{c1:'#c8c4b8',c2:'#3a3a38',h:.95,pat:'band',dor:'tall',sn:.3},'背びれと尻びれが高く、上から見るとツバメのよう。流木についてくる。'),
+S('kurokajiki','クロカジキ','open',5,180,200,400,{c1:'#3a4a6a',c2:'#1a2238',h:.26,bill:1,pat:'vstripe',tail:'lunate',dor:'tall'},'カジキの中でも最大級。トローリング釣りの頂点。'),
+S('yogore','ヨゴレ','open',4,62,150,300,{c1:'#7a8a90',c2:'#4a5a60',h:.24,shark:1,pat:'back',wing:1},'ひれの先が白く汚れたように見えるサメ。外洋をゆったり泳ぐ。'),
+S('itohiki','イトヒキアジ','open',3,26,30,80,{c1:'#e8eef4',c2:'#c8d0d8',h:.85,dor:'tall',sn:.15,tail:'fork'},'子どもは背びれが糸のように長く伸び、クラゲのふりをして漂う。'),
+S('ankou','アンコウ','deep',2,13,40,90,{shape:'angler',c1:'#6a5a4a',c2:'#3a2a1a'},'大きな口と頭の「つり竿」で獲物を待ちぶせる。冬の鍋の主役。'),
+S('yumekasago','ユメカサゴ','deep',2,12,15,30,{c1:'#e85a4a',c2:'#a83020',h:.4,bigEye:1,dor:'spiny',pat:'mottled',sn:.3},'深海の赤いカサゴ。口の中が黒いことから「ノドクロ」とも。'),
+S('norogenge','ノロゲンゲ','deep',1,4,20,30,{shape:'long',c1:'#8a7a8a',c2:'#5a4a5a'},'ぶよぶよのゼラチン質の体。昔はあまり食べられていなかった。'),
+S('zarabikunin','ザラビクニン','deep',2,10,20,40,{c1:'#e8b0b8',c2:'#c8909a',h:.38,sn:0,tail:'pointed',pat:'none'},'ピンク色でやわらかい、オタマジャクシのような形の深海魚。'),
+S('hoteiuo','ホテイウオ','deep',3,22,10,20,{c1:'#5a6a7a',c2:'#3a4a58',h:.85,sn:0,pat:'speck',tail:'round',dor:'none',bigEye:1},'まん丸な体の腹に吸盤があり、岩にくっついて休む。'),
+S('ginmedai','ギンメダイ','deep',2,11,15,25,{c1:'#d0d8e0',c2:'#8a9aaa',h:.5,bigEye:1,sn:.3,tail:'fork'},'銀色の体に大きな目。キンメダイの仲間ではない。'),
+S('harikinme','オオイバラガニ','deep',3,26,20,35,{shape:'crab',c1:'#d8603a',c2:'#8a3018'},'甲羅も脚もトゲだらけの深海のカニ。'),
+S('mitsumata','ミツマタヤリウオ','deep',4,62,30,50,{shape:'long',c1:'#1a1a22',c2:'#7ad8ff'},'メスは長い体に発光器が並び、オスは小さいまま。あごヒゲの先が光る。'),
+S('himeji','ヒメジ','beach',1,5,15,25,{c1:'#e8a8a0',c2:'#ffd84a',h:.28,whisker:1,pat:'midline',sn:.6,rain:1},'2本のヒゲで砂をさぐる。雨で濁った日に浅場へ寄ってくる。'),
+S('hanagoi','ハナゴイ','reef',3,28,8,12,{c1:'#b87aff',c2:'#ffd84a',h:.4,tail:'lunate',sn:.4,rain:1},'紫とオレンジのグラデーションが美しいハナダイ。雨の日にサンゴの上に群れる。'),
+S('tobiei','トビエイ','open',4,66,80,150,{shape:'ray',c1:'#3a4a5a',c2:'#f0f0f0',rain:1},'海面から大ジャンプするエイ。白い斑点が星空のよう。'),
 S('kelp','海藻のかたまり','any',1,0,20,60,{shape:'junk',kind:'kelp',junk:1,price:2},'ずっしり重い…と思ったら海藻だった。'),
 S('driftwood','流木','any',1,0,30,120,{shape:'junk',kind:'wood',junk:1,price:3},'長い旅をしてきた木。インテリアにする人もいる。'),
 S('sandal','ビーチサンダル','any',1,0,22,28,{shape:'junk',kind:'sandal',junk:1,price:1},'波にさらわれたサンダル。持ち主は今ごろ裸足かも。'),
@@ -532,6 +577,35 @@ S('m_kosai','コサイニジマス','lake',6,580,60,90,{c1:'#eef4ff',c2:'#ffc8f0
 S('m_subashiri','スバシリ','higata',1,5,10,20,{c1:'#a8b0b8',c2:'#3a4a5a',h:.26,pat:'stripes',tail:'fork',rain:1},'ボラの子ども。雨で川の水が増えると群れで上ってくる。'),
 S('m_ariakesuji','アリアケスジシマドジョウ','higata',3,28,6,9,{shape:'long',c1:'#d8ccaa',c2:'#3a3020',rain:1},'有明海にそそぐ川の流域だけにすむドジョウ。'),
 S('m_shibireei','シビレエイ','higata',4,66,30,50,{shape:'ray',c1:'#c8885a',c2:'#f0e0c8',rain:1},'体から電気を出すエイ。雷の日にはビリビリ度が増すとか。'),
+S('m_kadayashi','カダヤシ','pond',1,3,2,4,{c1:'#a8a890',c2:'#5a5a48',h:.28,tail:'round',bigEye:1,sn:.2},'メダカに似ているが、お腹で子どもを育てて産む外来魚。'),
+S('m_comet','コメット','pond',2,11,10,20,{c1:'#ff6a3a',c2:'#ffffff',h:.36,tail:'veil',sn:.5},'長い吹き流しの尾を持つ金魚。泳ぎがとても速い。'),
+S('m_shubunkin','朱文金','pond',3,24,10,18,{c1:'#a8c8e0',c2:'#ff5a2a',c3:'#1a1a1a',h:.36,pat:'koi',tail:'veil',sn:.5},'青・赤・黒の三色が混ざった「キャリコ」の金魚。'),
+S('m_azuma','東錦','pond',4,56,10,18,{c1:'#a8c8e8',c2:'#ff6a3a',c3:'#1a1a2a',h:.6,pat:'koi',tail:'veil',dor:'veil',hood:'#ffd0b0'},'オランダシシガシラのキャリコ版。頭のコブと三色が華やか。'),
+S('m_asagi','浅黄','pond',4,58,50,80,{c1:'#7a98b8',c2:'#e8603a',h:.36,pat:'scales',sc:'rgba(255,255,255,.45)',bellyCol:'rgba(232,96,58,.7)',whisker:1},'藍色の網目模様のウロコに、お腹が赤い錦鯉。'),
+S('m_mizukamakiri','ミズカマキリ','pond',2,12,4,5,{shape:'beetle',c1:'#7a6a4a',c2:'#5a4a30'},'カマキリそっくりの水生昆虫。おしりの長い管で息をする。'),
+S('m_numamutsu','ヌマムツ','river',1,4,8,15,{c1:'#c8c0a8',c2:'#3a3a3a',h:.3,pat:'line',bellyCol:'rgba(255,90,60,.4)',tail:'fork'},'カワムツに似るが胸びれが赤い。流れのゆるい場所を好む。'),
+S('m_ooyoshi','オオヨシノボリ','river',1,4,8,12,{c1:'#8a7a5a',c2:'#3a2a18',h:.3,pat:'blotchrow',tail:'round',shoulder:'#2a2a2a'},'ヨシノボリの中でいちばん大きい。胸びれのつけ根に黒い点。'),
+S('m_sunayatsume','スナヤツメ','river',2,12,15,20,{shape:'eel',c1:'#a8987a',c2:'#d8d0b8'},'あごのない原始的な魚。目の後ろに7つのエラ穴が並ぶ。'),
+S('m_kawaanago','カワアナゴ','river',2,11,15,25,{c1:'#5a4a3a',c2:'#c8a868',h:.3,pat:'mottled',tail:'round',dor:'double',bigMouth:1},'夜行性のハゼの仲間。日中は石の下に隠れている。'),
+S('m_akahire','アカヒレタビラ','river',3,26,6,9,{c1:'#c8c8d8',c2:'#3a5aa8',h:.4,pat:'line',tc:'#ff4a3a',fin:'#ff6a4a',shoulder:'#3a5aa8'},'ひれのふちが赤いタナゴ。東日本の限られた川にすむ。'),
+S('m_hinamoroko','ヒナモロコ','river',4,62,4,6,{c1:'#e8e0c8',c2:'#2a2a2a',h:.24,pat:'line',sn:.5},'日本では一度姿を消しかけた、とても小さなコイ科の魚。'),
+S('m_kasumi','カスミサンショウウオ','stream',2,13,8,12,{shape:'newt',c1:'#7a6a4a',c2:'#c8b878'},'丘陵の水たまりで卵を産む小型のサンショウウオ。'),
+S('m_nagarehiki','ナガレヒキガエル','stream',3,26,10,15,{shape:'frog',c1:'#9a6a40',c2:'#5a3a20',fz:1.2,fp:'warts',ear:1},'渓流で産卵する大きなヒキガエル。流れに強い卵を産む。'),
+S('m_tobikera','ヒゲナガカワトビケラの幼虫','stream',1,3,3,4,{shape:'beetle',c1:'#8a8060',c2:'#4a4a30'},'石で巣を作る虫。渓流魚のごちそう。'),
+S('m_shirame','シラメ','stream',3,28,20,30,{c1:'#e8eef4',c2:'#8a98a8',h:.28,pat:'speck',tail:'fork',sn:.7},'海へ下る準備でパーマークが消え、銀色に変わったアマゴ。'),
+S('m_ruriyoshi','ルリヨシノボリ','stream',2,13,6,9,{c1:'#6a6a5a',c2:'#4ab8ff',h:.3,pat:'bluedots',tail:'round'},'ほおに瑠璃色の点々がある美しいヨシノボリ。'),
+S('m_kirikuchi','キリクチ','stream',5,170,20,35,{c1:'#7a7a62',c2:'#f0e8c8',h:.32,pat:'parr',red:1,tail:'square'},'日本で一番南にすむイワナ。山奥のわずかな谷にしかいない。'),
+S('m_hariyo','ハリヨ','lake',3,28,4,6,{c1:'#5a7a5a',c2:'#e84a3a',h:.32,dor:'spiny',bellyCol:'rgba(232,74,58,.7)',tail:'round',sn:.4},'背中にトゲをもつトゲウオ。オスは水草で巣を作り、のどが赤くなる。'),
+S('m_ayumodoki','アユモドキ','lake',4,66,10,15,{c1:'#c8a868',c2:'#3a2a18',h:.3,pat:'vstripe',whisker:1,tail:'fork',sn:.5},'アユに似ているがドジョウの仲間。天然記念物。'),
+S('m_tsuchifuki','ツチフキ','lake',2,10,8,12,{c1:'#b8a888',c2:'#5a4a30',h:.26,whisker:1,pat:'dotline',sn:.85},'泥を吹くように口から砂を出すコイ科の魚。'),
+S('m_kawahigai','カワヒガイ','lake',2,11,10,15,{c1:'#c8b898',c2:'#3a2a1a',h:.3,pat:'midline',sn:.6},'体の真ん中に太い黒帯。二枚貝に卵を産む。'),
+S('m_ikechou','イケチョウガイ','lake',3,24,15,25,{shape:'bivalve',c1:'#3a3a28',c2:'#e8e0f0'},'大きな淡水の二枚貝。昔は淡水真珠の母貝に使われた。'),
+S('m_kouraigoi','コウライニゴイ','lake',2,10,30,45,{c1:'#d0ccb8',c2:'#6a6a58',h:.26,whisker:1,sn:.85,tail:'fork',pat:'speck'},'ニゴイより口ヒゲが長い。湖の砂底をすべるように泳ぐ。'),
+S('m_numagarei','ヌマガレイ','higata',3,26,20,35,{c1:'#7a6a4a',c2:'#ffb030',h:.6,pat:'mottled',fin:'#ffb030',tc:'#2a2a2a',sn:.4},'川をさかのぼるカレイ。ひれにオレンジと黒の帯模様。'),
+S('m_shouki','ショウキハゼ','higata',2,12,15,25,{c1:'#7a6a50',c2:'#2a2018',h:.36,pat:'saddle',tail:'round',dor:'double',bigMouth:1,sn:.1},'鍾馗さまのようないかつい顔の大型ハゼ。'),
+S('m_ariakeshira','アリアケシラウオ','higata',3,26,6,10,{c1:'#f4f8fc',c2:'#d8c0a0',h:.14,pat:'clear',sn:.9,dots:1},'有明海だけにいるシラウオ。すき通った体に黒い点の列。'),
+S('m_chigogani','ハラグクレチゴガニ','higata',1,4,1,2,{shape:'crab',c1:'#8aa8b8',c2:'#f0f0f0'},'青白いハサミを振り上げ、干潟で一斉にダンスする小さなカニ。'),
+S('m_fukko','フッコ','higata',2,11,35,55,{c1:'#c8d0d8',c2:'#3a4a5a',h:.27,dor:'double',tail:'fork',sn:.75},'セイゴとスズキの間の呼び名。河口で小魚を追い回す。'),
 // ---- 大陸：雨の日限定（追加） ----
 S('m_shuregel','シュレーゲルアオガエル','pond',2,14,4,5,{shape:'frog',c1:'#3ea83e',c2:'#2a7a2a',fz:.85,fp:'none',eyeCol:'#f0c020',rain:1},'田んぼの土の中に泡の卵を産む、黄色い目のカエル。'),
 S('m_zenitanago','ゼニタナゴ','pond',3,30,5,8,{c1:'#c8c8b8',c2:'#5a4a8a',h:.42,pat:'line',tc:'#ff6a8a',rain:1},'銭のように丸く平たいタナゴ。今ではとても数が少ない。'),
@@ -558,6 +632,11 @@ S('iz_kinkujaku','キンクジャクウオ','izumi',6,760,50,100,{shape:'birdfis
 S('iz_morinushi','モリノヌシガメ','izumi',6,800,80,160,{shape:'turtle',c1:'#c8e890',c2:'#6a9a4a',spot:'#ffffff',tree:1},'【伝説】甲羅の上に小さな森を背負った大亀。何千年も泉を見守っている。'),
 S('iz_nijigaeru','ニジイロアマガエル','izumi',6,700,4,7,{shape:'frog',c1:'#a8ff8a',c2:'#ffffff',rainbow:1,fz:.9,fp:'stripe',mask:'#ffffff'},'【伝説】見るたびに色が変わる虹色のカエル。鳴き声は鈴の音。'),
 S('iz_reishomodoki','レイショウウオモドキ','izumi',6,760,20,40,{shape:'reisho',c1:'#7ad8ff',c2:'#48b8e8',h:.58,pat:'none',noEye:1,talk:'か、かっけぇー'},'【伝説】夢で見た海のレイショウウオにそっくりだが、色だけが水色。本人は自分のことをかっこいいと思っている。'),
+S('iz_reisho_higashi','ヒガシレイショウウオ','izumi',6,760,20,40,{shape:'reisho',c1:'#ff9ad8',c2:'#e078b8',h:.58,pat:'none',noEye:1,talk:'お、おうw'},'【伝説】東の泉にすむ桃色のレイショウウオ。話しかけられると少し戸惑う。'),
+S('iz_reisho_minami','ミナミレイショウウオ','izumi',6,760,20,40,{shape:'reisho',c1:'#8ae84a',c2:'#5ac82a',h:.58,pat:'none',noEye:1,talk:'効いてて草'},'【伝説】南の泉の若草色のレイショウウオ。相手の反応を見て楽しんでいる。'),
+S('iz_reisho_hime','ヒメレイショウウオ','izumi',6,760,20,40,{shape:'reisho',c1:'#c8a8ff',c2:'#a284e8',h:.58,pat:'none',noEye:1,talk:'きちーw'},'【伝説】小さな紫色のレイショウウオ。何を見ても「きちー」と笑う。'),
+S('iz_reisho_aobire','アオビレレイショウウオ','izumi',6,760,20,40,{shape:'reisho',c1:'#c8945a',c2:'#a8743a',h:.58,pat:'none',noEye:1,talk:'やめたれw',fin:'#3a8aff'},'【伝説】茶色の体に、あざやかな青いひれをもつレイショウウオ。いじられている魚をかばう優しいやつ。'),
+S('iz_reisho_ide','イデレイショウウオ','izumi',6,760,20,40,{shape:'reisho',c1:'#8a8a96',c2:'#686874',h:.58,pat:'none',noEye:1,talk:'おちつけw'},'【伝説】泉の湧き出し口（井出）にすむ灰色のレイショウウオ。騒ぐ魚をいつもなだめている。'),
 S('iz_nushi','イズミノヌシ','izumi',6,900,120,300,{shape:'long',c1:'#fffde8',c2:'#d8ff8a'},'【伝説】夢で見た泉の主。白く輝く長い体で、泉の底の光を守っている。'),
 // ---- ハズレ ----
 S('m_j_can','空き缶','main',1,0,10,15,{shape:'junk',kind:'can',junk:1,price:1},'川にポイ捨てはダメ、ぜったい。'),
@@ -574,8 +653,8 @@ S('m_j_sara','カッパの皿','main',5,0,15,20,{shape:'junk',kind:'plate',junk:
 MSPECIES.forEach(p=>{p.m=1;SPM[p.id]=p;if(p.shape==='turtle')p.legs=1;});
 
 
-const ROD_COST=[0,0,150,500,1500,4000,10000,25000,60000,150000,400000];
-const ROD_MAX=10;
+const ROD_COST=[0,0,150,500,1500,4000,10000,25000,60000,150000,400000,800000,1500000,2500000,4000000,6000000,9000000,13000000,19000000,27000000,40000000];
+const ROD_MAX=20;
 const BAITS=[
  {id:'shrimp',n:'小エビ',ic:'🦐',c:20,k:.5,d:'いつでも買える定番の餌。竿の力は半分しか出せず、竿Lvが低いと魚がかかるのもかなり遅い'},
  {id:'cutS',n:'魚の切り身（小）',ic:'🐟',c:100,k:.7,d:'竿の力×0.7'},
@@ -875,8 +954,8 @@ function fishPath(c,sp,L,h){const {sn,hp,pd,bl}=fishGeo(sp),ny=h*(.03+.07*(1-sn)
 function drawFishBody(c,sp,L,t,ph){
  const h=L*(sp.h||.4),w=Math.sin(t*7+ph)*(sp.shark?.22:.35);
  const fx=(sp.pat==='rainbow'||sp.pat==='arcbow'||sp.pat==='irid'||sp.pat==='aurora')?`hsla(${(t*60+ph*40)%360},90%,72%,${sp.pat==='rainbow'?1:.8})`:sp.pat==='gold'?'#e0a800':(sp.pat==='sakura'||sp.pat==='petal')?sp.tc||shade(sp.c1,-.05):null;
- const tailCol=fx||sp.tc||(sp.pat==='tang'?sp.c2:shade(sp.c1,-.15));
- const finCol=fx||(sp.pat==='tang'?sp.c2:(sp.pat==='band'?sp.c1:shade(sp.c1,-.2)));
+ const tailCol=sp.fin||fx||sp.tc||(sp.pat==='tang'?sp.c2:shade(sp.c1,-.15));
+ const finCol=sp.fin||fx||(sp.pat==='tang'?sp.c2:(sp.pat==='band'?sp.c1:shade(sp.c1,-.2)));
  // 尾びれ
  c.save();c.translate(-L*.42,0);c.rotate(w);c.fillStyle=tailCol;c.beginPath();
  const ts=sp.shark?'shark':(sp.tail||'def');
@@ -1786,7 +1865,7 @@ const JRW=[0,8,5,3,1.5,.6];
 function pickSpecies(area){if(isDreamA(area)){const l=fishPool(area);let tot=0;const w=l.map(p=>{const v=p.r>=6?.6:1;tot+=v;return v;});let r=Math.random()*tot;for(let i=0;i<l.length;i++){r-=w[i];if(r<=0)return l[i];}return l[0];}
  const rw=[0,50,28,13,5,1.6,.4];const fish=fishPool(area),junk=junkPool(),list=fish.concat(junk);let tot=0;const jk=Math.max(.3,1.3-effRod()*.15),R=effRod(),bt=s.bait;
  if(bt==='cotton'){const jl=junkPool();let t2=0;const w2=jl.map(p=>{t2+=JRW[p.r];return JRW[p.r];});let x=Math.random()*t2;for(let i=0;i<jl.length;i++){x-=w2[i];if(x<=0)return jl[i];}return jl[0];}
- const rb=(curEvent()||{}).rare||1;const ws=list.map(p=>{if(bt==='meat'&&(p.junk||p.r<4)){return 0;}const w=p.junk?JRW[p.r]*jk:rw[p.r]*(1+(R-1)*.22*(p.r-1))*(s.rain?(p.rain?2.2:.4):1)*(p.r>=3?rb:1);tot+=w;return w;});let r=Math.random()*tot;
+ const rb=(curEvent()||{}).rare||1;const ws=list.map(p=>{if(bt==='meat'&&(p.junk||p.r<4)){return 0;}const Rr=R<=10?R:10+(R-10)*.4,w=p.junk?JRW[p.r]*jk:rw[p.r]*(1+(Rr-1)*.22*(p.r-1))*(s.rain?(p.rain?2.2:.4):1)*(p.r>=3?rb:1);tot+=w;return w;});let r=Math.random()*tot;
  for(let i=0;i<list.length;i++){r-=ws[i];if(r<=0)return list[i];}return list[0];}
 function curBait(){return BAITM[s.bait]||BAITM.shrimp;}
 function effRod(){if(isDreamA(s.area)&&s.bait!=='cotton')return Math.max(.2,s.rod*.2);return Math.max(.3,s.rod*curBait().k);}
@@ -1815,7 +1894,7 @@ function fishTap(){
  }
 }
 function registerCatch(sp,size){
- const f={u:s.uid++,s:sp.id,z:size};curBucket().push(f);
+ const f={u:s.uid++,s:sp.id,z:size};curBucket().push(f);s.lastFish=s.day;
  const d=s.dex[sp.id];const isNew=!d;let record=false;
  if(!d)s.dex[sp.id]={c:1,max:size};else{d.c++;if(size>d.max){d.max=size;record=true;}}
  if(isNew)addXp(5*sp.r);
@@ -2591,6 +2670,7 @@ cv.addEventListener('pointerdown',e=>{
  if(tab==='island'&&!spa&&!cafe&&spaHit&&Math.hypot(x-spaHit.x,y-spaHit.y)<spaHit.r){enterSpa();return;}
  if(tab==='island'&&cafeHit&&Math.hypot(x-cafeHit.x,y-cafeHit.y)<cafeHit.r){enterCafe();return;}
  if(inMain()&&tab==='island'&&s.spirit&&spiritHit&&Math.hypot(x-spiritHit.x,y-spiritHit.y)<spiritHit.r){askConfirm('✨ ふしぎな光の精霊についていきますか？\n\n時間がその日の朝に戻り、\n今日1日だけ「夢で見た泉」で釣りができます。\n（1日が終わると泉は消えます）',followSpirit);return;}
+ if(inMain()&&tab==='island'&&mCruiseHit&&Math.hypot(x-mCruiseHit.x,y-mCruiseHit.y)<mCruiseHit.r){goIsland();return;}
  if(inMain()&&tab==='island'&&mainHit&&Math.hypot(x-mainHit.x,y-mainHit.y)<mainHit.r){document.querySelector('[data-tab=tank]').click();return;}
  if(inMain()&&tab!=='fish')return;
  if(tab==='tank'&&cleanMode){sponge={x,y,t:T};wipe(x,y);return;}
@@ -2621,13 +2701,14 @@ function repairList(){if(stormStage()!=='damage')return[];const st=s.storm,L=[];
  if(st.bld.cottage)L.push({k:'cottage',ic:'🛖',n:`コテージ${s.b.cottage}棟の再建`,c:Math.round(sum(COTT,s.b.cottage)*.3)});
  if(st.bld.lighthouse)L.push({k:'lighthouse',ic:'💡',n:'灯台の再建',c:450});
  st.broken.forEach(i=>{const d=DECOM[s.decoList[i]];L.push({k:'d'+i,ic:d.ic,n:`${d.n}の再建`,c:Math.round(decoPaid(i)*.3)});});
+ const m=st.mult||1;if(m>1)L.forEach(x=>x.c=Math.round(x.c*m/100)*100);
  return L;}
 function stormDamage(){
  const idx=s.decoList.map((_,i)=>i).filter(i=>i<slotCount()&&s.decoList[i]);for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}
  const broken=idx.slice(0,Math.max(1,Math.round(idx.length*rand(.3,.5)))).sort((a,b)=>a-b);
  const bld={};if(s.b.cafe&&Math.random()<.5)bld.cafe=1;if(s.b.cottage&&Math.random()<.6)bld.cottage=1;if(s.b.lighthouse&&Math.random()<.4)bld.lighthouse=1;
  const debris={main:1};for(let i=0;i<s.land;i++)debris['l'+i]=1;
- s.storm={stage:'damage',broken,bld,debris};
+ s.storm={stage:'damage',broken,bld,debris,mult:1};{const base=repairList().reduce((a,x)=>a+x.c,0);if(base>0)s.storm.mult=Math.max(1,s.gold*.3/base);}
  s.tanks.forEach(t=>{ensureDirt(t);for(let i=0;i<t.dirt.length;i++)t.dirt[i]=Math.min(100,t.dirt[i]+40);});
  const tot=repairList().reduce((a,x)=>a+x.c,0);
  log(`🌪 嵐が去った…装飾${broken.length}か所と${Object.keys(bld).length}つの建物が崩壊し、島は荒れ果ててしまった`,'#ff8a8a');
@@ -2638,7 +2719,8 @@ function fixItem(k){const it=repairList().find(x=>x.k===k);if(!it||s.gold<it.c)r
  if(!repairList().length){s.storm=null;s.freeEv=(s.freeEv||0)+1;log('🎉 復興完了！リゾートが元の輝きを取り戻した！','#7ef0ff');log('🎫 お祝いに「復旧祭」の無料券を1枚もらった！開催すると5日間ずっと魚が即ヒット！（島タブ→🎉イベント）','#ff9ad5');addXp(100);}
  return true;}
 function stormNextDay(){ // endDay から呼ぶ（日付が進んだ後）
- const st=stormStage();
+ const st=stormStage();if(s.lastFish==null)s.lastFish=s.day;
+ if(!s.storm&&!curEvent()&&!s.dream&&s.day-s.lastFish>=30){s.lastFish=s.day;s.storm={stage:'warn'};s.rain=true;log('⚠️ 気象警報：今日は大雨。明日、大型の嵐🌪が島を直撃する見込みです…','#ffb36b');log('🎣 長いあいだ誰も海に出なかったせいか、島に大きな嵐が近づいている…','#ffb36b');return true;}
  if(st==='warn'){s.storm.stage='storm';s.rain=true;if(cafe){cafe=null;}spa=null;log('🌪 大型の嵐が上陸！夕方まで（12時間）リゾートは臨時休業。釣りにも出られない…','#ff8a8a');return true;}
  if(st==='storm'){stormDamage();s.rain=false;return true;} // 念のため（通常は12時間で過ぎ去る）
  if(!s.storm&&endgameDone()&&!curEvent()&&!s.dream&&Math.random()<STORM_CHANCE){s.storm={stage:'warn'};s.rain=true;
@@ -2787,7 +2869,7 @@ function curBucket(){return inMain()?s.mbucket:s.bucket;}
 function junkPool(){return(inMain()?MSPECIES:SPECIES).filter(p=>p.junk&&(s.rain||!p.rain));}
 function waitMult(){const i=MAREAS.findIndex(a=>a.id===s.area);return i>=0?MWAIT[i]:WAIT_MULT[Math.max(0,areaIdx(s.area))];}
 function mainUnlocked(){return s.tvq>=3;}
-let mainSub='area',mainHit=null;
+let mainSub='area',mainHit=null,mCruiseHit=null;
 const NK_LINES=['お金のことは気にするな…と言いたいところだが、設備は君の稼ぎで頼むよ。ハッハッハ！','水族館は育てるものだ。水槽を広げ、飾り、設備を整えれば、客は必ず来る。','筑後川はね、むかしからカッパが住んでいると言われているんだ。','エツという魚を知っているかい？初夏の筑後川の宝物だよ。','有明海の干潟は、ほかではなかなか見られない生き物の楽園なんだ。','雨の日には、雨の日にしか出会えない生き物がいるものさ。','水族館は「生き物と人をつなぐ場所」だと思っているんだ。'];
 function nkLine(){const n=Object.keys(s.don).length;if(!n)return'さあ館長、まずは池で何か釣って、水槽に展示してみたまえ！';return NK_LINES[(s.day+n)%NK_LINES.length];}
 // ナカイケ氏の肖像
@@ -3184,13 +3266,14 @@ function drawMainland(){cafeHit=null;spaHit=null;boatHit=null;cruiseHit=null;
  // 港とクルーザー
  const px=W*.82,py=H*.92;
  ctx.save();ctx.beginPath();ctx.moveTo(W*.55,H);ctx.quadraticCurveTo(W*.62,py+2,W*.8,py+4);ctx.quadraticCurveTo(W*.95,py,W*1.02,py-6);ctx.lineTo(W*1.02,H);ctx.closePath();let bg=ctx.createLinearGradient(0,py,0,H);bg.addColorStop(0,c('#6aaac4'));bg.addColorStop(1,c('#2e7a9a'));ctx.fillStyle=bg;ctx.fill();ctx.strokeStyle=c('#d8ccb0');ctx.lineWidth=2;ctx.stroke();ctx.clip();ctx.strokeStyle=`rgba(255,255,255,${.4*(1-nt*.6)})`;ctx.lineWidth=1;for(let i=0;i<8;i++){const x=W*.6+((i*53+T*6)%(W*.4)),y=py+8+(i%3)*5;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+8,y);ctx.stroke();}ctx.restore();
- ctx.fillStyle=c('#9a8a7a');ctx.fillRect(px-W*.06,py-1,W*.2,5);drawCruiser(W*.86,py+6,Math.max(.75,W/500),nt);
+ ctx.fillStyle=c('#9a8a7a');ctx.fillRect(px-W*.06,py-1,W*.2,5);drawCruiser(W*.86,py+6,Math.max(.75,W/500),nt);mCruiseHit={x:W*.86,y:py+2,r:Math.max(26,30*Math.max(.75,W/500))};
  // 夜の明かり
  if(nt>.3)for(const [x,y,r] of glow){const gg=ctx.createRadialGradient(x,y,0,x,y,r);gg.addColorStop(0,`rgba(255,220,150,${.35*nt})`);gg.addColorStop(1,'rgba(255,220,150,0)');ctx.fillStyle=gg;ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fill();}
  mainHit={x:ax-10*ak,y:ay-26*ak,r:Math.max(36,58*ak)};
  ctx.fillStyle='rgba(0,0,0,.35)';roundRect(ctx,6,H-26,120,20,8);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(`展示中 ${Object.keys(s.don).length}種`,14,H-16);
  if(s.rain)drawRain();
  if(ringOn('chikugo'))drawTapRing(mainHit.x,mainHit.y,mainHit.r);
+ if(mCruiseHit&&ringOn('cruise'))drawTapRing(mCruiseHit.x,mCruiseHit.y,mCruiseHit.r);
  spiritHit=null;if(s.spirit)drawSpirit(hz);}
 // ---------- ちくご水族館の大水槽 ----------
 const BOTTOM_SHAPES={crab:1,snail:1,bivalve:1,beetle:1,newt:1,frog:1,shrimp:1,tadpole:0,junk:1};
